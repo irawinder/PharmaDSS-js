@@ -73,7 +73,8 @@ function setup() {
   
   // Load Model XLS
   if (readXLS) {
-    // loadModel_XLS(agileModel, dataLocation);
+    console.log("reading xls");
+    loadModel_XLS(agileModel, dataLocation);
   }
 
   agileModel.maxCapacity();
