@@ -92,7 +92,7 @@ function setup() {
   agileModel.maxCapacity();
   
   //Initiate Game
-  // var session = new Game();
+  var session = new Game();
   // updateProfileCapacities();
     
   // Setup for Canvas Visualization

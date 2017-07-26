@@ -1,4 +1,11 @@
 var gameMode = false;
+var continuousMfG;
+var current;
+var selectedProfile;
+var selectedSite;
+var selectedSiteBuild;
+var selectedBuild;
+var turnLog;
 
 // Regenerate Game
 function regenerateGame() {
@@ -39,46 +46,37 @@ function regenerateGame() {
 // Game, Turn, Event classes help log and manage actions over the passage of time
 // Games are made up of a series of Turns, and Turns are made up of 0 or more events that effect the system.
 function Game() {
-  var continuousMfG = false;
-  
-  var current = new Turn(0);
-  var selectedProfile = 0;
-  var selectedSite = 0;
-  var selectedSiteBuild = 0;
-  var selectedBuild = 0;
-  var turnLog = new Array();
+  continuousMfG = false;
+  current = new Turn(0);
+  selectedProfile = 0;
+  selectedSite = 0;
+  selectedSiteBuild = 0;
+  selectedBuild = 0;
+  turnLog = new Array();
   tableHistory = new Array(U_MAX).fill(new Array(V_MAX).fill(new Array(2)));
   
   // Only adds profiles with 5 years advance forecast
   agileModel.activeProfiles = new Array();
-  console.log(agileModel.PROFILES);  
   Game.populateProfiles();
   
   // Clear all user-defined builds from each site
-  resetSites();
-  
-  // Clear all user-defined builds from sites
-  this.resetSites = function() {
-    for (var i=0; i<agileModel.SITES.length; i++) {
-      agileModel.SITES.get(i).siteBuild.clear();
-    }
-  }
+  Game.resetSites();
   
   // End the turn and commit all events to the Log
   this.execute = function() {  
     if (current.TURN < NUM_INTERVALS) {
       if (connection) {
         tableHistory.add(tablePieceInput);
-        println("Colortizer state logged #" + (tableHistory.length - 1));
+        print("Colortizer state logged #" + (tableHistory.length - 1));
       }
       turnLog.add(current);
-      println("Turn " + current.TURN + " logged");
+      print("Turn " + current.TURN + " logged");
       
       current = new Turn(current.TURN + 1);
       
       // Only adds profiles to game within known Lead Time
       this.populateProfiles();
-      //println("There are now " + agileModel.activeProfiles.size() + " Active Profiles.");
+      //print("There are now " + agileModel.activeProfiles.size() + " Active Profiles.");
       
       // Updates the Status of builds on each site at end of each turn (age, etc)
       for (var i=0; i<agileModel.SITES.length; i++) {
@@ -109,36 +107,43 @@ function Game() {
     
 }
 
+// Clear all user-defined builds from sites
+Game.resetSites = function() {
+  for (var i=0; i<agileModel.SITES.length; i++) {
+    agileModel.SITES.get(i).siteBuild.clear();
+  }
+}
 
-  // Only adds profiles with 5 years advance forecast
-  Game.populateProfiles = function() {
-    
-    // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
-    for (var i=0; i<agileModel.PROFILES.length; i++) {
-      if (agileModel.PROFILES.get(i).timeLead == current.TURN || (current.TURN == 0 && agileModel.PROFILES.get(i).timeLead < 0) ) {
-        agileModel.PROFILES.get(i).globalProductionLimit = 0;
-        agileModel.PROFILES.get(i).initCapacityProfile();
-        agileModel.activeProfiles.add(agileModel.PROFILES.get(i));
-      }
+
+// Only adds profiles with 5 years advance forecast
+Game.populateProfiles = function() {
+  
+  // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
+  for (var i=0; i<agileModel.PROFILES.length; i++) {
+    if (agileModel.PROFILES.get(i).timeLead == current.TURN || (current.TURN == 0 && agileModel.PROFILES.get(i).timeLead < 0) ) {
+      agileModel.PROFILES.get(i).globalProductionLimit = 0;
+      agileModel.PROFILES.get(i).initCapacityProfile();
+      agileModel.activeProfiles.add(agileModel.PROFILES.get(i));
     }
-    
-    // When game is active, only populate profiles that are visibile by 5-yr forecasts on first turn
-    if (current.TURN == 0) {
-      for (var i=0; i<agileModel.activeProfiles.length; i++) {
-        if (agileModel.activeProfiles.get(i).timeEnd + 1 < current.TURN) {
+  }
+  
+  // When game is active, only populate profiles that are visibile by 5-yr forecasts on first turn
+  if (current.TURN == 0) {
+    for (var i=0; i<agileModel.activeProfiles.length; i++) {
+      if (agileModel.activeProfiles.get(i).timeEnd + 1 < current.TURN) {
+        
+        // Resets selection to 0 if current profile is being deleted
+        if (selectedProfile == i) selectedProfile = 0;
+        
+        agileModel.activeProfiles.remove(i);
+        
+        // keeps current profile selected if one behind it is removed
+        if (selectedProfile > i) selectedProfile--;
           
-          // Resets selection to 0 if current profile is being deleted
-          if (selectedProfile == i) selectedProfile = 0;
-          
-          agileModel.activeProfiles.remove(i);
-          
-          // keeps current profile selected if one behind it is removed
-          if (selectedProfile > i) selectedProfile--;
-            
-        }
       }
     }
   }
+}
 
 // A class that holds information about events executed during each turn
 function Turn(TURN){
@@ -226,7 +231,7 @@ function Event(eventType, siteIndex, buildIndex, profileIndex = "None") {
   this.flagRepurpose = function() {
     if (agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).built == false) {
       game_message ="Can't repurpose while under construction";
-      println("Can't Repurpose while Under Construction");
+      print("Can't Repurpose while Under Construction");
     } else {
       agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).repurpose = true;
       agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).built = false;
@@ -253,7 +258,7 @@ function nextProfile() {
     session.setProfile(session.selectedProfile + 1);
   }
   
-  println("Profile: " + (session.selectedProfile+1));
+  print("Profile: " + (session.selectedProfile+1));
 }
 
 // User Selects Next Available Site
@@ -264,7 +269,7 @@ function nextSite() {
   } else {
     session.selectedSite++;
   }
-  println("Site: " + (session.selectedSite+1));
+  print("Site: " + (session.selectedSite+1));
 }
 
 // User Selects Next Available Build
@@ -274,14 +279,14 @@ function nextBuild() {
   } else {
     session.selectedBuild++;
   }
-  println("GMS Build Type: " + (session.selectedBuild+1));
+  print("GMS Build Type: " + (session.selectedBuild+1));
 }
 
 // User Selects Next Available Build on a specific site
 function nextSiteBuild() {
   if (agileModel.SITES.get(session.selectedSite).siteBuild.length == 0) {
     game_message = "Site has no Production!";
-    println("Site has no Production!");
+    print("Site has no Production!");
   } else {
     game_message = " ";
     if (session.selectedSiteBuild >= agileModel.SITES.get(session.selectedSite).siteBuild.length - 1) {
@@ -289,7 +294,7 @@ function nextSiteBuild() {
     } else {
       session.selectedSiteBuild++;
     }
-    println("Site " + session.selectedSite + " Build Type: " + (session.selectedSiteBuild+1));
+    print("Site " + session.selectedSite + " Build Type: " + (session.selectedSiteBuild+1));
   }
 }
 
@@ -301,7 +306,7 @@ function deploySelection() {
     session.current.event.add(deploy);
     
   } catch (e) {
-    println("deploySelection() failed to execute");
+    print("deploySelection() failed to execute");
   }
   updateProfileCapacities();
 }
