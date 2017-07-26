@@ -22,13 +22,13 @@ function randomIndex(amt) {
   //sets all values to -1
   for (var i=0; i<amt; i++) list[i] = -1;
   
-  var random;
+  var randomValue;
   var allocated = 0;
   while(allocated < amt) {
-    random = int(random(0, amt));
-    if (random < 0 || random >= amt) random = 0; // checks in bounds
-    if (list[random] == -1) {
-      list[random] = allocated;
+    randomValue = int(random(0, amt));
+    if (randomValue < 0 || randomValue >= amt) randomValue = 0; // checks in bounds
+    if (list[randomValue] == -1) {
+      list[randomValue] = allocated;
       allocated ++;
     }
   }
