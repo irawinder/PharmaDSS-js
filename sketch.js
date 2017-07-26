@@ -131,7 +131,7 @@ function setup() {
   initOutputs();
   setupRadar();
   
-  // flatOutputs();
+  flatOutputs();
   // setupTable();
 
   // initUDP();

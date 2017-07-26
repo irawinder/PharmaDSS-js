@@ -72,7 +72,7 @@ function randomOutputs() {
   }
   
   // Set KPI Radar to Last Available Output array
-  o = outputs.get(outputs.length - 1);
+  o = outputs[outputs.length - 1];
   
   for (var i=0; i<NUM_OUTPUTS; i++) {
     kpi.setScore(i, o[i]);
@@ -92,7 +92,7 @@ function flatOutputs() {
   }
   
   // Set KPI Radar to Last Available Output array
-  o = outputs.get(outputs.length - 1);
+  o = outputs[outputs.length - 1];
   
   for (var i=0; i<NUM_OUTPUTS; i++) {
     kpi.setScore(i, o[i]);
