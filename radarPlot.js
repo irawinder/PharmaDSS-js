@@ -26,20 +26,20 @@ function RadarPlot(num) {
   avgScore = 0;
   
   for (var i=0; i<nRadar; i++) {
-    names.add("");
+    names.push("");
     scores.push(0.5);
   }
   
   
   this.setName = function(index, name) {
     if (index < nRadar) {
-      names.set(index, name);
+      names[index] = name;
     }
   }
   
   this.setScore = function(index, value) {
     if (index < nRadar) {
-      scores.set(index, min(value, 1.0));
+      scores[index] = min(value, 1.0);
     }
   }
   

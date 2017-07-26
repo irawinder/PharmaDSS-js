@@ -93,7 +93,7 @@ function setup() {
   
   //Initiate Game
   var session = new Game();
-  // updateProfileCapacities();
+  updateProfileCapacities();
     
   // Setup for Canvas Visualization
   createCanvas(screenWidth, screenHeight, P2D);
@@ -129,7 +129,7 @@ function setup() {
 
 
   initOutputs();
-  // setupRadar();
+  setupRadar();
   
   // flatOutputs();
   // setupTable();
