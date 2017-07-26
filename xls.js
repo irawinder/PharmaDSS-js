@@ -1,4 +1,4 @@
-var loadOriginal = false;
+var loadOriginal = true;
 
 var NUM_LABOR = 6;
 var NUM_XLS_SITES = 2;
@@ -17,16 +17,13 @@ var NUM_RND_BUILDS = 6;
 var capacityToUseRND = [0.4];
 
 // Cell B63
-var SAFE_ROW = 62; 
+var SAFE_ROW = 1; 
 var SAFE_COL = 1;
 
 // Cell B58
 var RND_LIMIT_ROW = 1; 
 var RND_LIMIT_COL = 1;
 
-// "NCE Profile Data"
-var PROFILE_SHEET = 0; 
-  
 // Cell A1
 var PROFILE_ROW = 0; 
 var PROFILE_COL = 0;
@@ -34,7 +31,7 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
-function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules) {
+function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply, profile) {
   model.WEIGHT_UNITS = gms_rules.getString(0, 3);
   model.TIME_UNIT = gms_rules.getString(2, 1);
   model.COST_UNITS = (gms_rules.getString(7, 1)).substring(0, 1);
@@ -75,7 +72,6 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules) {
       for (var j=0; j<NUM_LABOR; j++) {
         var num = gms_rules.getString(5 + 3*j, 3 + i);
         for (var k=0; k<num; k++) {
-          print(model.LABOR_TYPES);
           model.GMS_BUILDS.labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
             gms_rules.getString(6 + 3*j, 3 + i), // #Shifts
@@ -170,22 +166,16 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules) {
 
 
 
-
-
-
-}
-
-
-function loadModel_XLS(model, name) {  
-  
-  
-  
   // Read MFG_System: MAX_SAFE_UTILIZATION
-  model.MAX_SAFE_UTILIZATION = reader.getFloat(SAFE_ROW, SAFE_COL)/100.0;
+  model.MAX_SAFE_UTILIZATION = supply.getString(SAFE_ROW, SAFE_COL)/100.0;
   
-  // Read Profile Information
-  reader.openSheet(PROFILE_SHEET);
-  
+
+
+
+
+
+
+  // Read Profile Information  
   var profileList;
   if (loadOriginal) {
     profileList = accendingIndex(NUM_PROFILES);
@@ -197,46 +187,56 @@ function loadModel_XLS(model, name) {
   for (var i=0; i<NUM_PROFILES; i++) {
     
     // Read Profile: Basic Attributes
-    model.PROFILES.add( new Profile(i) ); 
-    model.PROFILES.get(i).name = reader.getString(PROFILE_ROW + 2 + 4*i, PROFILE_COL);
-    model.PROFILES.get(i).summary = reader.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 1);
-    if (reader.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 2).equals("success")) {
-      model.PROFILES.get(i).success = true;
+    model.PROFILES = new Profile(i); 
+    model.PROFILES.name = profile.getString(PROFILE_ROW + 2 + 4*i, PROFILE_COL);
+    model.PROFILES.summary = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 1);
+    if (profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 2) == "success") {
+      model.PROFILES.success = true;
     } else {
-      model.PROFILES.get(i).success = false;
+      model.PROFILES.success = false;
     }
-    model.PROFILES.get(i).timeStart = reader.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 6);
+    model.PROFILES.timeStart = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 6);
     
     // Read Profile: Site Costs
     for (var j=0; j<NUM_XLS_SITES; j++) {
-      model.PROFILES.get(i).productionCost.add( reader.getFloat(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j) );
+      model.PROFILES.productionCost = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j);
     }
     
     // Read Profile: Demand Profile
-    model.PROFILES.get(i).demandProfile.addRow(); // Time
-    model.PROFILES.get(i).demandProfile.addRow(); // Demand Forecast
-    model.PROFILES.get(i).demandProfile.addRow(); // Demand Actual
-    model.PROFILES.get(i).demandProfile.addRow(); // Event Description
-    for (var j=0; j<NUM_varERVALS; j++) {
-      model.PROFILES.get(i).demandProfile.addColumn();
-      model.PROFILES.get(i).demandProfile.setFloat(0, j, reader.getFloat(PROFILE_ROW, PROFILE_COL + 10 + j) );
-      model.PROFILES.get(i).demandProfile.setFloat(1, j, reader.getFloat(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES.get(i).demandProfile.setFloat(2, j, reader.getFloat(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES.get(i).demandProfile.setString(3, j, reader.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
+    model.PROFILES.demandProfile = new p5.Table();
+    model.PROFILES.demandProfile.addRow(); // Time
+    model.PROFILES.demandProfile.addRow(); // Demand Forecast
+    model.PROFILES.demandProfile.addRow(); // Demand Actual
+    model.PROFILES.demandProfile.addRow(); // Event Description
+    for (var j=0; j<NUM_INTERVALS; j++) {
+      model.PROFILES.demandProfile.addColumn();
+      model.PROFILES.demandProfile.setString(0, j, profile.getString(PROFILE_ROW, PROFILE_COL + 10 + j) );
+      model.PROFILES.demandProfile.setString(1, j, profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES.demandProfile.setString(2, j, profile.getString(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES.demandProfile.setString(3, j, profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
     }
     
     // Calculates peak forecast demand value, lead years, etc
-    model.PROFILES.get(i).calc();
+    print(model.PROFILES);
+    model.PROFILES.calc();
     
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
     if (!loadOriginal) {
       var mag = 1000*(random(10)+3);
-      model.PROFILES.get(i).setPeak(mag);
+      model.PROFILES.setPeak(mag);
     }
     
     // Re-Calculates peak forecast demand value, lead years, etc
-    model.PROFILES.get(i).calc();
+    model.PROFILES.calc();
   }
   
   model.generateColors();
+
+
+
+
+
+
+
+
 }

@@ -46,13 +46,13 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
 Profile.calc = function() {
   // Based on Profile, compute the peak forecast demand
-  peak();
+  Profile.peak();
   // Based on Profile, compute the date that forecast is first know based on N years advance notice (i.e. 5yr) MFG_System.LEAD_TIME
-  lead();
+  Profile.lead();
   // Based on Profile, compute the date that NCE Profile "terminates"
-  end();
+  Profile.end();
   //Initialize Table for holding capacity values
-  initCapacityProfile();
+  Profile.initCapacityProfile();
 }
 
 // Given an existing profile, rescales all demand values (forecast and actual) according to a new peak value

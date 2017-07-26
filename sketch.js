@@ -34,7 +34,10 @@ var P3;
 var gmsRulesFile;
 var gmsCapacityFile;
 var gmsLabourFile;
-var gmsRNDFile;
+var rndPPFile;
+var rndRulesFile;
+var supplyRulesFile;
+var profileDataFile;
 
 function preload() {
   gmsRulesFile = loadTable("data/GMSRules.csv","csv","header");
@@ -42,6 +45,8 @@ function preload() {
   gmsLabourFile = loadTable("data/GMSLabourCosts.csv","csv");
   rndPPFile = loadTable("data/RND_PPRules.csv","csv");
   rndRulesFile = loadTable("data/RNDRules.csv","csv");
+  supplyRulesFile = loadTable("data/RNDRules.csv","csv");
+  profileDataFile = loadTable("data/ProfileData.csv","csv");
 }
 
 function setup() {
@@ -81,7 +86,7 @@ function setup() {
 
   // Load Model XLS  COL, ROW
   if (readXLS) {
-    loadRules(agileModel, gmsRulesFile, gmsCapacityFile, gmsLabourFile, rndPPFile, rndRulesFile);
+    loadRules(agileModel, gmsRulesFile, gmsCapacityFile, gmsLabourFile, rndPPFile, rndRulesFile, supplyRulesFile, profileDataFile);
   }
 
   agileModel.maxCapacity();
