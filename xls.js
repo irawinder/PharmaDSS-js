@@ -48,6 +48,52 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
+function loadRules(model, table) {
+  model.TIME_UNIT = table.getString(2, 1);
+  model.COST_UNITS = (table.getString(7, 1)).substring(0, 1);
+
+  // Read MFG_System: GMS Build Types
+  var index = -1;
+  var valid;
+  for (var i=0; i<NUM_GMS_BUILDS; i++) {
+    // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
+    valid = false;
+    for (var j=0; j<capacityToUseGMS.length; j++) {
+              print( table.getString(2+i,0) );
+
+      if (table.getString(2 + i, 0) == capacityToUseGMS[j]) {
+        print( table.getString(2+i,0) );
+        valid = true;
+        index++;
+        break;
+      }
+    }
+    
+    if(valid) {
+      model.GMS_BUILDS.add(new Build());
+      model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
+      model.GMS_BUILDS.get(index).capacity     = table.getString(2 + i, 0);
+      model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
+      model.GMS_BUILDS.get(index).buildTime    = buildTime(model.GMS_BUILDS.get(index).capacity);
+      model.GMS_BUILDS.get(index).repurpCost   = 1000000 * table.getString(2 + i, 3);
+      model.GMS_BUILDS.get(index).repurpTime   = table.getString(2 + i, 4);
+      
+      print(model.GMS_BUILDS);
+      // Read MFG_System: GMS Build Labor
+      for (var j=0; j<NUM_LABOR; j++) {
+        var num = table.getString(2 + i, 5 + 3*j);
+        for (var k=0; k<num; k++) {
+          model.GMS_BUILDS.get(index).labor.add(new Person(
+            model.LABOR_TYPES.getString(j, 0), // Name
+            table.getString(2 + i, 6 + 3*j), // #Shifts
+            model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
+          ));
+        }
+      }
+    }
+  }
+}
+
 
 function loadModel_XLS(model, name) {
   
@@ -72,42 +118,42 @@ function loadModel_XLS(model, name) {
   }
 
   // Read MFG_System: GMS Build Types
-  var index = -1;
-  var valid;
-  for (var i=0; i<NUM_GMS_BUILDS; i++) {
+  // var index = -1;
+  // var valid;
+  // for (var i=0; i<NUM_GMS_BUILDS; i++) {
     
-    // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
-    valid = false;
-    for (var j=0; j<capacityToUseGMS.length; j++) {
-      if (reader.getFloat(GMS_ROW, GMS_COL + i) == capacityToUseGMS[j]) {
-        valid = true;
-        index++;
-        break;
-      }
-    }
+  //   // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
+  //   valid = false;
+  //   for (var j=0; j<capacityToUseGMS.length; j++) {
+  //     if (reader.getFloat(GMS_ROW, GMS_COL + i) == capacityToUseGMS[j]) {
+  //       valid = true;
+  //       index++;
+  //       break;
+  //     }
+  //   }
     
-    if(valid) {
-      model.GMS_BUILDS.add(new Build());
-      model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
-      model.GMS_BUILDS.get(index).capacity     = reader.getFloat(GMS_ROW, GMS_COL + i);
-      model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
-      model.GMS_BUILDS.get(index).buildTime    = buildTime(model.GMS_BUILDS.get(index).capacity);
-      model.GMS_BUILDS.get(index).repurpCost   = 1000000 * reader.getFloat(GMS_ROW + 3, GMS_COL + i);
-      model.GMS_BUILDS.get(index).repurpTime   = reader.getFloat(GMS_ROW + 4, GMS_COL + i);
+  //   if(valid) {
+  //     model.GMS_BUILDS.add(new Build());
+  //     model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
+  //     model.GMS_BUILDS.get(index).capacity     = reader.getFloat(GMS_ROW, GMS_COL + i);
+  //     model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
+  //     model.GMS_BUILDS.get(index).buildTime    = buildTime(model.GMS_BUILDS.get(index).capacity);
+  //     model.GMS_BUILDS.get(index).repurpCost   = 1000000 * reader.getFloat(GMS_ROW + 3, GMS_COL + i);
+  //     model.GMS_BUILDS.get(index).repurpTime   = reader.getFloat(GMS_ROW + 4, GMS_COL + i);
       
-      // Read MFG_System: GMS Build Labor
-      for (var j=0; j<NUM_LABOR; j++) {
-        var num = reader.getvar(GMS_ROW + 5 + 3*j, GMS_COL + i);
-        for (var k=0; k<num; k++) {
-          model.GMS_BUILDS.get(index).labor.add(new Person(
-            model.LABOR_TYPES.getString(j, 0), // Name
-            reader.getFloat(GMS_ROW + 6 + 3*j, GMS_COL + i), // #Shifts
-            model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
-          ));
-        }
-      }
-    }
-  }
+  //     // Read MFG_System: GMS Build Labor
+  //     for (var j=0; j<NUM_LABOR; j++) {
+  //       var num = reader.getvar(GMS_ROW + 5 + 3*j, GMS_COL + i);
+  //       for (var k=0; k<num; k++) {
+  //         model.GMS_BUILDS.get(index).labor.add(new Person(
+  //           model.LABOR_TYPES.getString(j, 0), // Name
+  //           reader.getFloat(GMS_ROW + 6 + 3*j, GMS_COL + i), // #Shifts
+  //           model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
+  //         ));
+  //       }
+  //     }
+  //   }
+  // }
   
   // Read MFG_System: RND Build Types
   index = -1;
@@ -160,7 +206,7 @@ function loadModel_XLS(model, name) {
     
     // Generates Random Sites but Makes Sure Existing and GnField stay rectangular
     NUM_SITES = int(random(2, 4));
-    agileModel.SITES.clear();
+    model.SITES.clear();
     var randomLargest = int(random(0,NUM_SITES-.001));
     prvarln("rLarge:" + randomLargest);
     for (var i=0; i<NUM_SITES; i++) {
@@ -172,7 +218,7 @@ function loadModel_XLS(model, name) {
       }
       var gnHeight = int(random( 1, totHeight-1));
       var mag = 7.5;
-      agileModel.SITES.add(
+      model.SITES.add(
         // Site(String name, float capEx, float capGn, var limitRnD)
         new Site( "Site " + (i+1), mag*(totHeight-gnHeight), mag*(gnHeight), int(random( 2, 5) ) 
       ));

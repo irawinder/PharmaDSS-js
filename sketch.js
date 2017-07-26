@@ -71,56 +71,10 @@ function setup() {
 
   // Initiate MFG_System and Objects
   agileModel = new MFG_System();
-  
+
   // Load Model XLS  COL, ROW
   if (readXLS) {
-    agileModel.TIME_UNIT = gmsRulesFile.getString(2,1);
-    agileModel.COST_UNITS = (gmsRulesFile.getString(7,1)).substring(0,1);
-
-    // Read MFG_System: GMS Build Types
-    var index = -1;
-    var valid;
-    for (var i=0; i<NUM_GMS_BUILDS; i++) {
-      
-      // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
-      valid = false;
-      for (var j=0; j<capacityToUseGMS.length; j++) {
-        if (gmsRulesFile.getString(2 + i, 0) == capacityToUseGMS[j]) {
-          valid = true;
-          index++;
-          break;
-        }
-      }
-      
-      if(valid) {
-        agileModel.GMS_BUILDS.add(new Build());
-        agileModel.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
-        agileModel.GMS_BUILDS.get(index).capacity     = gmsRulesFile.getString(2 + i, 0);
-        agileModel.GMS_BUILDS.get(index).buildCost    = buildCost(agileModel.GMS_BUILDS.get(index).capacity);
-        agileModel.GMS_BUILDS.get(index).buildTime    = buildTime(agileModel.GMS_BUILDS.get(index).capacity);
-        agileModel.GMS_BUILDS.get(index).repurpCost   = 1000000 * gmsRulesFile.getString(2 + i, 3);
-        agileModel.GMS_BUILDS.get(index).repurpTime   = gmsRulesFile.getString(2 + i, 4);
-        
-        // Read MFG_System: GMS Build Labor
-        for (var j=0; j<NUM_LABOR; j++) {
-          var num = gmsRulesFile.getString(2 + i, 5 + 3*j);
-          for (var k=0; k<num; k++) {
-            agileModel.GMS_BUILDS.get(index).labor.add(new Person(
-              agileModel.LABOR_TYPES.getString(j, 0), // Name
-              gmsRulesFile.getString(2 + i, 6 + 3*j), // #Shifts
-              agileModel.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
-            ));
-          }
-        }
-      }
-    }
-
-
-
-
-
-
-
+    loadRules(agileModel, gmsRulesFile);
   }
 
   agileModel.maxCapacity();
@@ -134,7 +88,6 @@ function setup() {
 
   // Loads and formats menue items
   loadMenu(screenWidth, screenHeight);
-
 
 
 
