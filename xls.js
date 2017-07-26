@@ -47,22 +47,20 @@ var PROFILE_COL = 0;
 var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
-// // the xls reader object
-var reader;         
 
-// reads the XLS file and assigns values to System and Objects
+
 function loadModel_XLS(model, name) {
   
   // open xls file for reading
-  reader = new XlsReader( this, name );  
+  // reader = new XlsReader( this, name );  
   
-  // Read MFG_System Information
-  reader.openSheet(SYSTEM_SHEET);
+  // // Read MFG_System Information
+  // reader.openSheet(SYSTEM_SHEET);
     
   // Read MFG_System: Units
   model.WEIGHT_UNITS = reader.getString(SITE_ROW, SITE_COL+2);
-  model.TIME_UNITS = reader.getString(GMS_ROW+2, 1);
-  model.COST_UNITS = reader.getString(GMS_ROW+7, 1).substring(0,1);
+  // model.TIME_UNITS = reader.getString(GMS_ROW+2, 1);
+  // model.COST_UNITS = reader.getString(GMS_ROW+7, 1).substring(0,1);
 
   // Read MFG_System: Labor Types
   model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL));

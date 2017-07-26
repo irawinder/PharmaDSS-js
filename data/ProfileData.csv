@@ -1,0 +1,42 @@
+Year,,,,,,,,,,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
+NCE,Summary,Success/ Failure,Criticality to Patient,Number of Stages,Peak Forecast Demand,Start Time,Production Cost Site 1 (œ/t),Production Cost Site 2 (œ/t),Variable,,,,,,,,,,,,,,,,,,,,
+NCE 1,Double Forecast Demand,Success,,,1500,First 5,20000,25000,Forecast demand (kg/y),0,12,20,20,60,200,300,500,900,1300,1500,1500,1450,1200,800,400,200,20,0,0
+,,,,,,,,,Actual Demand (kg/y),0,10,50,50,90,400,1000,1200,1700,2300,3000,3400,3500,3500,3400,3000,3000,2600,2000,1500
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),100,,,,,,,,,,,,,,,,,,,
+NCE 2,Competition,Failure,,,7500,First 5,17000,30000,Forecast demand (kg/y),0,20,40,80,200,500,1600,2900,3500,4600,5800,7500,7500,7500,7400,7000,6100,5400,4300,2800
+,,,,,,,,,Actual Demand (kg/y),0,15,60,60,500,800,1000,1500,900,200,30,0,0,0,0,0,0,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Competition Enters Market,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),1000,,,,,,,,,,,,,,,,,,,
+NCE 3,Blockbuster,Success,,,31000,Second 5,24000,12000,Forecast demand (kg/y),0,0,0,0,0,0,0,0,20,30,200,1000,3000,8000,12000,17000,22000,30000,31000,30500
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,0,0,0,40,50,200,1200,2900,8400,12000,17500,23000,31000,31000,30000
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),30,,,,,,,,,,,,,,,,,,,
+NCE 4,Failure at phase IIB,Failure,,,9000,Third 5,19000,18000,Forecast demand (kg/y),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,20,500,1500,3500
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,50,500,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Failure of Drug During Trial,N/A
+,,,,,,,,,Recoveries (œ/kg),1500,,,,,,,,,,,,,,,,,,,
+NCE 5,A GSK Entity,Success,,,32390,Second 5,30000,17000,Forecast demand (kg/y),0,0,0,0,0,38,164,429,1653,3510,6908,10870,14690,18500,22260,25650,28260,29980,31050,32390
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,38,164,429,1653,3510,6908,10870,14690,18500,22260,25650,28260,29980,31050,32390
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),5000,,,,,,,,,,,,,,,,,,,
+NCE 6,Competition,Failure,,,15000,Second 5,15000,9000,Forecast demand (kg/y),0,0,0,0,0,0,30,30,80,500,2000,6000,8000,12000,15000,14900,15000,13000,12000,9000
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,0,25,30,100,300,1900,6000,7500,7400,3000,1400,300,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Competition Enters Market,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),2000,,,,,,,,,,,,,,,,,,,
+NCE 7,Never Manufactured,Failure,,,12900,First 5,40000,40000,Forecast demand (kg/y),0,0,30,40,200,1000,4000,9000,12000,12500,12900,12000,11000,10500,9000,7500,5000,2800,1000,50
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),1300,,,,,,,,,,,,,,,,,,,
+NCE 8,Never Manufactured,Failure,,,8000,Third 5,32000,30000,Forecast demand (kg/y),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,30,80,400,2000
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),700,,,,,,,,,,,,,,,,,,,
+NCE 9,Competition,Failure,,,11000,First 5,16000,19000,Forecast demand (kg/y),0,30,70,200,500,1200,1900,4500,7000,9400,10000,11000,10900,10000,10300,9000,7000,4900,2000,300
+,,,,,,,,,Actual Demand (kg/y),0,59,200,500,1900,2100,2000,1700,1500,1500,800,300,100,0,0,0,0,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,Competition Enters Market,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),500,,,,,,,,,,,,,,,,,,,
+NCE 10,Failure at phase IIB,Failure,,,11500,Second 5,8000,5000,Forecast demand (kg/y),0,0,0,0,0,20,20,500,1500,3500,7000,9000,11000,11500,11000,10500,10000,8000,5000,1500
+,,,,,,,,,Actual Demand (kg/y),0,0,0,0,0,20,50,500,0,0,0,0,0,0,0,0,0,0,0,0
+,,,,,,,,,Event Description,N/A,N/A,N/A,N/A,N/A,N/A,N/A,Failure of Drug During Trial,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+,,,,,,,,,Recoveries (œ/kg),950,,,,,,,,,,,,,,,,,,,
