@@ -7,7 +7,7 @@ var SYSTEM_SHEET = 4;
 // Cell A48
 var LABOR_ROW = 47; 
 var LABOR_COL = 0;
-var NUM_LABOR = 6;
+var NUM_LABOR = 6; // NOTE: Changed due to out of index??
 
 // Cell C38
 var SITE_ROW = 37; 
@@ -48,10 +48,19 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
-function loadRules(model, rules, capacity) {
+function loadRules(model, rules, capacity, labour) {
   model.WEIGHT_UNITS = rules.getString(0, 3);
   model.TIME_UNIT = rules.getString(2, 1);
   model.COST_UNITS = (rules.getString(7, 1)).substring(0, 1);
+
+  model.LABOR_TYPES = new p5.Table();
+  model.LABOR_TYPES.addColumn(labour.getString(0,0));
+  model.LABOR_TYPES.addColumn(labour.getString(0,1));
+  for (var i=0; i<NUM_LABOR; i++) {
+    model.LABOR_TYPES.addRow();
+    model.LABOR_TYPES.setString(i, 0, labour.getString(1 + i, 0));
+    model.LABOR_TYPES.setString(i, 1, labour.getString(1 + i, 1));
+  }
 
   // Read MFG_System: GMS Build Types
   var index = -1;
@@ -75,17 +84,16 @@ function loadRules(model, rules, capacity) {
       model.GMS_BUILDS.buildTime    = buildTime(model.GMS_BUILDS.capacity);
       model.GMS_BUILDS.repurpCost   = 1000000 * rules.getString(3, 3 + i);
       model.GMS_BUILDS.repurpTime   = rules.getString(4, 3 + i);
-            print(model.GMS_BUILDS);
 
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = rules.getString(2 + i, 5 + 3*j);
+        var num = rules.getString(5 + 3*j, 3 + i);
         for (var k=0; k<num; k++) {
           print(model.LABOR_TYPES);
           model.GMS_BUILDS.labor = (new Person(
-            model.LABOR_TYPES.getString(0, j), // Name
+            model.LABOR_TYPES.getString(j, 0), // Name
             rules.getString(6 + 3*j, 3 + i), // #Shifts
-            model.LABOR_TYPES.getFloat(1, j) // Cost/Shift
+            model.LABOR_TYPES.getString(j, 1) // Cost/Shift
           ));
         }
       }
@@ -108,13 +116,13 @@ function loadModel_XLS(model, name) {
   // model.COST_UNITS = reader.getString(GMS_ROW+7, 1).substring(0,1);
 
   // Read MFG_System: Labor Types
-  model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL));
-  model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL+1));
-  for (var i=0; i<NUM_LABOR; i++) {
-    model.LABOR_TYPES.addRow();
-    model.LABOR_TYPES.setString(i, 0, reader.getString(LABOR_ROW+1+i, LABOR_COL));
-    model.LABOR_TYPES.setFloat(i, 1, reader.getFloat(LABOR_ROW+1+i, LABOR_COL+1));
-  }
+  // model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL));
+  // model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL+1));
+  // for (var i=0; i<NUM_LABOR; i++) {
+  //   model.LABOR_TYPES.addRow();
+  //   model.LABOR_TYPES.setString(i, 0, reader.getString(LABOR_ROW+1+i, LABOR_COL));
+  //   model.LABOR_TYPES.setFloat(i, 1, reader.getFloat(LABOR_ROW+1+i, LABOR_COL+1));
+  // }
 
   // Read MFG_System: GMS Build Types
   // var index = -1;

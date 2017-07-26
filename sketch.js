@@ -37,6 +37,7 @@ var gmsCapacityFile;
 function preload() {
   gmsRulesFile = loadTable("data/GMSRules.csv","csv","header");
   gmsCapacityFile = loadTable("data/GMSCapacityRules.csv","csv","header");
+  gmsLabourFile = loadTable("data/GMSLabourCosts.csv","csv");
 }
 
 function setup() {
@@ -76,7 +77,7 @@ function setup() {
 
   // Load Model XLS  COL, ROW
   if (readXLS) {
-    loadRules(agileModel, gmsRulesFile, gmsCapacityFile);
+    loadRules(agileModel, gmsRulesFile, gmsCapacityFile, gmsLabourFile);
   }
 
   agileModel.maxCapacity();
