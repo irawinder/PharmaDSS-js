@@ -69,7 +69,7 @@ function loadRules(model, table) {
     }
     
     if(valid) {
-      model.GMS_BUILDS.add(new Build());
+      model.GMS_BUILDS = new Build();
       model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
       model.GMS_BUILDS.get(index).capacity     = table.getString(2 + i, 0);
       model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
