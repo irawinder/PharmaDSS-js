@@ -48,9 +48,10 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
-function loadRules(model, table) {
-  model.TIME_UNIT = table.getString(2, 1);
-  model.COST_UNITS = (table.getString(7, 1)).substring(0, 1);
+function loadRules(model, rules, capacity) {
+  model.WEIGHT_UNITS = rules.getString(0, 3);
+  model.TIME_UNIT = rules.getString(2, 1);
+  model.COST_UNITS = (rules.getString(7, 1)).substring(0, 1);
 
   // Read MFG_System: GMS Build Types
   var index = -1;
@@ -59,9 +60,7 @@ function loadRules(model, table) {
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseGMS.length; j++) {
-              print( table.getString(0, 3 + i) );
-
-      if (table.getString(0, 3 + i) == capacityToUseGMS[j]) {
+      if (rules.getString(0, 3 + i) == capacityToUseGMS[j]) {
         valid = true;
         index++;
         break;
@@ -70,21 +69,23 @@ function loadRules(model, table) {
     
     if(valid) {
       model.GMS_BUILDS = new Build();
-      model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
-      model.GMS_BUILDS.get(index).capacity     = table.getString(2 + i, 0);
-      model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
-      model.GMS_BUILDS.get(index).buildTime    = buildTime(model.GMS_BUILDS.get(index).capacity);
-      model.GMS_BUILDS.get(index).repurpCost   = 1000000 * table.getString(2 + i, 3);
-      model.GMS_BUILDS.get(index).repurpTime   = table.getString(2 + i, 4);
-      
+      model.GMS_BUILDS.name         = "Build #" + (i+1);
+      model.GMS_BUILDS.capacity     = rules.getString(0, 3 + i);
+      model.GMS_BUILDS.buildCost    = buildCost(model.GMS_BUILDS.capacity);
+      model.GMS_BUILDS.buildTime    = buildTime(model.GMS_BUILDS.capacity);
+      model.GMS_BUILDS.repurpCost   = 1000000 * rules.getString(3, 3 + i);
+      model.GMS_BUILDS.repurpTime   = rules.getString(4, 3 + i);
+            print(model.GMS_BUILDS);
+
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = table.getString(2 + i, 5 + 3*j);
+        var num = rules.getString(2 + i, 5 + 3*j);
         for (var k=0; k<num; k++) {
-          model.GMS_BUILDS.get(index).labor.add(new Person(
-            model.LABOR_TYPES.getString(j, 0), // Name
-            table.getString(2 + i, 6 + 3*j), // #Shifts
-            model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
+          print(model.LABOR_TYPES);
+          model.GMS_BUILDS.labor = (new Person(
+            model.LABOR_TYPES.getString(0, j), // Name
+            rules.getString(6 + 3*j, 3 + i), // #Shifts
+            model.LABOR_TYPES.getFloat(1, j) // Cost/Shift
           ));
         }
       }
@@ -102,7 +103,7 @@ function loadModel_XLS(model, name) {
   // reader.openSheet(SYSTEM_SHEET);
     
   // Read MFG_System: Units
-  model.WEIGHT_UNITS = reader.getString(SITE_ROW, SITE_COL+2);
+  // model.WEIGHT_UNITS = reader.getString(SITE_ROW, SITE_COL+2);
   // model.TIME_UNITS = reader.getString(GMS_ROW+2, 1);
   // model.COST_UNITS = reader.getString(GMS_ROW+7, 1).substring(0,1);
 
