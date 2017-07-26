@@ -1,4 +1,4 @@
-var loadOriginal = true;
+var loadOriginal = false;
 
 var NUM_LABOR = 6;
 var NUM_XLS_SITES = 2;
@@ -21,7 +21,7 @@ var SAFE_ROW = 62;
 var SAFE_COL = 1;
 
 // Cell B58
-var RND_LIMIT_ROW = 57; 
+var RND_LIMIT_ROW = 1; 
 var RND_LIMIT_COL = 1;
 
 // "NCE Profile Data"
@@ -34,10 +34,10 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
-function loadRules(model, rules, capacity, labour, RND) {
-  model.WEIGHT_UNITS = rules.getString(0, 3);
-  model.TIME_UNIT = rules.getString(2, 1);
-  model.COST_UNITS = (rules.getString(7, 1)).substring(0, 1);
+function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules) {
+  model.WEIGHT_UNITS = gms_rules.getString(0, 3);
+  model.TIME_UNIT = gms_rules.getString(2, 1);
+  model.COST_UNITS = (gms_rules.getString(7, 1)).substring(0, 1);
 
   model.LABOR_TYPES = new p5.Table();
   model.LABOR_TYPES.addColumn(labour.getString(0,0));
@@ -55,7 +55,7 @@ function loadRules(model, rules, capacity, labour, RND) {
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseGMS.length; j++) {
-      if (rules.getString(0, 3 + i) == capacityToUseGMS[j]) {
+      if (gms_rules.getString(0, 3 + i) == capacityToUseGMS[j]) {
         valid = true;
         index++;
         break;
@@ -65,20 +65,20 @@ function loadRules(model, rules, capacity, labour, RND) {
     if(valid) {
       model.GMS_BUILDS = new Build();
       model.GMS_BUILDS.name         = "Build #" + (i + 1);
-      model.GMS_BUILDS.capacity     = rules.getString(0, 3 + i);
+      model.GMS_BUILDS.capacity     = gms_rules.getString(0, 3 + i);
       model.GMS_BUILDS.buildCost    = buildCost(model.GMS_BUILDS.capacity);
       model.GMS_BUILDS.buildTime    = buildTime(model.GMS_BUILDS.capacity);
-      model.GMS_BUILDS.repurpCost   = 1000000 * rules.getString(3, 3 + i);
-      model.GMS_BUILDS.repurpTime   = rules.getString(4, 3 + i);
+      model.GMS_BUILDS.repurpCost   = 1000000 * gms_rules.getString(3, 3 + i);
+      model.GMS_BUILDS.repurpTime   = gms_rules.getString(4, 3 + i);
 
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = rules.getString(5 + 3*j, 3 + i);
+        var num = gms_rules.getString(5 + 3*j, 3 + i);
         for (var k=0; k<num; k++) {
           print(model.LABOR_TYPES);
           model.GMS_BUILDS.labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            rules.getString(6 + 3*j, 3 + i), // #Shifts
+            gms_rules.getString(6 + 3*j, 3 + i), // #Shifts
             model.LABOR_TYPES.getString(j, 1) // Cost/Shift
           ));
         }
@@ -91,14 +91,14 @@ function loadRules(model, rules, capacity, labour, RND) {
 
 
 
-  // Read MFG_System: RND Build Types
+  // Read MFG_System: rnd_pp Build Types
   index = -1;
   for (var i=0; i<NUM_RND_BUILDS; i++) {
   
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseRND.length; j++) {
-      if (RND.getString(RND_ROW, RND_COL + i) == capacityToUseRND[j]) {
+      if (rnd_pp.getString(RND_ROW, RND_COL + i) == capacityToUseRND[j]) {
         valid = true;
         index++;
         break;
@@ -108,17 +108,17 @@ function loadRules(model, rules, capacity, labour, RND) {
     if(valid) {
       model.RND_BUILDS = new Build();
       model.RND_BUILDS.name          = "Build #" + (i+1);
-      model.RND_BUILDS.capacity      = RND.getString(RND_ROW, RND_COL + i);
-      model.RND_BUILDS.repurpCost    = 1000000 * RND.getString(RND_ROW + 2, RND_COL + i);
-      model.RND_BUILDS.repurpTime    = RND.getString(RND_ROW + 1, RND_COL + i);
+      model.RND_BUILDS.capacity      = rnd_pp.getString(RND_ROW, RND_COL + i);
+      model.RND_BUILDS.repurpCost    = 1000000 * rnd_pp.getString(RND_ROW + 2, RND_COL + i);
+      model.RND_BUILDS.repurpTime    = rnd_pp.getString(RND_ROW + 1, RND_COL + i);
       
-      // Read MFG_System: RND Build Labor
+      // Read MFG_System: rnd_pp Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = RND.getString(RND_ROW + 3 + 3*j, RND_COL + i);
+        var num = rnd_pp.getString(RND_ROW + 3 + 3*j, RND_COL + i);
         for (var k=0; k<num; k++) {
           model.RND_BUILDS.labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            RND.getString(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
+            rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
             model.LABOR_TYPES.getString(j, 1) // Cost/Shift
           ));
         }
@@ -126,6 +126,48 @@ function loadRules(model, rules, capacity, labour, RND) {
     }
   }
   
+
+
+
+  // Read MFG_System: Sites
+  if (loadOriginal) {
+    NUM_SITES = 2;
+    for (var i=0; i<NUM_XLS_SITES; i++) {
+      model.SITES = (new Site(
+        "" + capacity.getString(i, 1),
+        capacity.getString(i, 2),
+        capacity.getString(i + 2, 2),
+        rnd_rules.getString(1 + i, 1)
+      ));
+    }
+  } else {
+    // Generates Random Sites but Makes Sure Existing and GnField stay rectangular
+    NUM_SITES = int(random(2, 4));
+    model.SITES = new Site();
+    var randomLargest = int(random(0,NUM_SITES-.001));
+    print("rLarge:" + randomLargest);
+    for (var i=0; i<NUM_SITES; i++) {
+      var totHeight;
+      if (i==randomLargest) {
+        totHeight = BASIN_HEIGHT;
+      } else {
+        totHeight = int(random( 2, BASIN_HEIGHT));
+      }
+      var gnHeight = int(random( 1, totHeight-1));
+      var mag = 7.5;
+      model.SITES = (
+        // Site(String name, float capEx, float capGn, var limitRnD)
+        new Site( "Site " + (i+1), mag*(totHeight-gnHeight), mag*(gnHeight), int(random( 2, 5) ) 
+      ));
+    }
+    
+  }
+
+
+
+
+
+
 
 
 
@@ -136,41 +178,7 @@ function loadRules(model, rules, capacity, labour, RND) {
 
 function loadModel_XLS(model, name) {  
   
-  // Read MFG_System: Sites
-  if (loadOriginal) {
-    NUM_SITES = 2;
-    for (var i=0; i<NUM_XLS_SITES; i++) {
-      model.SITES.add(new Site(
-        "" + reader.getvar(SITE_ROW + i, SITE_COL),
-        reader.getFloat(SITE_ROW + i, SITE_COL + 1),
-        reader.getFloat(SITE_ROW + i + 2, SITE_COL + 1),
-        reader.getvar(RND_LIMIT_ROW + i, RND_LIMIT_COL)
-      ));
-    }
-    
-  } else {
-    
-    // Generates Random Sites but Makes Sure Existing and GnField stay rectangular
-    NUM_SITES = int(random(2, 4));
-    model.SITES.clear();
-    var randomLargest = int(random(0,NUM_SITES-.001));
-    prvarln("rLarge:" + randomLargest);
-    for (var i=0; i<NUM_SITES; i++) {
-      var totHeight;
-      if (i==randomLargest) {
-        totHeight = BASIN_HEIGHT;
-      } else {
-        totHeight = int(random( 2, BASIN_HEIGHT));
-      }
-      var gnHeight = int(random( 1, totHeight-1));
-      var mag = 7.5;
-      model.SITES.add(
-        // Site(String name, float capEx, float capGn, var limitRnD)
-        new Site( "Site " + (i+1), mag*(totHeight-gnHeight), mag*(gnHeight), int(random( 2, 5) ) 
-      ));
-    }
-    
-  }
+  
   
   // Read MFG_System: MAX_SAFE_UTILIZATION
   model.MAX_SAFE_UTILIZATION = reader.getFloat(SAFE_ROW, SAFE_COL)/100.0;
