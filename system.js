@@ -33,7 +33,7 @@ function MFG_System() {
   this.generateColors = function() {
     colorMode(HSB);
     
-    profileColor = new color[PROFILES.length];
+    profileColor = new Array(PROFILES.length);
     var hue;
     for (var i=0; i<profileColor.length; i++) {
       hue = i * 200.0 / profileColor.length;

@@ -217,7 +217,6 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     }
     
     // Calculates peak forecast demand value, lead years, etc
-    print(model.PROFILES);
     model.PROFILES.calc();
     
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
