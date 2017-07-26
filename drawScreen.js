@@ -72,11 +72,13 @@ function drawScreen() {
   text("Ira Winder, Nina Lutz, Kent Larson (MIT), Joana Gomes (IIM, GSK)\nGiovanni Giorgio, Mason Briner (Capital Strategy and Design, GSK)\nAndrew Rutter (AMT), John Dyson (CSD, GSK)", width - MARGIN, MARGIN + textSizeValue);  
 
   // Draw Profiles
-  // if (!gameMode) {
-  //   drawProfiles(agileModel.PROFILES);
-  // } else {
-  //   drawProfiles(agileModel.activeProfiles);
-  // }
+  if (!gameMode) {
+    print(agileModel.PROFILES);
+    print(session);
+    drawProfiles(agileModel.PROFILES);
+  } else {
+    drawProfiles(agileModel.activeProfiles);
+  }
  
   // Draw Sites
   fill(textColor);
@@ -93,15 +95,15 @@ function drawScreen() {
   }
   
   textSize(min(16, textSizeValue));
-  // NCEClicks.clear();
+  NCEClicks = new Array();
   for (var i=0; i<NUM_SITES; i++) {
     selected = false;
-    // if (i == session.selectedSite) selected = true;
-    // agileModel.SITES.get(i).draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
+    if (i == session.selectedSite) selected = true;
+    agileModel.SITES.get(i).draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
   }
    
   // Line Graph and Outputs
-  // outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
+  outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
   drawBuilds();
@@ -118,10 +120,10 @@ function drawScreen() {
   }
   
   // Draw Radar Plot
-  // if (displayRadar) {
-    // kpi.draw(radarX, radarY, radarH);
-  // }
-  // outputGraph.draw();
+  if (displayRadar) {
+    kpi.draw(radarX, radarY, radarH);
+  }
+  outputGraph.draw();
 
   // Draw Pork Chop
   image(logo_GSK, 1.0*MARGIN, height-MARGIN - 85 + 2, 95, 95); 
@@ -129,6 +131,97 @@ function drawScreen() {
   textAlign(LEFT);
   text("PharmaDSS \n" + VERSION,  2.9*MARGIN, height-MARGIN - 40);
 }
+
+
+var nceW = 15;
+
+function drawLargeProfile(selected) {
+  selected.draw(MARGIN + profilesX - nceW, int(height - 1.75*MARGIN), profilesW, int(0.10*height),true, false, true);
+}
+
+function drawInfoProfile(selected) {
+  selected.draw(infoX + 80, height - 160, infoW - 160, infoH - 300,true, false, true);
+}
+
+function drawProfiles(list) {
+  fill(textColor);
+  textAlign(LEFT);
+  textSize(max(18, textSizeValue));
+  text("NCE Demand Profiles", MARGIN + profilesX - 25, titlesY);
+  
+  // Current Year
+  textAlign(RIGHT);
+  fill(textColor, 200);
+  print(session.current);
+  text(agileModel.YEAR_0 + session.current.TURN, profilesX + profilesW + 1.15*MARGIN, titlesY);
+  
+  var axis;
+  var selected;
+  var numProf = agileModel.PROFILES.length;
+  for (var i=1; i<=list.length; i++) {
+    selected = false;
+    axis = false;
+    if (!gameMode || list.get(i-1).timeLead <= session.current.TURN ) {
+      if (i == numProf) axis = true;
+      if (i == session.selectedProfile+1) selected = true;
+         if(!gameMode){
+            list.get(i-1).draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
+            profilesW, profilesH,
+            axis, selected, false);
+         }
+         else{
+             list.get(i-1).draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
+             profilesW, profilesH,
+             axis, selected, false);
+         }
+    }
+
+  }
+  
+  // Draw Profile Legend
+  noStroke();
+  
+  // Draw Rainbow Icon
+  colorMode(HSB);
+  var ht = 10;
+  var fraction = ht / agileModel.profileColor.length;
+  for (var i=0; i<agileModel.profileColor.length; i++) {
+    fill(agileModel.profileColor[i], 200);
+    rect(MARGIN + profilesX, titlesY + textSizeValue*1.5 + i*fraction, 15, fraction);
+  }
+  colorMode(RGB); 
+  // Always set back to RGB!!!
+  
+  fill(textColor, 150);
+  rect(MARGIN + profilesX, titlesY + textSizeValue*2.7 + 2, 15, 10);
+  fill(P3);
+  rect(MARGIN + profilesX+80 +textSizeValue*2, titlesY + textSizeValue*1.5 , 3, textSizeValue-2);
+  fill(Launch);
+  rect(MARGIN + profilesX+210 +textSizeValue*4, titlesY + textSizeValue*1.5, 3, textSizeValue-2);
+  fill(END);
+  rect(MARGIN + profilesX+80 +textSizeValue*2, titlesY + textSizeValue*2.7 + 2, 3, textSizeValue-2);
+  fill(textColor);
+  fill(CAPACITY_COLOR);
+  rect(MARGIN + profilesX+210  +textSizeValue*3, titlesY + textSizeValue*2.7 + 5, 15, 3);
+  
+  fill(textColor);
+  textAlign(LEFT);
+  text("Actual", MARGIN + profilesX+20, titlesY + textSizeValue*1.5 + 10);
+  text("Forecast", MARGIN + profilesX+20, titlesY + textSizeValue*2.7 + 12);
+  text("Capacity", MARGIN + profilesX+220  +textSizeValue*4, titlesY + textSizeValue*2.7 + 12);
+  text("Launch", MARGIN + profilesX+220  +textSizeValue*4, titlesY + textSizeValue*1.5 + 10);
+  text("Lead (Ph.III)", MARGIN + profilesX+90  +textSizeValue*2, titlesY + textSizeValue*1.5 + 10);
+  text("End", MARGIN + profilesX+90  +textSizeValue*2, titlesY + textSizeValue*2.7 + 12);
+
+  if(gameMode) {
+    fill(NOW);
+    rect(MARGIN + profilesX+140 +textSizeValue*3, titlesY + textSizeValue*2.7 + 2, 3, textSizeValue-2);
+    fill(textColor);
+    text("Now", MARGIN + profilesX+150  +textSizeValue*3, titlesY + textSizeValue*2.7 + 12);
+  }
+
+}
+
 
 
 function drawBuilds() {
