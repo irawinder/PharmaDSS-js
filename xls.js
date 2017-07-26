@@ -59,10 +59,9 @@ function loadRules(model, table) {
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseGMS.length; j++) {
-              print( table.getString(2+i,0) );
+              print( table.getString(0, 3 + i) );
 
-      if (table.getString(2 + i, 0) == capacityToUseGMS[j]) {
-        print( table.getString(2+i,0) );
+      if (table.getString(0, 3 + i) == capacityToUseGMS[j]) {
         valid = true;
         index++;
         break;
@@ -78,7 +77,6 @@ function loadRules(model, table) {
       model.GMS_BUILDS.get(index).repurpCost   = 1000000 * table.getString(2 + i, 3);
       model.GMS_BUILDS.get(index).repurpTime   = table.getString(2 + i, 4);
       
-      print(model.GMS_BUILDS);
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
         var num = table.getString(2 + i, 5 + 3*j);
