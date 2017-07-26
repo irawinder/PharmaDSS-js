@@ -1,31 +1,17 @@
 var loadOriginal = true;
-// import de.bezier.data.*;  
 
-// "Overarching Game Rules&Inputs"
-var SYSTEM_SHEET = 4; 
-
-// Cell A48
-var LABOR_ROW = 47; 
-var LABOR_COL = 0;
-var NUM_LABOR = 6; // NOTE: Changed due to out of index??
-
-// Cell C38
-var SITE_ROW = 37; 
-var SITE_COL = 1;
+var NUM_LABOR = 6;
 var NUM_XLS_SITES = 2;
 var NUM_SITES = 2;
 
-// Cell D3
-var GMS_ROW = 2; 
-var GMS_COL = 3;
 var NUM_GMS_BUILDS = 12;
 // Constrain the list of capacities that are acceptable for the game.
 // 0.5  1  2  5  7  10  15  20  25  30  40  50
 var capacityToUseGMS = [2];
 
 // Cell U3
-var RND_ROW = 2; 
-var RND_COL = 20;
+var RND_ROW = 1; 
+var RND_COL = 3;
 var NUM_RND_BUILDS = 6;
 // Constrain the list of capacities that are acceptable for the game.
 var capacityToUseRND = [0.4];
@@ -48,7 +34,7 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
     
 
-function loadRules(model, rules, capacity, labour) {
+function loadRules(model, rules, capacity, labour, RND) {
   model.WEIGHT_UNITS = rules.getString(0, 3);
   model.TIME_UNIT = rules.getString(2, 1);
   model.COST_UNITS = (rules.getString(7, 1)).substring(0, 1);
@@ -78,7 +64,7 @@ function loadRules(model, rules, capacity, labour) {
     
     if(valid) {
       model.GMS_BUILDS = new Build();
-      model.GMS_BUILDS.name         = "Build #" + (i+1);
+      model.GMS_BUILDS.name         = "Build #" + (i + 1);
       model.GMS_BUILDS.capacity     = rules.getString(0, 3 + i);
       model.GMS_BUILDS.buildCost    = buildCost(model.GMS_BUILDS.capacity);
       model.GMS_BUILDS.buildTime    = buildTime(model.GMS_BUILDS.capacity);
@@ -99,69 +85,12 @@ function loadRules(model, rules, capacity, labour) {
       }
     }
   }
-}
 
 
-function loadModel_XLS(model, name) {
-  
-  // open xls file for reading
-  // reader = new XlsReader( this, name );  
-  
-  // // Read MFG_System Information
-  // reader.openSheet(SYSTEM_SHEET);
-    
-  // Read MFG_System: Units
-  // model.WEIGHT_UNITS = reader.getString(SITE_ROW, SITE_COL+2);
-  // model.TIME_UNITS = reader.getString(GMS_ROW+2, 1);
-  // model.COST_UNITS = reader.getString(GMS_ROW+7, 1).substring(0,1);
 
-  // Read MFG_System: Labor Types
-  // model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL));
-  // model.LABOR_TYPES.addColumn(reader.getString(LABOR_ROW, LABOR_COL+1));
-  // for (var i=0; i<NUM_LABOR; i++) {
-  //   model.LABOR_TYPES.addRow();
-  //   model.LABOR_TYPES.setString(i, 0, reader.getString(LABOR_ROW+1+i, LABOR_COL));
-  //   model.LABOR_TYPES.setFloat(i, 1, reader.getFloat(LABOR_ROW+1+i, LABOR_COL+1));
-  // }
 
-  // Read MFG_System: GMS Build Types
-  // var index = -1;
-  // var valid;
-  // for (var i=0; i<NUM_GMS_BUILDS; i++) {
-    
-  //   // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
-  //   valid = false;
-  //   for (var j=0; j<capacityToUseGMS.length; j++) {
-  //     if (reader.getFloat(GMS_ROW, GMS_COL + i) == capacityToUseGMS[j]) {
-  //       valid = true;
-  //       index++;
-  //       break;
-  //     }
-  //   }
-    
-  //   if(valid) {
-  //     model.GMS_BUILDS.add(new Build());
-  //     model.GMS_BUILDS.get(index).name         = "Build #" + (i+1);
-  //     model.GMS_BUILDS.get(index).capacity     = reader.getFloat(GMS_ROW, GMS_COL + i);
-  //     model.GMS_BUILDS.get(index).buildCost    = buildCost(model.GMS_BUILDS.get(index).capacity);
-  //     model.GMS_BUILDS.get(index).buildTime    = buildTime(model.GMS_BUILDS.get(index).capacity);
-  //     model.GMS_BUILDS.get(index).repurpCost   = 1000000 * reader.getFloat(GMS_ROW + 3, GMS_COL + i);
-  //     model.GMS_BUILDS.get(index).repurpTime   = reader.getFloat(GMS_ROW + 4, GMS_COL + i);
-      
-  //     // Read MFG_System: GMS Build Labor
-  //     for (var j=0; j<NUM_LABOR; j++) {
-  //       var num = reader.getvar(GMS_ROW + 5 + 3*j, GMS_COL + i);
-  //       for (var k=0; k<num; k++) {
-  //         model.GMS_BUILDS.get(index).labor.add(new Person(
-  //           model.LABOR_TYPES.getString(j, 0), // Name
-  //           reader.getFloat(GMS_ROW + 6 + 3*j, GMS_COL + i), // #Shifts
-  //           model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
-  //         ));
-  //       }
-  //     }
-  //   }
-  // }
-  
+
+
   // Read MFG_System: RND Build Types
   index = -1;
   for (var i=0; i<NUM_RND_BUILDS; i++) {
@@ -169,7 +98,7 @@ function loadModel_XLS(model, name) {
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseRND.length; j++) {
-      if (reader.getFloat(RND_ROW, RND_COL + i) == capacityToUseRND[j]) {
+      if (RND.getString(RND_ROW, RND_COL + i) == capacityToUseRND[j]) {
         valid = true;
         index++;
         break;
@@ -177,25 +106,35 @@ function loadModel_XLS(model, name) {
     }
     
     if(valid) {
-      model.RND_BUILDS.add(new Build());
-      model.RND_BUILDS.get(index).name         = "Build #" + (i+1);
-      model.RND_BUILDS.get(index).capacity     = reader.getFloat(RND_ROW, RND_COL + i);
-      model.RND_BUILDS.get(index).repurpCost    = 1000000 * reader.getFloat(RND_ROW + 2, RND_COL + i);
-      model.RND_BUILDS.get(index).repurpTime    = reader.getFloat(RND_ROW + 1, RND_COL + i);
+      model.RND_BUILDS = new Build();
+      model.RND_BUILDS.name          = "Build #" + (i+1);
+      model.RND_BUILDS.capacity      = RND.getString(RND_ROW, RND_COL + i);
+      model.RND_BUILDS.repurpCost    = 1000000 * RND.getString(RND_ROW + 2, RND_COL + i);
+      model.RND_BUILDS.repurpTime    = RND.getString(RND_ROW + 1, RND_COL + i);
       
       // Read MFG_System: RND Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = reader.getvar(RND_ROW + 3 + 3*j, RND_COL + i);
+        var num = RND.getString(RND_ROW + 3 + 3*j, RND_COL + i);
         for (var k=0; k<num; k++) {
-          model.RND_BUILDS.get(index).labor.add(new Person(
+          model.RND_BUILDS.labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            reader.getFloat(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
-            model.LABOR_TYPES.getFloat(j, 1) // Cost/Shift
+            RND.getString(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
+            model.LABOR_TYPES.getString(j, 1) // Cost/Shift
           ));
         }
       }
     }
   }
+  
+
+
+
+
+
+}
+
+
+function loadModel_XLS(model, name) {  
   
   // Read MFG_System: Sites
   if (loadOriginal) {
