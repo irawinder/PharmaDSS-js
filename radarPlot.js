@@ -70,35 +70,35 @@ function RadarPlot(num) {
         //draw fills
         noStroke();
         fill(textColor, 100);
-        triangle(x, y, scores.get(i)*d*cos(rot+i*2*PI/nRadar) + x, 
-                       scores.get(i)*d*sin(rot+i*2*PI/nRadar) + y, 
-                       scores.get((i+1)%nRadar)*d*cos(rot+(i+1)%nRadar*2*PI/nRadar) + x, 
-                       scores.get((i+1)%nRadar)*d*sin(rot+(i+1)%nRadar*2*PI/nRadar) + y);
+        triangle(x, y, (scores[i])*d*cos(rot+i*2*PI/nRadar) + x, 
+                       (scores[i])*d*sin(rot+i*2*PI/nRadar) + y, 
+                       (scores[(i+1)%nRadar])*d*cos(rot+(i+1)%nRadar*2*PI/nRadar) + x, 
+                       (scores[(i+1)%nRadar])*d*sin(rot+(i+1)%nRadar*2*PI/nRadar) + y);
         
         //scores
          textAlign(CENTER, CENTER);
          //recolor for the scores
-          if(scores.get(i) <= .5){
-            RG = lerpColor(color(250, 0, 0),color(255, 255, 0), scores.get(i));}
+          if((scores[i]) <= .5){
+            RG = lerpColor(color(250, 0, 0),color(255, 255, 0), (scores[i]));}
           else{
-            RG = lerpColor(color(255, 255, 0),color(0, 200, 0), scores.get(i));}
+            RG = lerpColor(color(255, 255, 0),color(0, 200, 0), (scores[i]));}
          
          fill(RG); 
          if((d+12)*sin(rot+i*2*PI/nRadar) + y < y){
-           text(int(100*scores.get(i)) + "%", (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 15);
+           text(int(100*(scores[i])) + "%", (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 15);
          }
          else{
-           text(int(100*scores.get(i)) + "%", (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 13 + 15);
+           text(int(100*(scores[i])) + "%", (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 13 + 15);
          }
          
          //names
          fill(textColor);
          textAlign(CENTER);
          if((d+12)*sin(rot+i*2*PI/nRadar) + y - 7 < y){
-         text(names.get(i), (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y - 7);
+         text(names[i], (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y - 7);
          }
          else{
-         text(names.get(i), (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 5);
+         text(names[i], (d+12)*cos(rot+i*2*PI/nRadar) + x, (d+12)*sin(rot+i*2*PI/nRadar) + y + 5);
          }
       }
 

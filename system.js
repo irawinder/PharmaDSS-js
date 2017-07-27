@@ -13,35 +13,33 @@ var GMS_BUILDS, RND_BUILDS;
 var profileColor;
 // Max capacity value for a Site. (capEx + capGn)
 var maxCap;
-// Table that describes labor types and associated costs 
-var LABOR_TYPES;
 // Maximum portion (0.0 - 1.0) of site utilization considered "safe."
 var MAX_SAFE_UTILIZATION;
 // Time Profile is know in advance of first expected demand;
 var LEAD_TIME = 5;
 
 function MFG_System() {
-  LABOR_TYPES = new p5.Table();
+  this.LABOR_TYPES = new p5.Table();
   // The possible Universe/Reality of Profiles
-  PROFILES = new Array();
+  this.PROFILES = new Array();
   // Only the Profiles Visible/Used during a game situation
-  activeProfiles = new Array();
-  SITES = new Array();
-  GMS_BUILDS = new Array();
-  RND_BUILDS = new Array();
+  this.activeProfiles = new Array();
+  this.SITES = new Array();
+  this.GMS_BUILDS = new Array();
+  this.RND_BUILDS = new Array();
 
   this.generateColors = function() {
     colorMode(HSB);
     
-    profileColor = new Array(PROFILES.length);
+    this.profileColor = new Array();
     var hue;
-    for (var i=0; i<profileColor.length; i++) {
-      hue = i * 200.0 / profileColor.length;
-      profileColor[i] = color(hue, 255, 255);
+    for (var i=0; i<this.profileColor.length; i++) {
+      hue = i * 200.0 / this.profileColor.length;
+      this.profileColor[i] = color(hue, 255, 255);
       
       if(i > 2){
-        hue = i * 255.0 / profileColor.length;
-        profileColor[i] = color(hue, 255, 255);
+        hue = i * 255.0 / this.profileColor.length;
+        this.profileColor[i] = color(hue, 255, 255);
       }
 
     }

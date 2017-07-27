@@ -1,6 +1,4 @@
 var NCEClicks = new Array();
-var siteBuild;
-var siteRND;
     
 function Site(name, capEx, capGn, limitRnD) {
   this.name = name;
@@ -8,8 +6,8 @@ function Site(name, capEx, capGn, limitRnD) {
   this.capGn = capGn;
   this.limitRnD = limitRnD;
   
-  siteBuild = new Array();
-  siteRND = new Array();
+  this.siteBuild = new Array();
+  this.siteRND = new Array();
   
   // Update the state of all builds on site
   this.updateBuilds = function() {
@@ -115,13 +113,13 @@ function Site(name, capEx, capGn, limitRnD) {
     var BLD_W = (w - 20)/3;
     var BLD_H; 
    
-    for (var i=0; i<siteBuild.size(); i++) {
+    for (var i=0; i<this.siteBuild.length; i++) {
       // Height of a build Unit
       BLD_H = map(3*siteBuild.get(i).capacity, 0, maxCapSites, 0, h/3);
       
       //property array for clicking
       var props = [BLD_X +  BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, i, agileModel.PROFILES.get(siteBuild.get(i).PROFILE_INDEX).ABSOLUTE_INDEX];
-      NCEClicks.add(props);
+      NCEClicks.push(props);
       
       // Draw Site Builds on Sites
       if(!gameMode){

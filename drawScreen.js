@@ -79,9 +79,7 @@ function drawScreen() {
 
   // Draw Profiles
   if (!gameMode) {
-    print(agileModel.PROFILES);
-    // print(session);
-    // drawProfiles(agileModel.PROFILES);
+    drawProfiles(agileModel.PROFILES);
   } else {
     drawProfiles(agileModel.activeProfiles);
   }
@@ -109,27 +107,27 @@ function drawScreen() {
   // }
    
   // Line Graph and Outputs
-  // outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
+  outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
-  // drawBuilds();
+  drawBuilds();
   
   //Draw Selected Profile in Large Format
-  // try {
-  //   if (!gameMode) {
-  //     drawLargeProfile(agileModel.PROFILES.get(session.selectedProfile));
-  //   } else {
-  //     drawLargeProfile(agileModel.activeProfiles.get(session.selectedProfile));
-  //   }
-  // } catch (e) {
-  //   // print("Could not execute drawLargeProfile() in drawScreen()");
-  // }
+  try {
+    if (!gameMode) {
+      drawLargeProfile(agileModel.PROFILES[session.selectedProfile]);
+    } else {
+      drawLargeProfile(agileModel.activeProfiles.get(session.selectedProfile));
+    }
+  } catch (e) {
+    // print("Could not execute drawLargeProfile() in drawScreen()");
+  }
   
   // Draw Radar Plot
-  // if (displayRadar) {
-  //   kpi.draw(radarX, radarY, radarH);
-  // }
-  // outputGraph.draw();
+  if (displayRadar) {
+    kpi.draw(radarX, radarY, radarH);
+  }
+  outputGraph.draw();
 
 
 }
@@ -154,7 +152,6 @@ function drawProfiles(list) {
   // Current Year
   textAlign(RIGHT);
   fill(textColor, 200);
-  print(session.current);
   text(agileModel.YEAR_0 + session.current.TURN, profilesX + profilesW + 1.15*MARGIN, titlesY);
   
   var axis;

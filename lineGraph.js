@@ -121,11 +121,11 @@ function LineGraph(_Values, _x, _y, _w, _h) {
     text(0, minx - 10, miny);
     var x = minx - textSize*2;
     var y = miny - h/2;
-    pushMatrix();
+    push();
     translate(x,y);
     rotate(-HALF_PI);
     translate(-x,-y);
     text("Score", x,y);
-    popMatrix();
+    pop();
   }
 }
