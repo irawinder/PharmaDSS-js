@@ -109,7 +109,7 @@ Game.prototype.resetSites = function() {
 Game.prototype.populateProfiles = function() {
   // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
   for (var i=0; i<agileModel.PROFILES.length; i++) {
-    if (agileModel.PROFILES[i].timeLead == current.TURN || (current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
+    if (agileModel.PROFILES[i].timeLead == this.current.TURN || (this.current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
       agileModel.PROFILES[i].globalProductionLimit = 0;
       agileModel.PROFILES[i].initCapacityProfile();
       agileModel.activeProfiles.add(agileModel.PROFILES[i]);
@@ -119,7 +119,7 @@ Game.prototype.populateProfiles = function() {
   // When game is active, only populate profiles that are visibile by 5-yr forecasts on first turn
   if (this.current.TURN == 0) {
     for (var i=0; i<agileModel.activeProfiles.length; i++) {
-      if (agileModel.activeProfiles[i].timeEnd + 1 < current.TURN) {
+      if (agileModel.activeProfiles[i].timeEnd + 1 < this.current.TURN) {
         
         // Resets selection to 0 if current profile is being deleted
         if (selectedProfile == i) selectedProfile = 0;

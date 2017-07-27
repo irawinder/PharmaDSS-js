@@ -60,19 +60,19 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     }
     
     if(valid) {
-      model.GMS_BUILDS = new Build();
-      model.GMS_BUILDS.name         = "Build #" + (i + 1);
-      model.GMS_BUILDS.capacity     = gms_rules.getString(0, 3 + i);
-      model.GMS_BUILDS.buildCost    = buildCost(model.GMS_BUILDS.capacity);
-      model.GMS_BUILDS.buildTime    = buildTime(model.GMS_BUILDS.capacity);
-      model.GMS_BUILDS.repurpCost   = 1000000 * gms_rules.getString(3, 3 + i);
-      model.GMS_BUILDS.repurpTime   = gms_rules.getString(4, 3 + i);
+      model.GMS_BUILDS.push(new Build());
+      model.GMS_BUILDS[index].name         = "Build #" + (i + 1);
+      model.GMS_BUILDS[index].capacity     = gms_rules.getString(0, 3 + i);
+      model.GMS_BUILDS[index].buildCost    = buildCost(model.GMS_BUILDS.capacity);
+      model.GMS_BUILDS[index].buildTime    = buildTime(model.GMS_BUILDS.capacity);
+      model.GMS_BUILDS[index].repurpCost   = 1000000 * gms_rules.getString(3, 3 + i);
+      model.GMS_BUILDS[index].repurpTime   = gms_rules.getString(4, 3 + i);
 
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
         var num = gms_rules.getString(5 + 3*j, 3 + i);
         for (var k=0; k<num; k++) {
-          model.GMS_BUILDS.labor = (new Person(
+          model.GMS_BUILDS[index].labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
             gms_rules.getString(6 + 3*j, 3 + i), // #Shifts
             model.LABOR_TYPES.getString(j, 1) // Cost/Shift
@@ -102,17 +102,17 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     }
     
     if(valid) {
-      model.RND_BUILDS = new Build();
-      model.RND_BUILDS.name          = "Build #" + (i+1);
-      model.RND_BUILDS.capacity      = rnd_pp.getString(RND_ROW, RND_COL + i);
-      model.RND_BUILDS.repurpCost    = 1000000 * rnd_pp.getString(RND_ROW + 2, RND_COL + i);
-      model.RND_BUILDS.repurpTime    = rnd_pp.getString(RND_ROW + 1, RND_COL + i);
+      model.RND_BUILDS.push(new Build());
+      model.RND_BUILDS[index].name          = "Build #" + (i+1);
+      model.RND_BUILDS[index].capacity      = rnd_pp.getString(RND_ROW, RND_COL + i);
+      model.RND_BUILDS[index].repurpCost    = 1000000 * rnd_pp.getString(RND_ROW + 2, RND_COL + i);
+      model.RND_BUILDS[index].repurpTime    = rnd_pp.getString(RND_ROW + 1, RND_COL + i);
       
       // Read MFG_System: rnd_pp Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
         var num = rnd_pp.getString(RND_ROW + 3 + 3*j, RND_COL + i);
         for (var k=0; k<num; k++) {
-          model.RND_BUILDS.labor = (new Person(
+          model.RND_BUILDS[index].labor = (new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
             rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
             model.LABOR_TYPES.getString(j, 1) // Cost/Shift
@@ -187,55 +187,48 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
   for (var i=0; i<NUM_PROFILES; i++) {
     
     // Read Profile: Basic Attributes
-    model.PROFILES = new Profile(i); 
-    model.PROFILES.name = profile.getString(PROFILE_ROW + 2 + 4*i, PROFILE_COL);
-    model.PROFILES.summary = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 1);
+    model.PROFILES.push(new Profile(i)); 
+    model.PROFILES[i].name = profile.getString(PROFILE_ROW + 2 + 4*i, PROFILE_COL);
+    model.PROFILES[i].summary = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 1);
     if (profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 2) == "success") {
-      model.PROFILES.success = true;
+      model.PROFILES[i].success = true;
     } else {
-      model.PROFILES.success = false;
+      model.PROFILES[i].success = false;
     }
-    model.PROFILES.timeStart = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 6);
+    model.PROFILES[i].timeStart = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 6);
     
     // Read Profile: Site Costs
     for (var j=0; j<NUM_XLS_SITES; j++) {
-      model.PROFILES.productionCost = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j);
+      model.PROFILES[i].productionCost = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j);
     }
     
     // Read Profile: Demand Profile
-    model.PROFILES.demandProfile = new p5.Table();
-    model.PROFILES.demandProfile.addRow(); // Time
-    model.PROFILES.demandProfile.addRow(); // Demand Forecast
-    model.PROFILES.demandProfile.addRow(); // Demand Actual
-    model.PROFILES.demandProfile.addRow(); // Event Description
+    model.PROFILES[i].demandProfile = new p5.Table();
+    model.PROFILES[i].demandProfile.addRow(); // Time
+    model.PROFILES[i].demandProfile.addRow(); // Demand Forecast
+    model.PROFILES[i].demandProfile.addRow(); // Demand Actual
+    model.PROFILES[i].demandProfile.addRow(); // Event Description
     for (var j=0; j<NUM_INTERVALS; j++) {
-      model.PROFILES.demandProfile.addColumn();
-      model.PROFILES.demandProfile.setString(0, j, profile.getString(PROFILE_ROW, PROFILE_COL + 10 + j) );
-      model.PROFILES.demandProfile.setString(1, j, profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES.demandProfile.setString(2, j, profile.getString(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES.demandProfile.setString(3, j, profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES[i].demandProfile.addColumn();
+      model.PROFILES[i].demandProfile.setString(0, j, profile.getString(PROFILE_ROW, PROFILE_COL + 10 + j) );
+      model.PROFILES[i].demandProfile.setString(1, j, profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES[i].demandProfile.setString(2, j, profile.getString(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES[i].demandProfile.setString(3, j, profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
     }
     
     // Calculates peak forecast demand value, lead years, etc
-    model.PROFILES.calc();
+    model.PROFILES[i].calc();
     
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
     if (!loadOriginal) {
       var mag = 1000*(random(10)+3);
-      model.PROFILES.setPeak(mag);
+      model.PROFILES[i].setPeak(mag);
     }
     
     // Re-Calculates peak forecast demand value, lead years, etc
-    model.PROFILES.calc();
+    model.PROFILES[i].calc();
   }
   
   model.generateColors();
-
-
-
-
-
-
-
 
 }
