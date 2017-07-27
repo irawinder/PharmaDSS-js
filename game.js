@@ -73,7 +73,7 @@ function Game() {
       
       // Updates the Status of builds on each site at end of each turn (age, etc)
       for (var i=0; i<agileModel.SITES.length; i++) {
-        agileModel.SITES.get(i).updateBuilds();
+        agileModel.SITES[i].updateBuilds();
       }
       
       // Updates the production capacities for each NCE
@@ -83,9 +83,9 @@ function Game() {
       calcOutputs(session.current.TURN-1);
       for (var i=0; i<NUM_OUTPUTS; i++) {
         if (i < 3) {
-          kpi.setScore(i, 1 - outputs.get(session.current.TURN - 1)[i]/outputMax[i]);
+          kpi.setScore(i, 1 - outputs[session.current.TURN - 1][i]/outputMax[i]);
         } else {
-          kpi.setScore(i, outputs.get(session.current.TURN - 1)[i]/outputMax[i]);
+          kpi.setScore(i, outputs[session.current.TURN - 1][i]/outputMax[i]);
         }
       }
       displayRadar = true;
@@ -101,7 +101,7 @@ function Game() {
 // Clear all user-defined builds from sites
 Game.prototype.resetSites = function() {
   for (var i=0; i<agileModel.SITES.length; i++) {
-    agileModel.SITES.get(i).siteBuild.clear();
+    agileModel.SITES[i].siteBuild.clear();
   }
 }
 
@@ -109,17 +109,17 @@ Game.prototype.resetSites = function() {
 Game.prototype.populateProfiles = function() {
   // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
   for (var i=0; i<agileModel.PROFILES.length; i++) {
-    if (agileModel.PROFILES.get(i).timeLead == current.TURN || (current.TURN == 0 && agileModel.PROFILES.get(i).timeLead < 0) ) {
-      agileModel.PROFILES.get(i).globalProductionLimit = 0;
-      agileModel.PROFILES.get(i).initCapacityProfile();
-      agileModel.activeProfiles.add(agileModel.PROFILES.get(i));
+    if (agileModel.PROFILES[i].timeLead == current.TURN || (current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
+      agileModel.PROFILES[i].globalProductionLimit = 0;
+      agileModel.PROFILES[i].initCapacityProfile();
+      agileModel.activeProfiles.add(agileModel.PROFILES[i]);
     }
   }
   
   // When game is active, only populate profiles that are visibile by 5-yr forecasts on first turn
   if (this.current.TURN == 0) {
     for (var i=0; i<agileModel.activeProfiles.length; i++) {
-      if (agileModel.activeProfiles.get(i).timeEnd + 1 < current.TURN) {
+      if (agileModel.activeProfiles[i].timeEnd + 1 < current.TURN) {
         
         // Resets selection to 0 if current profile is being deleted
         if (selectedProfile == i) selectedProfile = 0;
@@ -148,18 +148,18 @@ function Event(eventType, siteIndex, buildIndex, profileIndex = "None") {
   this.profileIndex = profileIndex;
 
   if (this.profileIndex == "None") {
-    Event.flagRemove();
+    this.flagRemove();
   } else {
     if (eventType.equals("deploy")) {
       // stage a build/deployment event based upon pre-engineered modules 
-      Event.stage();
+      this.stage();
     } else if (eventType.equals("initialize")) {
       // init. a build/deployment event based upon pre-engineered modules 
-      Event.initialize();
+      this.initialize();
     } else if (eventType.equals("repurpose")) {
       // stage a build/deployment event based upon pre-engineered modules 
       this.siteBuildIndex = buildIndex;
-      Event.flagRepurpose();
+      this.flagRepurpose();
     }
   }
 }
@@ -170,20 +170,20 @@ Event.prototype.stage = function() {
   var event = new Build();
   
   // Copy Ideal Build attributes to site-specific build
-  event.name         = agileModel.GMS_BUILDS.get(buildIndex).name;
-  event.capacity     = agileModel.GMS_BUILDS.get(buildIndex).capacity;
-  event.buildCost    = agileModel.GMS_BUILDS.get(buildIndex).buildCost;
-  event.buildTime    = agileModel.GMS_BUILDS.get(buildIndex).buildTime;
-  event.repurpCost   = agileModel.GMS_BUILDS.get(buildIndex).repurpCost;
-  event.repurpTime   = agileModel.GMS_BUILDS.get(buildIndex).repurpTime;
-  event.labor        = agileModel.GMS_BUILDS.get(buildIndex).labor;
+  event.name         = agileModel.GMS_BUILDS[buildIndex].name;
+  event.capacity     = agileModel.GMS_BUILDS[buildIndex].capacity;
+  event.buildCost    = agileModel.GMS_BUILDS[buildIndex].buildCost;
+  event.buildTime    = agileModel.GMS_BUILDS[buildIndex].buildTime;
+  event.repurpCost   = agileModel.GMS_BUILDS[buildIndex].repurpCost;
+  event.repurpTime   = agileModel.GMS_BUILDS[buildIndex].repurpTime;
+  event.labor        = agileModel.GMS_BUILDS[buildIndex].labor;
   event.editing      = true;
   
   // Customizes a Build for a given NCE
   event.assignProfile(profileIndex);
   
   // Add the NCE-customized Build to the given Site
-  agileModel.SITES.get(siteIndex).siteBuild.add(event);
+  agileModel.SITES[siteIndex].siteBuild.add(event);
 }
 
 // stage a build/deployment event based upon pre-engineered modules 
@@ -191,13 +191,13 @@ Event.prototype.initialize = function() {
   var event = new Build();
   
   // Copy Ideal Build attributes to site-specific build
-  event.name         = agileModel.GMS_BUILDS.get(buildIndex).name;
-  event.capacity     = agileModel.GMS_BUILDS.get(buildIndex).capacity;
-  event.buildCost    = agileModel.GMS_BUILDS.get(buildIndex).buildCost;
-  event.buildTime    = agileModel.GMS_BUILDS.get(buildIndex).buildTime;
-  event.repurpCost   = agileModel.GMS_BUILDS.get(buildIndex).repurpCost;
-  event.repurpTime   = agileModel.GMS_BUILDS.get(buildIndex).repurpTime;
-  event.labor        = agileModel.GMS_BUILDS.get(buildIndex).labor;
+  event.name         = agileModel.GMS_BUILDS[buildIndex].name;
+  event.capacity     = agileModel.GMS_BUILDS[buildIndex].capacity;
+  event.buildCost    = agileModel.GMS_BUILDS[buildIndex].buildCost;
+  event.buildTime    = agileModel.GMS_BUILDS[buildIndex].buildTime;
+  event.repurpCost   = agileModel.GMS_BUILDS[buildIndex].repurpCost;
+  event.repurpTime   = agileModel.GMS_BUILDS[buildIndex].repurpTime;
+  event.labor        = agileModel.GMS_BUILDS[buildIndex].labor;
   event.editing      = true;
   
   // Customizes a Build for a given NCE
@@ -206,10 +206,10 @@ Event.prototype.initialize = function() {
   event.capEx_Logged = true;
   
   // Add the NCE-customized Build to the given Site
-  agileModel.SITES.get(siteIndex).siteBuild.add(event);
+  ((agileModel.SITES)[siteIndex]).siteBuild.add(event);
 }
 
-  var current = agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex);
+var current = ((agileModel.SITES)[siteIndex]).siteBuild.get(siteBuildIndex);
 Event.prototype.flagRemove = function() {
   if (current.editing) {
     agileModel.SITES.get(siteIndex).siteBuild.remove(siteBuildIndex);

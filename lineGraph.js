@@ -46,10 +46,10 @@ function LineGraph(_Values, _x, _y, _w, _h) {
         
         for(var j = 0; j<intervals; j++) {
            posx  = j*(w/Values.length) + minx;         
-           posy = map(100*Values.get(j)[i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
+           posy = map(100*Values[j][i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
           
            posx2  = posx + (w/Values.length);
-           posy2 = map(100*Values.get(j+1)[i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
+           posy2 = map(100*Values[j+1][i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
            
            //set colors with the appropriate profile
            fill(colarray[i]);
@@ -67,8 +67,8 @@ function LineGraph(_Values, _x, _y, _w, _h) {
              
              fill(textColor);
              textAlign(CENTER);
-             var val = str(100*Values.get(j+1)[i]/outputMax[i]).substring(0, str(100*Values.get(j+1)[i]/outputMax[i]).indexOf(".")).length();
-             text(nf(100*Values.get(j+1)[i], val, 1).substring(0,3) + " " +outputUnits[i], posx2, posy2-10);
+             var val = str(100*Values[j+1][i]/outputMax[i]).substring(0, str(100*Values[j+1][i]/outputMax[i]).indexOf(".")).length();
+             text(nf(100*Values[j+1][i], val, 1).substring(0,3) + " " +outputUnits[i], posx2, posy2-10);
            }
         }
       
@@ -79,9 +79,9 @@ function LineGraph(_Values, _x, _y, _w, _h) {
          strokeWeight(2);
          stroke(colarray[i], 150);
          posx  = minx; 
-         posy = map(100*Values.get(0)[i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
+         posy = map(100*Values[0][i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
          posx2  = posx + (w/Values.length);
-         posy2 = map(100*Values.get(1)[i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
+         posy2 = map(100*Values[1][i]/outputMax[i], 0, 100, miny - 10, miny - h + 30);
          var dim = 2;
          if (session.current.TURN == 1) dim = 4;
          ellipse(posx, posy, dim, dim);

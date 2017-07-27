@@ -11,13 +11,13 @@ function Site(name, capEx, capGn, limitRnD) {
   
   // Update the state of all builds on site
   this.updateBuilds = function() {
-    for(var i=siteBuild.size()-1; i>=0; i--) {
-      siteBuild.get(i).editing = false;
-      if (siteBuild.get(i).demolish) {
+    for(var i=siteBuild.length-1; i>=0; i--) {
+      siteBuild[i].editing = false;
+      if (siteBuild[i].demolish) {
         siteBuild.remove(i);
         if (session.selectedSiteBuild >= i && i != 0) session.selectedSiteBuild--; // moves index back to avoid crash
       } else {
-        siteBuild.get(i).updateBuild();
+        siteBuild[i].updateBuild();
       }
     }
   }

@@ -46,7 +46,7 @@ function RadarPlot(num) {
   this.updateAvg = function() {
     avgScore = 0;
     for (var i=0; i<nRadar; i++) {
-      avgScore += scores.get(i);
+      avgScore += scores[i];
     }
     avgScore /= nRadar;
   }

@@ -32,29 +32,29 @@ function initOutputs() {
 }
 
 function calcOutputs(turn) {
-  if (outputs.get(turn).length > 0) {
+  if (outputs[turn].length > 0) {
     // Capital Expenditures
-    outputs.get(turn)[0] = calcCAPEX();
+    outputs[turn][0] = calcCAPEX();
   }
   
-  if (outputs.get(turn).length > 1) {
+  if (outputs[turn].length > 1) {
     // Ability to meet Demand
-    outputs.get(turn)[3] = calcDemandMeetAbility();
+    outputs[turn][3] = calcDemandMeetAbility();
   }
   
-  if (outputs.get(turn).length > 2) {
+  if (outputs[turn].length > 2) {
     // Security of Supply
-    outputs.get(turn)[4] = calcSecurity();
+    outputs[turn][4] = calcSecurity();
   }
   
-  if (outputs.get(turn).length > 3) {
+  if (outputs[turn].length > 3) {
     // Operating Expenditures
-    outputs.get(turn)[1] = calcCOGs();
+    outputs[turn][1] = calcCOGs();
   }
   
-  if (outputs.get(turn).length > 4) {
+  if (outputs[turn].length > 4) {
     // Cost of Goods
-    outputs.get(turn)[2] = calcOPEX();
+    outputs[turn][2] = calcOPEX();
   }
   
 }
@@ -104,8 +104,8 @@ function calcCAPEX() {
   var expenses = 0.0;
   var current;
   for (var i=0; i<agileModel.SITES.length; i++) {
-    for (var j=0; j<agileModel.SITES.get(i).siteBuild.length; j++) {
-      current = agileModel.SITES.get(i).siteBuild.get(j);
+    for (var j=0; j<agileModel.SITES[i].siteBuild.length; j++) {
+      current = agileModel.SITES[i].siteBuild[j];
       if (!current.capEx_Logged) { // Ensures capital cost for build is only counted once
         expenses += current.buildCost;
         if (current.age != 0) current.capEx_Logged = false;
@@ -120,11 +120,11 @@ function calcOPEX() {
   var expenses = 0.0;
   var current;
   for (var i=0; i<agileModel.SITES.length; i++) {
-    for (var j=0; j<agileModel.SITES.get(i).siteBuild.length; j++) {
-      current = agileModel.SITES.get(i).siteBuild.get(j);
+    for (var j=0; j<agileModel.SITES[i].siteBuild.length; j++) {
+      current = agileModel.SITES[i].siteBuild[j];
       if (current.built) {
         for (var l=0; l<current.labor.length; l++) {
-          expenses += current.labor.get(l).cost;
+          expenses += current.labor[l].cost;
         }
       }
     }
@@ -138,11 +138,11 @@ function calcCOGs() {
   var current;
   var nce;
   for (var i=0; i<agileModel.SITES.length; i++) {
-    for (var j=0; j<agileModel.SITES.get(i).siteBuild.length; j++) {
-      current = agileModel.SITES.get(i).siteBuild.get(j);
-      nce = agileModel.PROFILES.get(current.PROFILE_INDEX);
+    for (var j=0; j<agileModel.SITES[i].siteBuild.length; j++) {
+      current = agileModel.SITES[i].siteBuild[j];
+      nce = agileModel.PROFILES[current.PROFILE_INDEX];
       if (current.built) {
-        expenses += current.production * current.capacity * nce.productionCost.get(i);
+        expenses += current.production * current.capacity * nce.productionCost[i];
       }
     }
   }
@@ -162,8 +162,8 @@ function calcDemandMeetAbility() {
   
   for (var i=0; i<agileModel.activeProfiles.length; i++) {
     
-    profileCapacity = agileModel.activeProfiles.get(i).globalProductionLimit;
-    profileActualDemand = agileModel.activeProfiles.get(i).demandProfile.getFloat(2, session.current.TURN-1);
+    profileCapacity = agileModel.activeProfiles[i].globalProductionLimit;
+    profileActualDemand = agileModel.activeProfiles[i].demandProfile.getString(2, session.current.TURN-1);
     
     if (profileActualDemand > 0) {
       scoreCount++;
@@ -219,9 +219,9 @@ function calcSecurity() {
     siteCapacity = new float[agileModel.SITES.length];
     for (var s=0; s<agileModel.SITES.length; s++) {
       siteCapacity[s] = 0.0;
-      for (var b=0; b<agileModel.SITES.get(s).siteBuild.length; b++) {
-        current = agileModel.SITES.get(s).siteBuild.get(b);
-        if (current.PROFILE_INDEX == agileModel.activeProfiles.get(i).ABSOLUTE_INDEX) {
+      for (var b=0; b<agileModel.SITES[s].siteBuild.length; b++) {
+        current = agileModel.SITES[s].siteBuild[b];
+        if (current.PROFILE_INDEX == agileModel.activeProfiles[i].ABSOLUTE_INDEX) {
           siteCapacity[s] += current.capacity;
         }
       }
@@ -234,7 +234,7 @@ function calcSecurity() {
       totalCapacity += siteCapacity[s];
     }
     
-    var demand = agileModel.activeProfiles.get(i).demandProfile.getFloat(2, min(session.current.TURN, NUM_INTERVALS-1) );
+    var demand = agileModel.activeProfiles[i].demandProfile.getString(2, min(session.current.TURN, NUM_INTERVALS-1) );
     demand /= 1000.0; // units of kiloTons
     
     // Calaculates normalized balance and supply scores and adds them to total
@@ -263,7 +263,7 @@ function calcSecurity() {
       }
       
       // Adds the current NCE's balance score to the overall
-      balanceScore += agileModel.activeProfiles.get(i).weightBalance * numBackup;
+      balanceScore += agileModel.activeProfiles[i].weightBalance * numBackup;
       
 
       // Calculate Normalized supply score and add it to total
@@ -277,7 +277,7 @@ function calcSecurity() {
         sup = TOLERANCE - bufferSupply;
         if (sup < 0.0) sup = 0;
       }
-      supplyScore += agileModel.activeProfiles.get(i).weightSupply * sup;
+      supplyScore += agileModel.activeProfiles[i].weightSupply * sup;
       
     }
     

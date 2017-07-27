@@ -143,16 +143,16 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     numSites = factories.length;
     for (var i=0; i<numSites; i++) {
       localProductionLimit.push(0.0);
-      numBuilds = factories.get(i).siteBuild.length;
+      numBuilds = factories[i].siteBuild.length;
       for (var j=0; j<numBuilds; j++) {
-        current = factories.get(i).siteBuild.get(j);
+        current = factories[i].siteBuild[j];
         if (current.built) {
           if (current.PROFILE_INDEX == ABSOLUTE_INDEX) {
-            localProductionLimit.set(i, localProductionLimit.get(i) + current.capacity);
+            localProductionLimit.set(i, localProductionLimit[i] + current.capacity);
           }
         }
       }
-      globalProductionLimit += 1000*localProductionLimit.get(i);
+      globalProductionLimit += 1000*localProductionLimit[i];
     }
     
     // Sets Remaining Capacity to Current Turn's Status Quo:
@@ -162,9 +162,9 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // If Demand is yet to be built, adds potential to future capacity as "ghost"
     for (var i=0; i<numSites; i++) {
-      numBuilds = factories.get(i).siteBuild.length;
+      numBuilds = factories[i].siteBuild.length;
       for (var j=0; j<numBuilds; j++) {
-        current = factories.get(i).siteBuild.get(j);
+        current = factories[i].siteBuild[j];
         if (!current.built) {
           if (current.PROFILE_INDEX == ABSOLUTE_INDEX) {
             var yearsToOperate = int(current.buildTime - current.age);
@@ -407,7 +407,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     // Y-Axis for Large-scale graphic
     if (detail) {
       //unit = demandPeak_F/3;
-      unit = 1000*agileModel.GMS_BUILDS.get(0).capacity;
+      unit = 1000*agileModel.GMS_BUILDS[0].capacity;
       stroke(textColor, 20);
       strokeWeight(1);
       for (var i=0; i<=int (forecastScalerH*demandPeak_F/unit); i++) {
@@ -423,6 +423,6 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 function updateProfileCapacities() {
   // Updates the production capacities for each NCE
   for (var i=0; i<agileModel.activeProfiles.length; i++) {
-    agileModel.activeProfiles.get(i).calcProduction(agileModel.SITES);
+    agileModel.activeProfiles[i].calcProduction(agileModel.SITES);
   }
 }

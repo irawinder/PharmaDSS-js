@@ -7,9 +7,6 @@ var YEAR_0 = 2017;
 var COST_UNITS;
 // Objects that hold marginal attributes of various build volumes.  
 // Each build is associated with a discrete build volume.
-var PROFILES, activeProfiles;
-var SITES;
-var GMS_BUILDS, RND_BUILDS;
 var profileColor;
 // Max capacity value for a Site. (capEx + capGn)
 var maxCap;

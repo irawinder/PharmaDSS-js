@@ -103,7 +103,7 @@ function drawScreen() {
   // for (var i=0; i<NUM_SITES; i++) {
   //   selected = false;
   //   if (i == session.selectedSite) selected = true;
-  //   agileModel.SITES.get(i).draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
+  //   agileModel.SITES.[i].draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
   // }
    
   // Line Graph and Outputs
@@ -117,7 +117,7 @@ function drawScreen() {
     if (!gameMode) {
       drawLargeProfile(agileModel.PROFILES[session.selectedProfile]);
     } else {
-      drawLargeProfile(agileModel.activeProfiles.get(session.selectedProfile));
+      drawLargeProfile(agileModel.activeProfiles[session.selectedProfile]);
     }
   } catch (e) {
     // print("Could not execute drawLargeProfile() in drawScreen()");
@@ -160,16 +160,16 @@ function drawProfiles(list) {
   for (var i=1; i<=list.length; i++) {
     selected = false;
     axis = false;
-    if (!gameMode || list.get(i-1).timeLead <= session.current.TURN ) {
+    if (!gameMode || list[i-1].timeLead <= session.current.TURN ) {
       if (i == numProf) axis = true;
       if (i == session.selectedProfile+1) selected = true;
          if(!gameMode){
-            list.get(i-1).draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
+            list[i-1].draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
             profilesW, profilesH,
             axis, selected, false);
          }
          else{
-             list.get(i-1).draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
+             list[i-1].draw(MARGIN + profilesX - nceW, MARGIN + profilesY + int(0.57*height*(i-1)/float(numProf+1)), 
              profilesW, profilesH,
              axis, selected, false);
          }
@@ -270,9 +270,9 @@ function drawInfoOverlay() {
   try {
     //Draw Selected Profile in Large Format
     if (!gameMode) {
-      drawInfoProfile(agileModel.PROFILES.get(session.selectedProfile));
+      drawInfoProfile(agileModel.PROFILES[session.selectedProfile]);
     } else {
-      drawInfoProfile(agileModel.activeProfiles.get(session.selectedProfile));
+      drawInfoProfile(agileModel.activeProfiles[session.selectedProfile]);
     }
     
   } catch(e) {
@@ -282,7 +282,7 @@ function drawInfoOverlay() {
   fill(textColor);
   for (var i=0; i<NUM_SITES; i++) {
     try {
-      text("Site " + i + ", Cost of Goods: " + agileModel.activeProfiles.get(session.selectedProfile).productionCost.get(i), 
+      text("Site " + i + ", Cost of Goods: " + agileModel.activeProfiles[session.selectedProfile].productionCost[i], 
         infoX + 180 + MARGIN, infoY + 80 + 30*i);
     } catch(e) {
       
