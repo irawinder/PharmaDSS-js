@@ -183,7 +183,7 @@ Event.prototype.stage = function() {
   event.assignProfile(profileIndex);
   
   // Add the NCE-customized Build to the given Site
-  agileModel.SITES[siteIndex].siteBuild.add(event);
+  agileModel.SITES[siteIndex].siteBuild.push(event);
 }
 
 // stage a build/deployment event based upon pre-engineered modules 
@@ -202,32 +202,32 @@ Event.prototype.initialize = function() {
   
   // Customizes a Build for a given NCE
   event.assignProfile(profileIndex);
-  event.age          = int(event.buildTime - agileModel.PROFILES.get(profileIndex).timeLaunch);
+  event.age          = int(event.buildTime - agileModel.PROFILES[profileIndex].timeLaunch);
   event.capEx_Logged = true;
   
   // Add the NCE-customized Build to the given Site
-  ((agileModel.SITES)[siteIndex]).siteBuild.add(event);
+  ((agileModel.SITES)[siteIndex]).siteBuild.push(event);
 }
 
-var current = ((agileModel.SITES)[siteIndex]).siteBuild.get(siteBuildIndex);
+var current = ((agileModel.SITES)[siteIndex]).siteBuild[siteBuildIndex];
 Event.prototype.flagRemove = function() {
   if (current.editing) {
-    agileModel.SITES.get(siteIndex).siteBuild.remove(siteBuildIndex);
+    agileModel.SITES[siteIndex].siteBuild.remove(siteBuildIndex);
   } else {
-    agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).demolish = true;
+    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].demolish = true;
   }
   
 }
 
 Event.prototype.flagRepurpose = function() {
-  if (agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).built == false) {
+  if (agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].built == false) {
     game_message ="Can't repurpose while under construction";
     print("Can't Repurpose while Under Construction");
   } else {
-    agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).repurpose = true;
-    agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).built = false;
-    agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).age = 0;
-    agileModel.SITES.get(siteIndex).siteBuild.get(siteBuildIndex).PROFILE_INDEX = profileIndex;
+    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].repurpose = true;
+    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].built = false;
+    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].age = 0;
+    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].PROFILE_INDEX = profileIndex;
     game_message = " ";
   }
 }
@@ -275,12 +275,12 @@ function nextBuild() {
 
 // User Selects Next Available Build on a specific site
 function nextSiteBuild() {
-  if (agileModel.SITES.get(session.selectedSite).siteBuild.length == 0) {
+  if (agileModel.SITES[session.selectedSite].siteBuild.length == 0) {
     game_message = "Site has no Production!";
     print("Site has no Production!");
   } else {
     game_message = " ";
-    if (session.selectedSiteBuild >= agileModel.SITES.get(session.selectedSite).siteBuild.length - 1) {
+    if (session.selectedSiteBuild >= agileModel.SITES[session.selectedSite].siteBuild.length - 1) {
       session.selectedSiteBuild = 0;
     } else {
       session.selectedSiteBuild++;
@@ -293,7 +293,7 @@ function nextSiteBuild() {
 function deploySelection() {
   game_message = " ";
   try {
-    var deploy = new Event("deploy", session.selectedSite, session.selectedBuild, agileModel.activeProfiles.get(session.selectedProfile).ABSOLUTE_INDEX);
+    var deploy = new Event("deploy", session.selectedSite, session.selectedBuild, agileModel.activeProfiles[session.selectedProfile].ABSOLUTE_INDEX);
     session.current.event.push(deploy);
     
   } catch (e) {
@@ -311,7 +311,7 @@ function removeSelection() {
 
 // Repurpose Selected Manufacturing Option
 function repurposeSelection() {
-  var repurpose = new Event("repurpose", session.selectedSite, session.selectedSiteBuild, agileModel.activeProfiles.get(session.selectedProfile).ABSOLUTE_INDEX);
+  var repurpose = new Event("repurpose", session.selectedSite, session.selectedSiteBuild, agileModel.activeProfiles[session.selectedProfile].ABSOLUTE_INDEX);
   session.current.event.push(repurpose);
   updateProfileCapacities();
 }
@@ -325,7 +325,7 @@ function endTurn() {
 function activeProfileIndex (profile) {
   var index = -1;
   for (var i=0; i<agileModel.activeProfiles.length; i++) {
-    if (profile == agileModel.activeProfiles.get(i).ABSOLUTE_INDEX) {
+    if (profile == agileModel.activeProfiles[i].ABSOLUTE_INDEX) {
       index = i;
       break;
     }

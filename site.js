@@ -115,24 +115,24 @@ function Site(name, capEx, capGn, limitRnD) {
    
     for (var i=0; i<this.siteBuild.length; i++) {
       // Height of a build Unit
-      BLD_H = map(3*siteBuild.get(i).capacity, 0, maxCapSites, 0, h/3);
+      BLD_H = map(3*siteBuild[i].capacity, 0, maxCapSites, 0, h/3);
       
       //property array for clicking
-      var props = [BLD_X +  BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, i, agileModel.PROFILES.get(siteBuild.get(i).PROFILE_INDEX).ABSOLUTE_INDEX];
+      var props = [BLD_X +  BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, i, agileModel.PROFILES[siteBuild[i].PROFILE_INDEX].ABSOLUTE_INDEX];
       NCEClicks.push(props);
       
       // Draw Site Builds on Sites
       if(!gameMode){
         // Draws Solid NCE colors before game starts
-        fill(agileModel.profileColor[siteBuild.get(i).PROFILE_INDEX], 180);
+        fill(agileModel.profileColor[siteBuild[i].PROFILE_INDEX], 180);
         rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
         fill(backgroundValue, 100);
         rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
       } else if (gameMode) {
-        if (session.current.TURN > 0 && siteBuild.get(i).built) {
+        if (session.current.TURN > 0 && siteBuild[i].built) {
           // Calculate percent of build module being utilized to meet demand
-          var demand = agileModel.PROFILES.get(siteBuild.get(i).PROFILE_INDEX).demandProfile.getFloat(2, session.current.TURN-1);
-          var cap = agileModel.PROFILES.get(siteBuild.get(i).PROFILE_INDEX).globalProductionLimit;
+          var demand = agileModel.PROFILES[siteBuild[i].PROFILE_INDEX].demandProfile.getString(2, session.current.TURN-1);
+          var cap = agileModel.PROFILES[siteBuild[i].PROFILE_INDEX].globalProductionLimit;
           var meetPercent;
           if (cap == 0) {
             meetPercent = 0.0;
@@ -142,7 +142,7 @@ function Site(name, capEx, capGn, limitRnD) {
           
           // Assign Value to Build Class for Later Use
           // (Should move this calculation outside of draw eventually)
-          siteBuild.get(i).production = meetPercent;
+          siteBuild[i].production = meetPercent;
           
           // Translate percent to pixel dimension
           var capWidth = map(meetPercent, 0, 1.0, 0, BLD_W);
@@ -157,7 +157,7 @@ function Site(name, capEx, capGn, limitRnD) {
           rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
           
           // Draw colored rectangle
-          fill(agileModel.profileColor[siteBuild.get(i).PROFILE_INDEX], 180);
+          fill(agileModel.profileColor[siteBuild[i].PROFILE_INDEX], 180);
           rect(BLD_X + BLD_W*(i%3), BLD_Y + offset, capWidth, BLD_H - 2, 5);
           
         } 
@@ -181,8 +181,8 @@ function Site(name, capEx, capGn, limitRnD) {
       noStroke();
       fill(textColor);
       textAlign(CENTER, CENTER);
-      //text(agileModel.PROFILES.get(siteBuild.get(i).PROFILE_INDEX).name + " - " + siteBuild.get(i).capacity + "t", x + BLD_W/2  + BLD_W*(i%2) + 10, BLD_Y + offset + textSize/2);
-      text(siteBuild.get(i).PROFILE_INDEX+1, x + BLD_W/2  + BLD_W*(i%3) + 10, BLD_Y + offset + textSize/2);
+      //text(agileModel.PROFILES[siteBuild[i].PROFILE_INDEX].name + " - " + siteBuild[i].capacity + "t", x + BLD_W/2  + BLD_W*(i%2) + 10, BLD_Y + offset + textSize/2);
+      text(siteBuild[i].PROFILE_INDEX+1, x + BLD_W/2  + BLD_W*(i%3) + 10, BLD_Y + offset + textSize/2);
       
       if (i%3 == 2) {
         offset += BLD_H;
