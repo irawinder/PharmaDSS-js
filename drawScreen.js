@@ -71,11 +71,17 @@ function drawScreen() {
   text("PharmaDSS " + VERSION, width - MARGIN, MARGIN);
   text("Ira Winder, Nina Lutz, Kent Larson (MIT), Joana Gomes (IIM, GSK)\nGiovanni Giorgio, Mason Briner (Capital Strategy and Design, GSK)\nAndrew Rutter (AMT), John Dyson (CSD, GSK)", width - MARGIN, MARGIN + textSizeValue);  
 
+  // Draw Pork Chop
+  image(logo_GSK, 1.0*MARGIN, height-MARGIN - 85 + 2, 95, 95); 
+  image(logo_MIT, 2.9*MARGIN, height-MARGIN - 15, 1.4*MARGIN, 0.6*MARGIN); 
+  textAlign(LEFT);
+  text("PharmaDSS \n" + VERSION,  2.9*MARGIN, height-MARGIN - 40);
+
   // Draw Profiles
   if (!gameMode) {
     print(agileModel.PROFILES);
-    print(session);
-    drawProfiles(agileModel.PROFILES);
+    // print(session);
+    // drawProfiles(agileModel.PROFILES);
   } else {
     drawProfiles(agileModel.activeProfiles);
   }
@@ -96,40 +102,36 @@ function drawScreen() {
   
   textSize(min(16, textSizeValue));
   NCEClicks = new Array();
-  for (var i=0; i<NUM_SITES; i++) {
-    selected = false;
-    if (i == session.selectedSite) selected = true;
-    agileModel.SITES.get(i).draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
-  }
+  // for (var i=0; i<NUM_SITES; i++) {
+  //   selected = false;
+  //   if (i == session.selectedSite) selected = true;
+  //   agileModel.SITES.get(i).draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
+  // }
    
   // Line Graph and Outputs
-  outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
+  // outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
-  drawBuilds();
+  // drawBuilds();
   
   //Draw Selected Profile in Large Format
-  try {
-    if (!gameMode) {
-      drawLargeProfile(agileModel.PROFILES.get(session.selectedProfile));
-    } else {
-      drawLargeProfile(agileModel.activeProfiles.get(session.selectedProfile));
-    }
-  } catch (e) {
-    // print("Could not execute drawLargeProfile() in drawScreen()");
-  }
+  // try {
+  //   if (!gameMode) {
+  //     drawLargeProfile(agileModel.PROFILES.get(session.selectedProfile));
+  //   } else {
+  //     drawLargeProfile(agileModel.activeProfiles.get(session.selectedProfile));
+  //   }
+  // } catch (e) {
+  //   // print("Could not execute drawLargeProfile() in drawScreen()");
+  // }
   
   // Draw Radar Plot
-  if (displayRadar) {
-    kpi.draw(radarX, radarY, radarH);
-  }
-  outputGraph.draw();
+  // if (displayRadar) {
+  //   kpi.draw(radarX, radarY, radarH);
+  // }
+  // outputGraph.draw();
 
-  // Draw Pork Chop
-  image(logo_GSK, 1.0*MARGIN, height-MARGIN - 85 + 2, 95, 95); 
-  image(logo_MIT, 2.9*MARGIN, height-MARGIN - 15, 1.4*MARGIN, 0.6*MARGIN); 
-  textAlign(LEFT);
-  text("PharmaDSS \n" + VERSION,  2.9*MARGIN, height-MARGIN - 40);
+
 }
 
 

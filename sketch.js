@@ -39,6 +39,8 @@ var rndRulesFile;
 var supplyRulesFile;
 var profileDataFile;
 
+var session;
+
 function preload() {
   gmsRulesFile = loadTable("data/GMSRules.csv","csv","header");
   gmsCapacityFile = loadTable("data/GMSCapacityRules.csv","csv","header");
@@ -92,7 +94,7 @@ function setup() {
   agileModel.maxCapacity();
   
   //Initiate Game
-  var session = new Game();
+  session = new Game();
   updateProfileCapacities();
     
   // Setup for Canvas Visualization
@@ -178,7 +180,7 @@ function draw() {
 
 // Refreshes when there's a mouse mouse movement
 function mouseMoved() {
-  loop();
+  // loop(); // NOTE: TURNED OFF TEMPORARILY DUE TO ERRORS
 }
 
 function loadMenu(canvasWidth, canvasHeight) {
