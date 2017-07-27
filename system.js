@@ -27,19 +27,16 @@ function MFG_System() {
 
   this.generateColors = function() {
     colorMode(HSB);
-    
-    this.profileColor = new Array();
+    this.profileColor = new Array(this.PROFILES.length);
+
     var hue;
     for (var i=0; i<this.profileColor.length; i++) {
       hue = i * 200.0 / this.profileColor.length;
-      this.profileColor[i] = color(hue, 255, 255);
-      
+      this.profileColor[i] = (hue, 255, 255, 180);
       if(i > 2){
         hue = i * 255.0 / this.profileColor.length;
-        this.profileColor[i] = color(hue, 255, 255);
+        this.profileColor[i] = (hue, 255, 255, 180);
       }
-
-
     }
     colorMode(RGB);
   }

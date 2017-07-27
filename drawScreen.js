@@ -103,7 +103,7 @@ function drawScreen() {
   for (var i=0; i<NUM_SITES; i++) {
     selected = false;
     if (i == session.selectedSite) selected = true;
-    agileModel.SITES.draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
+    agileModel.SITES[i].draw(MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES), sitesY, ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2, sitesH, agileModel.maxCap, selected);
   }
    
   // Line Graph and Outputs

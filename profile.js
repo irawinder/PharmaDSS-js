@@ -1,7 +1,6 @@
 // Demand profile for a chemical entity (i.e. NCE)
 var MAX_PROFILE_VALUE = 0;
 // This static index should always refer to the profile's "ideal" state located in "MFG_System.PROFILES"
-var ABSOLUTE_INDEX;
 var launched;
 
 // Profile Output Weights:
@@ -26,12 +25,14 @@ var over, locked;
 var localProductionLimit;
 var globalProductionLimit;
 
-// function Profile(INDEX) {
-//   productionCost = new Array();
-//   demandProfile = new p5.Table();
-//   ABSOLUTE_INDEX = INDEX;
-//   launched = false;
-// }
+var ABSOLUTE_INDEX = 0; // TODO: FIX NUMBERING SYSTEM???
+
+function Profile(INDEX) {
+  this.productionCost = new Array();
+  this.demandProfile = new p5.Table();
+  this.ABSOLUTE_INDEX = INDEX;
+  launched = false;
+}
 
 function Profile(name, summary, success, timeStart, recoveries, productionCost, demandProfile, INDEX) {
   this.name = name;
@@ -40,7 +41,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   this.timeStart = timeStart;
   this.productionCost = productionCost;
   this.demandProfile = demandProfile;
-  ABSOLUTE_INDEX = INDEX;
+  this.ABSOLUTE_INDEX = INDEX;
   launched = false;
 
   this.calc = function() {
@@ -206,7 +207,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Molecule Icon
     if (!detail) {
-      fill(agileModel.profileColor[ABSOLUTE_INDEX], 180);
+      print(ABSOLUTE_INDEX);
+      fill(agileModel.profileColor[ABSOLUTE_INDEX]);
       if (selected) {
         stroke(textColor);
         strokeWeight(1);
@@ -225,14 +227,14 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Time Bar
     if (!detail) {
-      fill("#CCCCCC", 80);
+      fill("#CCCCCC"); // TODO: 80
       var begin = max(0, timeLead);
       var end = max(0, timeEnd);
 
       if (!gameMode) {
         rect(x + scalerW * begin, y - h, scalerW * (min(end, this.demandProfile.getColumnCount()) - begin), h);
       } else {
-        fill("#CCCCCC", 80);
+        fill("#CCCCCC"); // TODO: 80
         rect(x + scalerW * begin, y - h, scalerW * (min(min(end, this.demandProfile.getColumnCount()), session.current.TURN) - begin), h);
       }
     }
@@ -331,8 +333,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     ellipse(x + scalerW * (0.5+int(peakTime_F-1)), y - scalerH * this.demandProfile.getString(1, int(peakTime_F-1)), 3, 3);
     fill(textColor);
     textAlign(CENTER);
-    textSize(textSize);
-    text(int(demandPeak_F/100)/10.0 + agileModel.WEIGHT_UNITS, x + scalerW * (0.5+int(peakTime_F-1)) + 1, y - scalerH * demandProfile.getString(1, int(peakTime_F-1)) - 5);
+    textSize(textSizeValue);
+    text(int(demandPeak_F/100)/10.0 + agileModel.WEIGHT_UNITS, x + scalerW * (0.5+int(peakTime_F-1)) + 1, y - scalerH * this.demandProfile.getString(1, int(peakTime_F-1)) - 5);
 
     noStroke();
     

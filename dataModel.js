@@ -216,6 +216,8 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
       model.PROFILES[i].demandProfile.setString(3, j, profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
     }
     
+    model.PROFILES[i].ABSOLUTE_INDEX = i;
+    print(model.PROFILES[i]);
     // Calculates peak forecast demand value, lead years, etc
     model.PROFILES[i].calc();
     
