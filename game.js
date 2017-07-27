@@ -101,7 +101,7 @@ function Game() {
 // Clear all user-defined builds from sites
 Game.prototype.resetSites = function() {
   for (var i=0; i<agileModel.SITES.length; i++) {
-    agileModel.SITES[i].siteBuild.clear();
+    agileModel.SITES[i].siteBuild = new Array();
   }
 }
 

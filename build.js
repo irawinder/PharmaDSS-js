@@ -11,6 +11,7 @@ var repurpose = false;
 // flag determining if build's capital cost has already been scored
 var capEx_Logged = false;
 var editing = false;
+var labor = new Array();
 
 function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, labor, editing) {
   this.name = name;

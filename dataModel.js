@@ -129,7 +129,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
   if (loadOriginal) {
     NUM_SITES = 2;
     for (var i=0; i<NUM_XLS_SITES; i++) {
-      model.SITES = (new Site(
+      model.SITES.push(new Site(
         "" + capacity.getString(i, 1),
         capacity.getString(i, 2),
         capacity.getString(i + 2, 2),
@@ -139,7 +139,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
   } else {
     // Generates Random Sites but Makes Sure Existing and GnField stay rectangular
     NUM_SITES = int(random(2, 4));
-    model.SITES = new Site();
+    model.SITES = new Array();
     var randomLargest = int(random(0,NUM_SITES-.001));
     print("rLarge:" + randomLargest);
     for (var i=0; i<NUM_SITES; i++) {
@@ -151,7 +151,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
       }
       var gnHeight = int(random( 1, totHeight-1));
       var mag = 7.5;
-      model.SITES = (
+      model.SITES.push(
         // Site(String name, float capEx, float capGn, var limitRnD)
         new Site( "Site " + (i+1), mag*(totHeight-gnHeight), mag*(gnHeight), int(random( 2, 5) ) 
       ));

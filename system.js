@@ -48,7 +48,7 @@ function MFG_System() {
     var current;
     maxCap = 0;
     for (var i=0; i<NUM_SITES; i++) { // Calculate maximum site capacity value
-      current = agileModel.SITES[i].capEx + SITES[i].capGn;
+      current = agileModel.SITES[i].capEx + agileModel.SITES[i].capGn;
       if ( current > agileModel.maxCap ) maxCap = current;
     }
     return maxCap;
