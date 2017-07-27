@@ -206,11 +206,11 @@ Event.prototype.initialize = function() {
   event.capEx_Logged = true;
   
   // Add the NCE-customized Build to the given Site
-  ((agileModel.SITES)[siteIndex]).siteBuild.push(event);
+  agileModel.SITES[siteIndex].siteBuild.push(event);
 }
 
-var current = ((agileModel.SITES)[siteIndex]).siteBuild[siteBuildIndex];
 Event.prototype.flagRemove = function() {
+  var current = agileModel.SITES[siteIndex].siteBuild[siteBuildIndex];
   if (current.editing) {
     agileModel.SITES[siteIndex].siteBuild.remove(siteBuildIndex);
   } else {
