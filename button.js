@@ -369,8 +369,8 @@ function checkSelections() {
   if (!gameMode) {
     numProfiles = agileModel.PROFILES.length;
       for(var i =0; i<numProfiles; i++){
-        if(mouseX <= agileModel.PROFILES.get(i).xClick + agileModel.PROFILES.get(i).wClick && mouseX >= agileModel.PROFILES.get(i).xClick 
-        && mouseY <= agileModel.PROFILES.get(i).yClick + agileModel.PROFILES.get(i).hClick && mouseY >= agileModel.PROFILES.get(i).yClick){
+        if(mouseX <= agileModel.PROFILES[i].xClick + agileModel.PROFILES[i].wClick && mouseX >= agileModel.PROFILES[i].xClick 
+        && mouseY <= agileModel.PROFILES[i].yClick + agileModel.PROFILES[i].hClick && mouseY >= agileModel.PROFILES[i].yClick){
           session.setProfile(i);
         }
       }
@@ -378,20 +378,20 @@ function checkSelections() {
     numProfiles = agileModel.activeProfiles.length;
     
     for(var i =0; i<numProfiles; i++){
-        if(mouseX <= agileModel.activeProfiles.get(i).xClick + agileModel.activeProfiles.get(i).wClick && mouseX >= agileModel.activeProfiles.get(i).xClick 
-        && mouseY <= agileModel.activeProfiles.get(i).yClick + agileModel.activeProfiles.get(i).hClick && mouseY >= agileModel.activeProfiles.get(i).yClick){
+        if(mouseX <= agileModel.activeProfiles[i].xClick + agileModel.activeProfiles[i].wClick && mouseX >= agileModel.activeProfiles[i].xClick 
+        && mouseY <= agileModel.activeProfiles[i].yClick + agileModel.activeProfiles[i].hClick && mouseY >= agileModel.activeProfiles[i].yClick){
             session.setProfile(i);} 
     }
        
     for(var j = 0; j<NCEClicks.length; j++){
-      var NCEClickX = NCEClicks.get(j)[0];
-      var NCEClickY = NCEClicks.get(j)[1];
-      var NCEClickWidth = NCEClicks.get(j)[2];
-      var NCEClickHeight = NCEClicks.get(j)[3];  
+      var NCEClickX = NCEClicks[j][0];
+      var NCEClickY = NCEClicks[j][1];
+      var NCEClickWidth = NCEClicks[j][2];
+      var NCEClickHeight = NCEClicks[j][3];  
         if(mouseX <= NCEClickX + NCEClickWidth && mouseX >= NCEClickX  && mouseY <= NCEClickY + NCEClickHeight && mouseY >= NCEClickY){
-          session.selectedSiteBuild = int(NCEClicks.get(j)[4]);
+          session.selectedSiteBuild = int(NCEClicks[j][4]);
             for(var i = 0; i<agileModel.activeProfiles.length; i++){
-                if (NCEClicks.get(j)[5] == agileModel.activeProfiles.get(i).ABSOLUTE_INDEX){
+                if (NCEClicks[j][5] == agileModel.activeProfiles[i].ABSOLUTE_INDEX){
                     session.selectedProfile = int(i);
                 }
             }
@@ -400,8 +400,8 @@ function checkSelections() {
      
     
      for(var i =0; i<numProfiles; i++){
-        if(mouseX <= agileModel.activeProfiles.get(i).xClick + agileModel.activeProfiles.get(i).wClick && mouseX >= agileModel.activeProfiles.get(i).xClick 
-        && mouseY <= agileModel.activeProfiles.get(i).yClick + agileModel.activeProfiles.get(i).hClick && mouseY >= agileModel.activeProfiles.get(i).yClick){
+        if(mouseX <= agileModel.activeProfiles[i].xClick + agileModel.activeProfiles[i].wClick && mouseX >= agileModel.activeProfiles[i].xClick 
+        && mouseY <= agileModel.activeProfiles[i].yClick + agileModel.activeProfiles[i].hClick && mouseY >= agileModel.activeProfiles[i].yClick){
           session.setProfile(i);
         }    
      }
@@ -413,20 +413,20 @@ function checkSelections() {
         var clickX = MARGIN  + sitesX + i*((width-sitesX-MARGIN)/NUM_SITES);
         var clickW = ((width-sitesX-MARGIN)/NUM_SITES) - MARGIN*2;
       if(mouseX <= clickX + clickW && mouseX >= clickX  && mouseY <= sitesY + sitesH && mouseY >= sitesY){
-        session.selectedSite = int(agileModel.SITES.get(i).name) - 1;
+        session.selectedSite = int(agileModel.SITES[i].name) - 1;
       }
 
     }
       
    if(!gameMode){
      for(var j = 0; j<NCEClicks.length; j++){
-            var NCEClickX = NCEClicks.get(j)[0];
-            var NCEClickY = NCEClicks.get(j)[1];
-            var NCEClickWidth = NCEClicks.get(j)[2];
-            var NCEClickHeight = NCEClicks.get(j)[3];  
+            var NCEClickX = NCEClicks[j][0];
+            var NCEClickY = NCEClicks[j][1];
+            var NCEClickWidth = NCEClicks[j][2];
+            var NCEClickHeight = NCEClicks[j][3];  
               if(mouseX <= NCEClickX + NCEClickWidth && mouseX >= NCEClickX  && mouseY <= NCEClickY + NCEClickHeight && mouseY >= NCEClickY){
-                session.selectedSiteBuild = int(NCEClicks.get(j)[4]);
-                session.selectedProfile = int(NCEClicks.get(j)[5]);
+                session.selectedSiteBuild = int(NCEClicks[j][4]);
+                session.selectedProfile = int(NCEClicks[j][5]);
               }
      }
    }

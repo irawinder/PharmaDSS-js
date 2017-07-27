@@ -59,10 +59,10 @@ function Game() {
   this.execute = function() {  
     if (this.current.TURN < NUM_INTERVALS) {
       if (connection) {
-        tableHistory.push(tablePieceInput);
-        print("Colortizer state logged #" + (tableHistory.length - 1));
+        this.tableHistory.push(tablePieceInput);
+        print("Colortizer state logged #" + (this.tableHistory.length - 1));
       }
-      turnLog.push(this.current);
+      this.turnLog.push(this.current);
       print("Turn " + this.current.TURN + " logged");
       
       this.current = new Turn(this.current.TURN + 1);
@@ -94,7 +94,7 @@ function Game() {
   
   // Set the Active Profile selected by the user
   this.setProfile = function(index) {
-    selectedProfile = index;
+    this.selectedProfile = index;
   }   
 }
 
@@ -112,7 +112,7 @@ Game.prototype.populateProfiles = function() {
     if (agileModel.PROFILES[i].timeLead == this.current.TURN || (this.current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
       agileModel.PROFILES[i].globalProductionLimit = 0;
       agileModel.PROFILES[i].initCapacityProfile();
-      agileModel.activeProfiles.add(agileModel.PROFILES[i]);
+      agileModel.activeProfiles.push(agileModel.PROFILES[i]);
     }
   }
   
@@ -122,12 +122,12 @@ Game.prototype.populateProfiles = function() {
       if (agileModel.activeProfiles[i].timeEnd + 1 < this.current.TURN) {
         
         // Resets selection to 0 if current profile is being deleted
-        if (selectedProfile == i) selectedProfile = 0;
+        if (this.selectedProfile == i) this.selectedProfile = 0;
         
         agileModel.activeProfiles.remove(i);
         
         // keeps current profile selected if one behind it is removed
-        if (selectedProfile > i) selectedProfile--;
+        if (this.selectedProfile > i) this.selectedProfile--;
           
       }
     }
