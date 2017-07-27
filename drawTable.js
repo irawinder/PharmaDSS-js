@@ -19,142 +19,139 @@ var BASIN_HEIGHT = 6;
  *
  */
 
-// void setupTable() {
-//   offscreen = createGraphics(projectorHeight, projectorHeight);
-//   // TableSurface(int u, int v, boolean left_margin)
-//   mfg = new TableSurface(projectorHeight, projectorHeight, V_MAX, V_MAX, true);
-//   enableSites = true;
-//   generateBasins();
-// }
+function setupTable() {
+  offscreen = createGraphics(projectorHeight, projectorHeight);
+  // TableSurface(int u, int v, boolean left_margin)
+  mfg = new TableSurface(projectorHeight, projectorHeight, V_MAX, V_MAX, true);
+  enableSites = true;
+  generateBasins();
+}
 
-// void drawTable() {
+function drawTable() {
 
-//   // Draw the scene, offscreen
-//   mfg.draw(offscreen);
+  // Draw the scene, offscreen
+  mfg.draw(offscreen);
 
-//   if (testProjectorOnMac) {
-//     stroke(background);
-//     strokeWeight(1);
-//     fill(textColor, 100);
-//     rect((width - int(0.85*height) ) / 2, (height - int(0.85*height) ) / 2, int(0.85*height), int(0.85*height), 10);
-//     image(offscreen, (width - int(0.8*height) ) / 2, (height - int(0.8*height) ) / 2, int(0.8*height), int(0.8*height));
-//   }
-// }
+  if (testProjectorOnMac) {
+    stroke(background);
+    strokeWeight(1);
+    fill(textColor, 100);
+    rect((width - int(0.85*height) ) / 2, (height - int(0.85*height) ) / 2, int(0.85*height), int(0.85*height), 10);
+    image(offscreen, (width - int(0.8*height) ) / 2, (height - int(0.8*height) ) / 2, int(0.8*height), int(0.8*height));
+  }
+}
 
-// void generateBasins() {
-//   siteCapacity = new float[NUM_SITES][2];
-//   for (int i=0; i<NUM_SITES; i++) { 
-//     //siteCapacity[i] = agileModel.SITES.get(i).capEx + agileModel.SITES.get(i).capGn;
-//     siteCapacity[i][0] = agileModel.SITES.get(i).capEx;
-//     siteCapacity[i][1] = agileModel.SITES.get(i).capGn;
-//   }
+function generateBasins() {
+  siteCapacity = new float[NUM_SITES][2];
+  for (var i=0; i<NUM_SITES; i++) { 
+    //siteCapacity[i] = agileModel.SITES.get(i).capEx + agileModel.SITES.get(i).capGn;
+    siteCapacity[i][0] = agileModel.SITES[i].capEx;
+    siteCapacity[i][1] = agileModel.SITES[i].capGn;
+  }
 
-//   mfg.clearBasins();
-//   mfg.addBasins(siteCapacity);
-//   enableSites = true;
-// }
+  mfg.clearBasins();
+  mfg.addBasins(siteCapacity);
+  enableSites = true;
+}
 
-// class TableSurface {
+function TableSurface(W, H, U, V, left_margin) {
+  var U, V;
+  var cellW, cellH;
+  var LEFT_MARGIN;
+  var MARGIN_W = 4;  // Left Margin for Grid (in Lego Squares)
+  var BASINS_Y = 8;  // Top Margin for Basins (in Lego Squares_
+  var BASINS_H = 10; // Height of Largest Basin (in Lego Squares)
 
-//   int U, V;
-//   float cellW, cellH;
-  
-//   String[][][] cellType;
+	this.U = U;
+	this.V = V;
+	LEFT_MARGIN = left_margin;
+	inputArea = new Array();
+	cellType = new Array(U).fill(new Array(V).fill(new Array(2)));
+	inUse = new Array(U).fill(new Array(V));
+	siteBuildIndex = new Array(U).fill(new Array(V));
 
-//   boolean LEFT_MARGIN;
-//   int MARGIN_W = 4;  // Left Margin for Grid (in Lego Squares)
-//   int BASINS_Y = 8;  // Top Margin for Basins (in Lego Squares_
-//   int BASINS_H = 10; // Height of Largest Basin (in Lego Squares)
+	cellW = float(W)/U;
+	cellH = float(H)/V;
 
-//   ArrayList<Basin> inputArea;
-  
-//   boolean[][] inUse;
-//   int[][] siteBuildIndex;
+	this.resetCellTypes();
 
-//   TableSurface(int W, int H, int U, int V, boolean left_margin) {
-//     this.U = U;
-//     this.V = V;
-//     LEFT_MARGIN = left_margin;
-//     inputArea = new ArrayList<Basin>();
-//     cellType = new String[U][V][2];
-//     inUse = new boolean[U][V];
-//     siteBuildIndex = new int[U][V];
-    
-//     cellW = float(W)/U;
-//     cellH = float(H)/V;
-    
-//     resetCellTypes();
-    
-//   }
-  
-//   void resetCellTypes() {
-//     for (int u=0; u<U; u++) {
-//       for (int v=0; v<V; v++) {
+  this.resetCellTypes = function() {
+    for (var u=0; u<U; u++) {
+      for (var v=0; v<V; v++) {
         
-//         // Sets Site ID to Null
-//         cellType[u][v][0] = "NULL";
+        // Sets Site ID to Null
+        cellType[u][v][0] = "NULL";
         
-//         // Sets Site's "Existing" or "Greenfield" Status to Null
-//         cellType[u][v][1] = "NULL";
+        // Sets Site's "Existing" or "Greenfield" Status to Null
+        cellType[u][v][1] = "NULL";
         
-//         inUse[u][v] = false;
-//         siteBuildIndex[u][v] = -1;
-//       }
-//     }
-//   }
-  
-//   void checkTableDeploy() {
-    
-//     // Cycle through each 22x22 Table Grid
-//     for (int u=0; u<U; u++) {
-//       for (int v=0; v<V; v++) {
+        inUse[u][v] = false;
+        siteBuildIndex[u][v] = -1;
+      }
+    }
+  } 
+
+  this.checkTableDeploy = function() {
+    // Cycle through each 22x22 Table Grid
+    for (var u=0; u<U; u++) {
+      for (var v=0; v<V; v++) {
         
-//         // Determine if the Cell is in a "Site" Basin and, if so, which one
-//         int site = -1;
-//         if (inBasin(u, v)) {
-//           if (cellType[u][v][0].equals("SITE_0")) site = 0;
-//           if (cellType[u][v][0].equals("SITE_1")) site = 1;
-//           if (cellType[u][v][0].equals("SITE_2")) site = 2;   
+        // Determine if the Cell is in a "Site" Basin and, if so, which one
+        var site = -1;
+        if (inBasin(u, v)) {
+          if (cellType[u][v][0] = "SITE_0") site = 0;
+          if (cellType[u][v][0] = "SITE_1") site = 1;
+          if (cellType[u][v][0] = "SITE_2") site = 2;   
             
-//           // If the cell is currently in use, proceed
-//           if (inUse[u][v]) {
+          // If the cell is currently in use, proceed
+          if (inUse[u][v]) {
             
-//             // If Lego Piece is Removed ...
-//             if (tablePieceInput[u - MARGIN_W][v][0] == -1 && siteBuildIndex[u][v] != -1) {
-//               try {
-//                 Event remove = new Event("remove", site, siteBuildIndex[u][v]);
-//                 session.current.event.add(remove);
-//                 updateProfileCapacities();
-//                 inUse[u][v] = false;
-//               } catch (Exception e) {
-//                 println("Error Removing A Piece from the Table");
-//               }
-//             }
+            // If Lego Piece is Removed ...
+            if (tablePieceInput[u - MARGIN_W][v][0] == -1 && siteBuildIndex[u][v] != -1) {
+              try {
+                var remove = new Event("remove", site, siteBuildIndex[u][v]);
+                session.current.event.push(remove);
+                updateProfileCapacities();
+                inUse[u][v] = false;
+              } catch (e) {
+                print("Error Removing A Piece from the Table");
+              }
+            }
   
-//           } 
+          } 
           
-//           // If the cell is currently not in use, proceed
-//           else {
+          // If the cell is currently not in use, proceed
+          else {
             
-//             // If lego id is valid, proceed
-//             if (tablePieceInput[u - MARGIN_W][v][0] > -1 && tablePieceInput[u - MARGIN_W][v][0] < NUM_PROFILES) {
+            // If lego id is valid, proceed
+            if (tablePieceInput[u - MARGIN_W][v][0] > -1 && tablePieceInput[u - MARGIN_W][v][0] < NUM_PROFILES) {
               
-//               // Begin Building the Current Production Facility
-//               Event deploy = new Event("deploy", site, session.selectedBuild, agileModel.PROFILES.get(tablePieceInput[u - MARGIN_W][v][0]).ABSOLUTE_INDEX);
-//               session.current.event.add(deploy);
-//               siteBuildIndex[u][v] = agileModel.SITES.get(site).siteBuild.size()-1;
-//               println(siteBuildIndex[u][v]);
-//               inUse[u][v] = true;
+              // Begin Building the Current Production Facility
+              var deploy = new Event("deploy", site, session.selectedBuild, agileModel.PROFILES[tablePieceInput[u - MARGIN_W][v][0]].ABSOLUTE_INDEX);
+              session.current.event.push(deploy);
+              siteBuildIndex[u][v] = agileModel.SITES[site].siteBuild.length-1;
+              print(siteBuildIndex[u][v]);
+              inUse[u][v] = true;
               
-//             }
-//           }
-//         } 
-//       }
-//     }
+            }
+          }
+        } 
+      }
+    }
     
-//     // Update Profile Information
-//     updateProfileCapacities();
-//   }
+    // Update Profile Information
+    updateProfileCapacities();
+  }
+
+
+
+
+
+
+}  
+
+  
+
   
 //   void draw(PGraphics p) {
 //     int buffer = 30;
