@@ -216,7 +216,7 @@ function calcSecurity() {
     numBackup = 0.0;
     
     // Calculates NCE Capacity at each site;
-    siteCapacity = new float[agileModel.SITES.length];
+    siteCapacity = new Array(agileModel.SITES.length);
     for (var s=0; s<agileModel.SITES.length; s++) {
       siteCapacity[s] = 0.0;
       for (var b=0; b<agileModel.SITES[s].siteBuild.length; b++) {

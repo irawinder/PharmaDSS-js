@@ -92,7 +92,7 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     if (type == ("GMS")) {
       text("Build Time: " + int(this.buildTime) + " " + agileModel.TIME_UNITS, x, y - 11);
       text("Build Cost: " + int(this.buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y +4);
-      text("Repurpose Time: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS, x, y + 19);
+      text("Repurpose Time: " + int(this.repurpTime) + " " + agileModel.TIME_UNITS, x, y + 19);
       text("Repurpose Cost: " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y + 34);
     } else {
       text("Repurpose Cost: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);

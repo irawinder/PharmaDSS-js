@@ -227,6 +227,13 @@ function drawBuilds() {
   var selected;
   var spread = 3.0;
   
+  // Draw GMS Build Options
+  for (var i=0; i<agileModel.GMS_BUILDS.length; i++) {
+    selected = false;
+    if (i == session.selectedBuild) selected = true;
+    if (!displayRadar) agileModel.GMS_BUILDS[i].draw(sitesX + MARGIN - 5, lineY + lineH - 20, buildsW, buildsH, "GMS", selected);
+  }
+
   // Draw Personnel Legend
   var vOff = -50;
   fill(textColor);
