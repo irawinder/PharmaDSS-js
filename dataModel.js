@@ -217,12 +217,13 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     }
     
     model.PROFILES[i].ABSOLUTE_INDEX = i;
-    print(model.PROFILES[i]);
+    THE_INDEX = i;
     // Calculates peak forecast demand value, lead years, etc
     model.PROFILES[i].calc();
-    
+    print(model.PROFILES[i]);
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
     if (!loadOriginal) {
+      print("not load original");
       var mag = 1000*(random(10)+3);
       model.PROFILES[i].setPeak(mag);
     }

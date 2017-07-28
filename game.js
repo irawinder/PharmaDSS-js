@@ -69,7 +69,7 @@ function Game() {
       
       // Only adds profiles to game within known Lead Time
       this.populateProfiles();
-      //print("There are now " + agileModel.activeProfiles.size() + " Active Profiles.");
+      //print("There are now " + agileModel.activeProfiles.length + " Active Profiles.");
       
       // Updates the Status of builds on each site at end of each turn (age, etc)
       for (var i=0; i<agileModel.SITES.length; i++) {
@@ -140,6 +140,8 @@ function Turn(TURN){
   var event = new Array();  
 }
 
+var siteBuildIndex;
+
 // An Event might describe a change to the system initiated by (a) the user or (b) external forces
 function Event(eventType, siteIndex, buildIndex, profileIndex = "None") {
   this.eventType = eventType;
@@ -150,15 +152,15 @@ function Event(eventType, siteIndex, buildIndex, profileIndex = "None") {
   if (this.profileIndex == "None") {
     this.flagRemove();
   } else {
-    if (eventType.equals("deploy")) {
+    if (this.eventType == "deploy") {
       // stage a build/deployment event based upon pre-engineered modules 
       this.stage();
-    } else if (eventType.equals("initialize")) {
+    } else if (this.eventType == "initialize") {
       // init. a build/deployment event based upon pre-engineered modules 
       this.initialize();
-    } else if (eventType.equals("repurpose")) {
+    } else if (this.eventType == "repurpose") {
       // stage a build/deployment event based upon pre-engineered modules 
-      this.siteBuildIndex = buildIndex;
+      siteBuildIndex = buildIndex;
       this.flagRepurpose();
     }
   }
@@ -170,20 +172,20 @@ Event.prototype.stage = function() {
   var event = new Build();
   
   // Copy Ideal Build attributes to site-specific build
-  event.name         = agileModel.GMS_BUILDS[buildIndex].name;
-  event.capacity     = agileModel.GMS_BUILDS[buildIndex].capacity;
-  event.buildCost    = agileModel.GMS_BUILDS[buildIndex].buildCost;
-  event.buildTime    = agileModel.GMS_BUILDS[buildIndex].buildTime;
-  event.repurpCost   = agileModel.GMS_BUILDS[buildIndex].repurpCost;
-  event.repurpTime   = agileModel.GMS_BUILDS[buildIndex].repurpTime;
-  event.labor        = agileModel.GMS_BUILDS[buildIndex].labor;
+  event.name         = agileModel.GMS_BUILDS[this.buildIndex].name;
+  event.capacity     = agileModel.GMS_BUILDS[this.buildIndex].capacity;
+  event.buildCost    = agileModel.GMS_BUILDS[this.buildIndex].buildCost;
+  event.buildTime    = agileModel.GMS_BUILDS[this.buildIndex].buildTime;
+  event.repurpCost   = agileModel.GMS_BUILDS[this.buildIndex].repurpCost;
+  event.repurpTime   = agileModel.GMS_BUILDS[this.buildIndex].repurpTime;
+  event.labor        = agileModel.GMS_BUILDS[this.buildIndex].labor;
   event.editing      = true;
   
   // Customizes a Build for a given NCE
-  event.assignProfile(profileIndex);
+  event.assignProfile(this.profileIndex);
   
   // Add the NCE-customized Build to the given Site
-  agileModel.SITES[siteIndex].siteBuild.push(event);
+  agileModel.SITES[this.siteIndex].siteBuild.push(event);
 }
 
 // stage a build/deployment event based upon pre-engineered modules 
@@ -191,43 +193,45 @@ Event.prototype.initialize = function() {
   var event = new Build();
   
   // Copy Ideal Build attributes to site-specific build
-  event.name         = agileModel.GMS_BUILDS[buildIndex].name;
-  event.capacity     = agileModel.GMS_BUILDS[buildIndex].capacity;
-  event.buildCost    = agileModel.GMS_BUILDS[buildIndex].buildCost;
-  event.buildTime    = agileModel.GMS_BUILDS[buildIndex].buildTime;
-  event.repurpCost   = agileModel.GMS_BUILDS[buildIndex].repurpCost;
-  event.repurpTime   = agileModel.GMS_BUILDS[buildIndex].repurpTime;
-  event.labor        = agileModel.GMS_BUILDS[buildIndex].labor;
+  event.name         = agileModel.GMS_BUILDS[this.buildIndex].name;
+  event.capacity     = agileModel.GMS_BUILDS[this.buildIndex].capacity;
+  event.buildCost    = agileModel.GMS_BUILDS[this.buildIndex].buildCost;
+  event.buildTime    = agileModel.GMS_BUILDS[this.buildIndex].buildTime;
+  event.repurpCost   = agileModel.GMS_BUILDS[this.buildIndex].repurpCost;
+  event.repurpTime   = agileModel.GMS_BUILDS[this.buildIndex].repurpTime;
+  event.labor        = agileModel.GMS_BUILDS[this.buildIndex].labor;
   event.editing      = true;
   
   // Customizes a Build for a given NCE
-  event.assignProfile(profileIndex);
-  event.age          = int(event.buildTime - agileModel.PROFILES[profileIndex].timeLaunch);
+  event.assignProfile(this.profileIndex);
+  event.age          = int(event.buildTime - agileModel.PROFILES[this.profileIndex].timeLaunch);
   event.capEx_Logged = true;
   
   // Add the NCE-customized Build to the given Site
-  agileModel.SITES[siteIndex].siteBuild.push(event);
+  agileModel.SITES[this.siteIndex].siteBuild.push(event);
 }
 
 Event.prototype.flagRemove = function() {
-  var current = agileModel.SITES[siteIndex].siteBuild[siteBuildIndex];
+  print(agileModel.SITES[0]);
+  var current = agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex];
+
   if (current.editing) {
-    agileModel.SITES[siteIndex].siteBuild.remove(siteBuildIndex);
+    agileModel.SITES[this.siteIndex].siteBuild.remove(siteBuildIndex);
   } else {
-    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].demolish = true;
+    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].demolish = true;
   }
   
 }
 
 Event.prototype.flagRepurpose = function() {
-  if (agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].built == false) {
+  if (agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].built == false) {
     game_message ="Can't repurpose while under construction";
     print("Can't Repurpose while Under Construction");
   } else {
-    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].repurpose = true;
-    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].built = false;
-    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].age = 0;
-    agileModel.SITES[siteIndex].siteBuild[siteBuildIndex].PROFILE_INDEX = profileIndex;
+    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].repurpose = true;
+    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].built = false;
+    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].age = 0;
+    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].PROFILE_INDEX = this.profileIndex;
     game_message = " ";
   }
 }

@@ -25,7 +25,7 @@ var over, locked;
 var localProductionLimit;
 var globalProductionLimit;
 
-var ABSOLUTE_INDEX = 0; // TODO: FIX NUMBERING SYSTEM???
+var THE_INDEX; // TODO: FIX NUMBERING SYSTEM???
 
 function Profile(INDEX) {
   this.productionCost = new Array();
@@ -148,8 +148,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       for (var j=0; j<numBuilds; j++) {
         current = factories[i].siteBuild[j];
         if (current.built) {
-          if (current.PROFILE_INDEX == ABSOLUTE_INDEX) {
-            localProductionLimit.set(i, localProductionLimit[i] + current.capacity);
+          if (current.PROFILE_INDEX == THE_INDEX) {
+            localProductionLimit[i] = (localProductionLimit[i] + current.capacity);
           }
         }
       }
@@ -167,7 +167,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       for (var j=0; j<numBuilds; j++) {
         current = factories[i].siteBuild[j];
         if (!current.built) {
-          if (current.PROFILE_INDEX == ABSOLUTE_INDEX) {
+          if (current.PROFILE_INDEX == THE_INDEX) {
             var yearsToOperate = int(current.buildTime - current.age);
             if (yearsToOperate + session.current.TURN < NUM_INTERVALS) { // Checks to make sure relevant
               var newCapacity = capacityProfile.getString(1, session.current.TURN-1 + yearsToOperate);
@@ -207,8 +207,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Molecule Icon
     if (!detail) {
-      print(ABSOLUTE_INDEX);
-      fill(agileModel.profileColor[ABSOLUTE_INDEX]);
+      fill(agileModel.profileColor[THE_INDEX]);
       if (selected) {
         stroke(textColor);
         strokeWeight(1);
@@ -263,11 +262,11 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       // If game is on, only shows actual demand bars for finished turns
       if (!gameMode || session.current.TURN + 1 > i) {
         var alpha;
-        fill(agileModel.profileColor[ABSOLUTE_INDEX], 150);
+        fill(agileModel.profileColor[THE_INDEX], 150);
         
         // Draws 1-yr future demand lighter
         if (session.current.TURN == i) {
-          fill(agileModel.profileColor[ABSOLUTE_INDEX], 50);
+          fill(agileModel.profileColor[THE_INDEX], 50);
         }
         rect(x + scalerW * i + 1, y - barA, scalerW - 1, barA);
       }
@@ -323,9 +322,9 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       Y_SHIFT = 28;
     }
     if (gameMode && timeEnd > session.current.TURN ) {
-      text(name, x, y + 10 + Y_SHIFT);
+      text(this.name, x, y + 10 + Y_SHIFT);
     } else {
-      text(name + ", " + summary, x, y + 10 + Y_SHIFT);
+      text(this.name + ", " + this.summary, x, y + 10 + Y_SHIFT);
     }
 
     // Draw Demand Peak Value
