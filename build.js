@@ -21,10 +21,11 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
   this.repurpCost = repurpCost;
   this.repurpTime = repurpTime;
   this.labor = labor;
+  this.editing = editing;
 
   // Allocate Specific Profile Information to a Build when it is deployed on Site
   this.assignProfile = function(index) {
-    PROFILE_INDEX = index;
+    this.PROFILE_INDEX = index;
     built = false;
     age = 0;
   }

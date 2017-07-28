@@ -69,7 +69,7 @@ function Game() {
       
       // Only adds profiles to game within known Lead Time
       this.populateProfiles();
-      //print("There are now " + agileModel.activeProfiles.length + " Active Profiles.");
+      print("There are now " + agileModel.activeProfiles.length + " Active Profiles.");
       
       // Updates the Status of builds on each site at end of each turn (age, etc)
       for (var i=0; i<agileModel.SITES.length; i++) {
@@ -109,7 +109,7 @@ Game.prototype.resetSites = function() {
 Game.prototype.populateProfiles = function() {
   // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
   for (var i=0; i<agileModel.PROFILES.length; i++) {
-    if (agileModel.PROFILES[i].timeLead == this.current.TURN || (this.current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
+    if ((timeLead == this.current.TURN) || (this.current.TURN == 0 && timeLead < 0) ) {
       agileModel.PROFILES[i].globalProductionLimit = 0;
       agileModel.PROFILES[i].initCapacityProfile();
       agileModel.activeProfiles.push(agileModel.PROFILES[i]);
@@ -137,32 +137,35 @@ Game.prototype.populateProfiles = function() {
 // A class that holds information about events executed during each turn
 function Turn(TURN){
   this.TURN = TURN;
-  var event = new Array();  
+  this.event = new Array();  
 }
 
-var siteBuildIndex;
+function Event(eventType, siteIndex, siteBuildIndex) {
+  this.eventType = eventType;
+  this.siteIndex = siteIndex;
+  this.siteBuildIndex = siteBuildIndex;
+  
+  // flag a build/deployment for removal 
+  this.flagRemove();
+}
 
 // An Event might describe a change to the system initiated by (a) the user or (b) external forces
-function Event(eventType, siteIndex, buildIndex, profileIndex = "None") {
+function Event(eventType, siteIndex, buildIndex, profileIndex) {
   this.eventType = eventType;
   this.siteIndex = siteIndex;
   this.buildIndex = buildIndex;
   this.profileIndex = profileIndex;
 
-  if (this.profileIndex == "None") {
-    this.flagRemove();
-  } else {
-    if (this.eventType == "deploy") {
-      // stage a build/deployment event based upon pre-engineered modules 
-      this.stage();
-    } else if (this.eventType == "initialize") {
-      // init. a build/deployment event based upon pre-engineered modules 
-      this.initialize();
-    } else if (this.eventType == "repurpose") {
-      // stage a build/deployment event based upon pre-engineered modules 
-      siteBuildIndex = buildIndex;
-      this.flagRepurpose();
-    }
+  if (this.eventType == "deploy") {
+    // stage a build/deployment event based upon pre-engineered modules 
+    this.stage();
+  } else if (this.eventType == "initialize") {
+    // init. a build/deployment event based upon pre-engineered modules 
+    this.initialize();
+  } else if (this.eventType == "repurpose") {
+    // stage a build/deployment event based upon pre-engineered modules 
+    this.siteBuildIndex = buildIndex;
+    this.flagRepurpose();
   }
 }
 
@@ -206,32 +209,30 @@ Event.prototype.initialize = function() {
   event.assignProfile(this.profileIndex);
   event.age          = int(event.buildTime - agileModel.PROFILES[this.profileIndex].timeLaunch);
   event.capEx_Logged = true;
-  
+
   // Add the NCE-customized Build to the given Site
   agileModel.SITES[this.siteIndex].siteBuild.push(event);
 }
 
 Event.prototype.flagRemove = function() {
-  print(agileModel.SITES[0]);
-  var c = agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex];
-
-  if (c.editing) {
-    agileModel.SITES[this.siteIndex].siteBuild.remove(siteBuildIndex);
+  var current = agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex];
+  if (current.editing) {
+    agileModel.SITES[this.siteIndex].siteBuild.remove(this.siteBuildIndex);
   } else {
-    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].demolish = true;
+    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].demolish = true;
   }
   
 }
 
 Event.prototype.flagRepurpose = function() {
-  if (agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].built == false) {
+  if (agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built == false) {
     game_message ="Can't repurpose while under construction";
     print("Can't Repurpose while Under Construction");
   } else {
-    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].repurpose = true;
-    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].built = false;
-    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].age = 0;
-    agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].PROFILE_INDEX = this.profileIndex;
+    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].repurpose = true;
+    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built = false;
+    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].age = 0;
+    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].PROFILE_INDEX = this.profileIndex;
     game_message = " ";
   }
 }
@@ -299,7 +300,6 @@ function deploySelection() {
   try {
     var deploy = new Event("deploy", session.selectedSite, session.selectedBuild, agileModel.activeProfiles[session.selectedProfile].ABSOLUTE_INDEX);
     session.current.event.push(deploy);
-    
   } catch (e) {
     print("deploySelection() failed to execute");
   }

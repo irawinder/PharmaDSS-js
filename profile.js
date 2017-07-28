@@ -95,7 +95,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       var value = this.demandProfile.getString(1, i);
       if (value > 0) {
         timeLaunch = i;
-        timeLead = i - agileModel.LEAD_TIME;
+        timeLead = i - LEAD_TIME;
         break;
       }
     }
