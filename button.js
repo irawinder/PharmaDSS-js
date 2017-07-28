@@ -300,16 +300,16 @@ function Button(x, y, w, h, label){
       } else {
         p.fill(100, active);
       }
-      p.rect(x, y, w, h, 5);
+      p.rect(this.x, this.y, this.w, this.h, 5);
       p.fill(255);
       p.textAlign(CENTER);
-      p.text(label, x + (w/2), y + 0.6*h); 
+      p.text(this.label, x + (w/2), y + 0.6*h); 
     }
   } 
   
   // returns true if mouse hovers in button region
   this.over = function(){
-    if(mouseX >= x  && mouseY >= y + 5 && mouseX <= x + w && mouseY <= y + 2 + h){
+    if(mouseX >= this.x  && mouseY >= this.y + 5 && mouseX <= this.x + this.w && mouseY <= this.y + 2 + this.h){
       return true;
     } else {
       return false;
@@ -342,7 +342,7 @@ function Menu(w, h, x, y, vOffset, names, align){
       this.buttons[i] = new Button(this.w - this.x - marginW, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
     } else if ( this.align == "left" || this.align == "LEFT" ) { 
       // Left Align
-      this.buttons[i] = new Button(marginW, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, names[i]);
+      this.buttons[i] = new Button(marginW, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
     } else if ( this.align == "center" || this.align == "CENTER" ) { 
       // Center Align
       this.buttons[i] = new Button( (this.w-this.x)/2, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);

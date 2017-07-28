@@ -213,9 +213,9 @@ Event.prototype.initialize = function() {
 
 Event.prototype.flagRemove = function() {
   print(agileModel.SITES[0]);
-  var current = agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex];
+  var c = agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex];
 
-  if (current.editing) {
+  if (c.editing) {
     agileModel.SITES[this.siteIndex].siteBuild.remove(siteBuildIndex);
   } else {
     agileModel.SITES[this.siteIndex].siteBuild[siteBuildIndex].demolish = true;

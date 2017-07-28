@@ -52,22 +52,22 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     p.textSize(12);
     p.fill(255);
     p.text(capacity + " " + agileModel.WEIGHT_UNITS, x, y + 4);
-    if (type.equals("GMS")) {
+    if (type == ("GMS")) {
       p.text("BLD: " + int(buildTime) + " " + agileModel.TIME_UNITS + ", " + int(buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
       p.text("RPP: " + int(repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x + 100, y - 11);
     } else {
       p.text("RPP: " + int(repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
     }
     for (var i=0; i< labor.size (); i++) {
-      if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(0, 0) )) {
+      if (labor[i].name == (agileModel.LABOR_TYPES.getString(0, 0) )) {
         p.fill("#CC0000");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(1, 0) )) {
+      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(1, 0) )) {
         p.fill("#00CC00");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(2, 0) )) {
+      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(2, 0) )) {
         p.fill("#0000CC");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(3, 0) )) {
+      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(3, 0) )) {
         p.fill("#CCCC00");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(4, 0) )) {
+      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(4, 0) )) {
         p.fill("#CC00CC");
       } else {
         p.fill("#00CCCC");
@@ -86,28 +86,28 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     // Draw "Chip" Image
     image(chip, x, y - 100 , w, 75);
   
-    text("Production Capacity:" + int(capacity) + " tons", x, y -140);
+    text("Production Capacity:" + int(this.capacity) + " tons", x, y -140);
 
-    if (type.equals("GMS")) {
-      text("Build Time: " + int(buildTime) + " " + agileModel.TIME_UNITS, x, y - 11);
-      text("Build Cost: " + int(buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y +4);
-      text("Repurpose Time: " + int(repurpTime) + " " +agileModel.TIME_UNITS, x, y + 19);
-      text("Repurpose Cost: " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y + 34);
+    if (type == ("GMS")) {
+      text("Build Time: " + int(this.buildTime) + " " + agileModel.TIME_UNITS, x, y - 11);
+      text("Build Cost: " + int(this.buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y +4);
+      text("Repurpose Time: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS, x, y + 19);
+      text("Repurpose Cost: " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y + 34);
     } else {
-      text("Repurpose Cost: " + int(repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
+      text("Repurpose Cost: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
     }
     
     text("Personnel: " , x, y - 115);
-    for (var i=0; i< labor.size (); i++) {
-      if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(0, 0) )) {
+    for (var i=0; i< this.labor.length; i++) {
+      if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(0, 0) )) {
         fill("#CC0000");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(1, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(1, 0) )) {
         fill("#00CC00");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(2, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(2, 0) )) {
         fill("#0000CC");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(3, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(3, 0) )) {
         fill("#CCCC00");
-      } else if (labor[i].name.equals(agileModel.LABOR_TYPES.getString(4, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(4, 0) )) {
         fill("#CC00CC");
       } else {
         fill("#00CCCC");

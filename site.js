@@ -36,7 +36,7 @@ function Site(name, capEx, capGn, limitRnD) {
     
     //Site constants
     var maxCapSites = agileModel.maxCapacity();
-    var siteBound = map(capGn+capEx,0, maxCapSites, 0, sitesH/3);
+    var siteBound = map(this.capGn+this.capEx,0, maxCapSites, 0, sitesH/3);
     var siteStart = picH + sitesY;
     
     fill(255);
@@ -75,7 +75,7 @@ function Site(name, capEx, capGn, limitRnD) {
     rect(x, y + 5.25*textSizeValue, 10, 10, 1);
     
     //Draws Existing Infrastructure on Site
-    var existLine = map(capEx, 0, maxCapSites, 0, sitesH/3);
+    var existLine = map(this.capEx, 0, maxCapSites, 0, sitesH/3);
     strokeWeight(1);
     stroke(GSK_ORANGE, 200);
     fill(GSK_ORANGE, 50);
@@ -86,15 +86,15 @@ function Site(name, capEx, capGn, limitRnD) {
     fill(textColor);
     textAlign(LEFT);
     textSize(textSizeValue);
-    text("Site " + name, x, y - 5);
+    text("Site " + this.name, x, y - 5);
     textAlign(LEFT);
     fill(GSK_ORANGE);
-    text(int(capEx) + agileModel.WEIGHT_UNITS, x,  siteStart - 15);
+    text(int(this.capEx) + agileModel.WEIGHT_UNITS, x,  siteStart - 15);
     fill(textColor);
-    text(" / " + int(capGn+capEx) + agileModel.WEIGHT_UNITS, x + 25,  siteStart - 15);
+    text(" / " + int(this.capGn+this.capEx) + agileModel.WEIGHT_UNITS, x + 25,  siteStart - 15);
            
     // Draw RND Capacity Slots
-    for (var i=0; i<limitRnD; i++) {
+    for (var i=0; i<this.limitRnD; i++) {
       fill(backgroundValue);
       stroke(textColor, 100);
       strokeWeight(2);

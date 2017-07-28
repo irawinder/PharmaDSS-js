@@ -76,8 +76,8 @@ function TableSurface(W, H, U, V, left_margin) {
 	this.resetCellTypes();
 
   this.resetCellTypes = function() {
-    for (var u=0; u<U; u++) {
-      for (var v=0; v<V; v++) {
+    for (var u=0; u<this.U; u++) {
+      for (var v=0; v<this.V; v++) {
         
         // Sets Site ID to Null
         cellType[u][v][0] = "NULL";
@@ -93,8 +93,8 @@ function TableSurface(W, H, U, V, left_margin) {
 
   this.checkTableDeploy = function() {
     // Cycle through each 22x22 Table Grid
-    for (var u=0; u<U; u++) {
-      for (var v=0; v<V; v++) {
+    for (var u=0; u<this.U; u++) {
+      for (var v=0; v<this.V; v++) {
         
         // Determine if the Cell is in a "Site" Basin and, if so, which one
         var site = -1;
