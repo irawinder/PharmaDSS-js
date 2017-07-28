@@ -225,6 +225,7 @@ Event.prototype.flagRemove = function() {
 }
 
 Event.prototype.flagRepurpose = function() {
+  print(agileModel.SITES[this.siteIndex]);
   if (agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built == false) {
     game_message ="Can't repurpose while under construction";
     print("Can't Repurpose while Under Construction");

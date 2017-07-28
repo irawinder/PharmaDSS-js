@@ -26,20 +26,20 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
   // Allocate Specific Profile Information to a Build when it is deployed on Site
   this.assignProfile = function(index) {
     this.PROFILE_INDEX = index;
-    built = false;
-    age = 0;
+    this.built = false;
+    this.age = 0;
   }
 
   this.updateBuild = function() {
-    age++;
-    if (repurpose) {
-      if (age >= repurpTime) {
-        built = true;
-        repurpose = false;
+    this.age++;
+    if (this.repurpose) {
+      if (this.age >= this.repurpTime) {
+        this.built = true;
+        this.repurpose = false;
       }
-    } else if (age >= buildTime) {
+    } else if (this.age >= this.buildTime) {
       // Build becomes active after N years of construction
-      built = true;
+      this.built = true;
     }
   }
 
@@ -54,21 +54,21 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     p.fill(255);
     p.text(capacity + " " + agileModel.WEIGHT_UNITS, x, y + 4);
     if (type == ("GMS")) {
-      p.text("BLD: " + int(buildTime) + " " + agileModel.TIME_UNITS + ", " + int(buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
-      p.text("RPP: " + int(repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x + 100, y - 11);
+      p.text("BLD: " + int(this.buildTime) + " " + agileModel.TIME_UNITS + ", " + int(this.buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
+      p.text("RPP: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x + 100, y - 11);
     } else {
-      p.text("RPP: " + int(repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
+      p.text("RPP: " + int(this.repurpTime) + " " +agileModel.TIME_UNITS + ", " + int(this.repurpCost/100000)/10.0 + agileModel.COST_UNITS, x, y - 11);
     }
-    for (var i=0; i< labor.size (); i++) {
-      if (labor[i].name == (agileModel.LABOR_TYPES.getString(0, 0) )) {
+    for (var i=0; i< this.labor.length; i++) {
+      if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(0, 0) )) {
         p.fill("#CC0000");
-      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(1, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(1, 0) )) {
         p.fill("#00CC00");
-      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(2, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(2, 0) )) {
         p.fill("#0000CC");
-      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(3, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(3, 0) )) {
         p.fill("#CCCC00");
-      } else if (labor[i].name == (agileModel.LABOR_TYPES.getString(4, 0) )) {
+      } else if (this.labor[i].name == (agileModel.LABOR_TYPES.getString(4, 0) )) {
         p.fill("#CC00CC");
       } else {
         p.fill("#00CCCC");
