@@ -33,7 +33,7 @@ var NUM_INTERVALS = 20;
 
 function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply, profile) {
   model.WEIGHT_UNITS = gms_rules.getString(0, 3);
-  model.TIME_UNIT = gms_rules.getString(2, 1);
+  model.TIME_UNITS = gms_rules.getString(2, 1);
   model.COST_UNITS = (gms_rules.getString(7, 1)).substring(0, 1);
 
   model.LABOR_TYPES = new p5.Table();

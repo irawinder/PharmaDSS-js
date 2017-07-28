@@ -87,7 +87,7 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     // Draw "Chip" Image
     image(chip, x, y - 100 , w, 75);
   
-    text("Production Capacity:" + int(this.capacity) + " tons", x, y -140);
+    text("Production Capacity: " + int(this.capacity) + " tons", x, y -140);
 
     if (type == ("GMS")) {
       text("Build Time: " + int(this.buildTime) + " " + agileModel.TIME_UNITS, x, y - 11);
