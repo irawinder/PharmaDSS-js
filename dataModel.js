@@ -29,7 +29,6 @@ var PROFILE_ROW = 0;
 var PROFILE_COL = 0;
 var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
-    
 
 function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply, profile) {
   model.WEIGHT_UNITS = gms_rules.getString(0, 3);
@@ -223,7 +222,6 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     print(model.PROFILES[i]);
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
     if (!loadOriginal) {
-      print("not load original");
       var mag = 1000*(random(10)+3);
       model.PROFILES[i].setPeak(mag);
     }

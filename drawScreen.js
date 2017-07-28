@@ -68,8 +68,9 @@ function drawScreen() {
   fill(textColor);
   textAlign(RIGHT);
   textSize(textSizeValue);
-  text("PharmaDSS " + VERSION, width - MARGIN, MARGIN);
-  text("Ira Winder, Nina Lutz, Kent Larson (MIT), Joana Gomes (IIM, GSK)\nGiovanni Giorgio, Mason Briner (Capital Strategy and Design, GSK)\nAndrew Rutter (AMT), John Dyson (CSD, GSK)", width - MARGIN, MARGIN + textSizeValue);  
+  text("PharmaDSS " + VERSION, width - MARGIN, MARGIN - textSizeValue*2);
+  text("Ira Winder, Nina Lutz, Kent Larson (MIT), Joana Gomes (IIM, GSK)\nGiovanni Giorgio, Mason Briner (Capital Strategy and Design, GSK)\nAndrew Rutter (AMT), John Dyson (CSD, GSK)", 
+    width - MARGIN, MARGIN + textSizeValue);  
 
   // Draw Pork Chop
   image(logo_GSK, 1.0*MARGIN, height-MARGIN - 85 + 2, 95, 95); 
@@ -110,7 +111,7 @@ function drawScreen() {
   outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
-  drawBuilds();
+  // drawBuilds();  // TODO: THE SITES
   
   //Draw Selected Profile in Large Format
   try {
@@ -148,11 +149,11 @@ function drawProfiles(list) {
   textAlign(LEFT);
   textSize(max(18, textSizeValue));
   text("NCE Demand Profiles", MARGIN + profilesX - 25, titlesY);
-  
   // Current Year
   textAlign(RIGHT);
   fill(textColor, 200);
-  text(agileModel.YEAR_0 + session.current.TURN, profilesX + profilesW + 1.15*MARGIN, titlesY);
+
+  text(YEAR_0 + session.current.TURN, profilesX + profilesW + 1.15*MARGIN, titlesY);
   
   var axis;
   var selected;

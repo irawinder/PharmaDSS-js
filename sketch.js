@@ -180,7 +180,7 @@ function draw() {
 
 // Refreshes when there's a mouse mouse movement
 function mouseMoved() {
-  // loop(); // NOTE: TURNED OFF TEMPORARILY DUE TO ERRORS
+  loop(); // NOTE: TURNED OFF TEMPORARILY DUE TO ERRORS
 }
 
 function loadMenu(canvasWidth, canvasHeight) {
