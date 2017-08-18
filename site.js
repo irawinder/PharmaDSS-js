@@ -84,6 +84,7 @@ function Site(name, capEx, capGn, limitRnD) {
     
     // Draw Label Text
     fill(textColor);
+    noStroke();
     textAlign(LEFT);
     textSize(textSizeValue);
     text("Site " + this.name, x, y - 5);

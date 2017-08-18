@@ -99,7 +99,6 @@ function setup() {
     
   // Setup for Canvas Visualization
   createCanvas(screenWidth, screenHeight);
-  console.log(screenWidth);
 
   // Loads and formats menue items
   loadMenu(screenWidth, screenHeight);
@@ -122,7 +121,6 @@ function setup() {
   textFont(main);
 
   noStroke();
-
   textSize(textSizeValue);
 
 
@@ -206,6 +204,6 @@ function loadMenu(canvasWidth, canvasHeight) {
 function gameText() {
   textAlign(LEFT);
   fill(249, 60, 60);
-  textSize(textSizeValue+ 2);
+  textSize(textSizeValue + 2);
   text(game_message, 50, height-260, profilesX-MARGIN*1.5, height/8);
 }

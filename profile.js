@@ -314,6 +314,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       fill(textColor);
     }
     textAlign(LEFT);
+    noStroke();
     textSize(textSizeValue);
     var Y_SHIFT;
     if (!detail) {

@@ -80,13 +80,13 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     // Draw Build Characteristics
     var scaler = 3;
     textAlign(LEFT);
+    noStroke();
     textSize(12);
     fill(textColor);
     // Draw "Chip" Image
     image(chip, x, y - 100 , w, 75);
   
     text("Production Capacity: " + int(this.capacity) + " tons", x, y -140);
-
     if (type == ("GMS")) {
       text("Build Time: " + int(this.buildTime) + " " + agileModel.TIME_UNITS, x, y - 11);
       text("Build Cost: " + int(this.buildCost/100000)/10.0 + agileModel.COST_UNITS, x, y +4);
