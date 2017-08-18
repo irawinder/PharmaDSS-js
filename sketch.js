@@ -74,8 +74,10 @@ function setup() {
 
   HIGHLIGHT = color(174, 230, 230);
   HIGHLIGHT_ALPHA = color(174, 230, 230, 50);
-  THEME = color(255, 108,47);
-  GSK_ORANGE = color(255, 108,47);
+  THEME = color(255, 108, 47);
+  GSK_ORANGE = color(255, 108, 47);
+  GSK_ORANGE_ALPHA200 = color(255, 108, 47, 200);
+  GSK_ORANGE_ALPHA50 = color(255, 108, 47, 50);
   CAPACITY_COLOR = color(200, 95, 224); 
   NOW = color(255, 220, 4);
   END = color(249, 60, 60);
