@@ -98,7 +98,8 @@ function setup() {
   updateProfileCapacities();
     
   // Setup for Canvas Visualization
-  createCanvas(screenWidth, screenHeight, P2D);
+  createCanvas(screenWidth, screenHeight);
+  console.log(screenWidth);
 
   // Loads and formats menue items
   loadMenu(screenWidth, screenHeight);
@@ -134,7 +135,7 @@ function setup() {
   setupRadar();
   
   flatOutputs();
-  // setupTable();
+  setupTable();
 
   // initUDP();
 }
@@ -180,7 +181,7 @@ function draw() {
 
 // Refreshes when there's a mouse mouse movement
 function mouseMoved() {
-  loop(); // NOTE: TURNED OFF TEMPORARILY DUE TO ERRORS
+  // loop(); // NOTE: TURNED OFF TEMPORARILY DUE TO ERRORS
 }
 
 function loadMenu(canvasWidth, canvasHeight) {
