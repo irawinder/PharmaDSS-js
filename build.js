@@ -6,8 +6,6 @@ var built;
 var age;
 // Is the build flagged to be demolished?
 var demolish = false;
-// Is the build being repurposed?
-var repurpose = false;
 // flag determining if build's capital cost has already been scored
 var capEx_Logged = false;
 var editing = false;
@@ -22,6 +20,7 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
   this.repurpTime = repurpTime;
   this.labor = labor;
   this.editing = editing;
+  this.repurpose = false;
 
   // Allocate Specific Profile Information to a Build when it is deployed on Site
   this.assignProfile = function(index) {
@@ -83,7 +82,6 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
     textAlign(LEFT);
     textSize(12);
     fill(textColor);
-    
     // Draw "Chip" Image
     image(chip, x, y - 100 , w, 75);
   

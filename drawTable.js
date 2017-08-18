@@ -18,9 +18,12 @@ var BASIN_HEIGHT = 6;
  *   + V-Axis
  *
  */
+  var projectorWidth = 1920;
+  var projectorHeight = 1200;
+  var projectorOffset = 1280;
 
 function setupTable() {
-  offscreen = createGraphics(projectorHeight, projectorHeight);
+  // offscreen = createGraphics(projectorHeight, projectorHeight);
   // TableSurface(int u, int v, boolean left_margin)
   mfg = new TableSurface(projectorHeight, projectorHeight, V_MAX, V_MAX, true);
   enableSites = true;
@@ -53,6 +56,22 @@ function generateBasins() {
   enableSites = true;
 }
 
+TableSurface.prototype.resetCellTypes = function() {
+  for (var u=0; u<this.U; u++) {
+    for (var v=0; v<this.V; v++) {
+      
+      // Sets Site ID to Null
+      cellType[u][v][0] = "NULL";
+      
+      // Sets Site's "Existing" or "Greenfield" Status to Null
+      cellType[u][v][1] = "NULL";
+      
+      inUse[u][v] = false;
+      siteBuildIndex[u][v] = -1;
+    }
+  }
+} 
+
 function TableSurface(W, H, U, V, left_margin) {
   var U, V;
   var MARGIN_W = 4;  // Left Margin for Grid (in Lego Squares)
@@ -72,21 +91,7 @@ function TableSurface(W, H, U, V, left_margin) {
 
 	this.resetCellTypes();
 
-  this.resetCellTypes = function() {
-    for (var u=0; u<this.U; u++) {
-      for (var v=0; v<this.V; v++) {
-        
-        // Sets Site ID to Null
-        cellType[u][v][0] = "NULL";
-        
-        // Sets Site's "Existing" or "Greenfield" Status to Null
-        cellType[u][v][1] = "NULL";
-        
-        inUse[u][v] = false;
-        siteBuildIndex[u][v] = -1;
-      }
-    }
-  } 
+  
 
   this.checkTableDeploy = function() {
     // Cycle through each 22x22 Table Grid
@@ -334,34 +339,30 @@ function TableSurface(W, H, U, V, left_margin) {
         isQuad = true;
       }
     
-      s[i] = createShape();
-      s[i].beginShape();
-
-      s[i].noFill();
-      
-      s[i].strokeWeight(2*CORNER_BEVEL[i]);
+      beginShape();
+      noFill();
+      strokeWeight(2*CORNER_BEVEL[i]);
 
       if (i==0) {
-        s[i].stroke(255, 150);
-        
+        stroke(255, 150);
       } else {
-        s[i].stroke(GSK_ORANGE);
+        stroke(GSK_ORANGE);
       }
 
-      s[i].vertex( - CORNER_BEVEL[i] +  basinX*cellW, - CORNER_BEVEL[i] +  basinY*cellH);
-      s[i].vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, - CORNER_BEVEL[i] +  basinY*cellH);
+      vertex( - CORNER_BEVEL[i] +  basinX*cellW, - CORNER_BEVEL[i] +  basinY*cellH);
+      vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, - CORNER_BEVEL[i] +  basinY*cellH);
       if (isQuad) {
-        s[i].vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
-        s[i].vertex( - CORNER_BEVEL[i] +  basinX*cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
+        vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
+        vertex( - CORNER_BEVEL[i] +  basinX*cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
       } else {
-        s[i].vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
-        s[i].vertex( + CORNER_BEVEL[i] + (basinX + basinSize[i]%basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
-        s[i].vertex( + CORNER_BEVEL[i] + (basinX + basinSize[i]%basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth + 1) * cellH);
-        s[i].vertex( - CORNER_BEVEL[i] +  basinX*cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth + 1) * cellH);
+        vertex( + CORNER_BEVEL[i] + (basinX + basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
+        vertex( + CORNER_BEVEL[i] + (basinX + basinSize[i]%basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth) * cellH);
+        vertex( + CORNER_BEVEL[i] + (basinX + basinSize[i]%basinWidth) * cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth + 1) * cellH);
+        vertex( - CORNER_BEVEL[i] +  basinX*cellW, + CORNER_BEVEL[i] + (basinY + basinSize[i] / basinWidth + 1) * cellH);
       }
-       s[i].vertex( - CORNER_BEVEL[i] +  basinX*cellW, - CORNER_BEVEL[i] +  basinY*cellH);
+       vertex( - CORNER_BEVEL[i] +  basinX*cellW, - CORNER_BEVEL[i] +  basinY*cellH);
 
-      s[i].endShape(CLOSE);
+      endShape(CLOSE);
     }
     
   }

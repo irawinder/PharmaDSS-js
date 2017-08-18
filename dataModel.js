@@ -219,7 +219,6 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     THE_INDEX = i;
     // Calculates peak forecast demand value, lead years, etc
     model.PROFILES[i].calc();
-    print(model.PROFILES[i]);
     //Rescale peak NCE values to be within reasonable orders of magnitude of GMS Build Options
     if (!loadOriginal) {
       var mag = 1000*(random(10)+3);
@@ -231,5 +230,4 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
   }
   
   model.generateColors();
-
 }
