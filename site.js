@@ -36,7 +36,7 @@ function Site(name, capEx, capGn, limitRnD) {
     
     //Site constants
     var maxCapSites = agileModel.maxCapacity();
-    var siteBound = map(this.capGn+this.capEx,0, maxCapSites, 0, sitesH/3);
+    var siteBound = map(this.capGn+this.capEx, 0, maxCapSites, 0, sitesH/3);
     var siteStart = picH + sitesY;
     
     fill(255);
@@ -44,7 +44,6 @@ function Site(name, capEx, capGn, limitRnD) {
     // Draw Site Selection
     if (selected) {
         fill(HIGHLIGHT_ALPHA);
-        noStroke(); 
         rect(x - 10,  y - 20, w + RnD_W + 2*RnD_gap + 10,  highlightH, 5);
         noStroke();
     }
@@ -61,7 +60,7 @@ function Site(name, capEx, capGn, limitRnD) {
 
     // Legend for Site Areas
     textAlign(LEFT);
-    fill(GSK_ORANGE);
+    fill(GSK_ORANGE_ALPHA200);
     text("Built Capacity", x+15, y + 4.5*textSizeValue);
     fill(textColor, 225);
     text("Available Site", x+15, y + 6.0*textSizeValue);
@@ -77,9 +76,10 @@ function Site(name, capEx, capGn, limitRnD) {
     //Draws Existing Infrastructure on Site
     var existLine = map(this.capEx, 0, maxCapSites, 0, sitesH/3);
     strokeWeight(1);
-    stroke(GSK_ORANGE, 200);
-    fill(GSK_ORANGE, 50);
+    stroke(GSK_ORANGE_ALPHA200);
+    fill(GSK_ORANGE_ALPHA50);
     rect(x+5, siteStart, w-10, existLine + 4, 5);
+    //TODO
     rect(x, y + 3.75*textSizeValue, 10, 10, 1);
     
     // Draw Label Text
@@ -90,7 +90,7 @@ function Site(name, capEx, capGn, limitRnD) {
     text("Site " + this.name, x, y - 5);
     textAlign(LEFT);
     fill(GSK_ORANGE);
-    text(int(this.capEx) + agileModel.WEIGHT_UNITS, x,  siteStart - 15);
+    text(this.capEx + agileModel.WEIGHT_UNITS, x,  siteStart - 15);
     fill(textColor);
     text(" / " + int(this.capGn+this.capEx) + agileModel.WEIGHT_UNITS, x + 25,  siteStart - 15);
            
@@ -125,7 +125,7 @@ function Site(name, capEx, capGn, limitRnD) {
       // Draw Site Builds on Sites
       if(!gameMode){
         // Draws Solid NCE colors before game starts
-        fill(agileModel.profileColor[this.siteBuild[i].PROFILE_INDEX], 180);
+        fill(agileModel.profileColor[this.siteBuild[i].PROFILE_INDEX]);
         rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
         fill(backgroundValue, 100);
         rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
@@ -160,7 +160,6 @@ function Site(name, capEx, capGn, limitRnD) {
           // Draw colored rectangle
           fill(agileModel.profileColor[this.siteBuild[i].PROFILE_INDEX]);
           rect(BLD_X + BLD_W*(i%3), BLD_Y + offset, capWidth, BLD_H - 2, 5);
-          
         } 
         
       }
