@@ -111,7 +111,7 @@ function drawScreen() {
   outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
-  drawBuilds();  // TODO: THE SITES
+  drawBuilds();
   
   //Draw Selected Profile in Large Format
   try {
@@ -186,7 +186,7 @@ function drawProfiles(list) {
   var ht = 10;
   var fraction = ht / agileModel.profileColor.length;
   for (var i=0; i<agileModel.profileColor.length; i++) {
-    fill(agileModel.profileColor[i], 200);
+    fill(agileModel.profileColor[i]);
     rect(MARGIN + profilesX, titlesY + textSizeValue*1.5 + i*fraction, 15, fraction);
   }
   colorMode(RGB); 

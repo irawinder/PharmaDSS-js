@@ -427,77 +427,77 @@ function decodePieces() {
   mfg.checkTableDeploy();
 }
 
-function drawBuilds(p) {
-  // Draw Build/Repurpose Units
+// function drawBuilds(p) {
+//   // Draw Build/Repurpose Units
   
-  //Builds
-  buildsX = 20;
-  buildsY = int(0.75*p.height);
-  buildsW   = int(0.135*p.width);
-  buildsH   = profilesH;
+//   //Builds
+//   buildsX = 20;
+//   buildsY = int(0.75*p.height);
+//   buildsW   = int(0.135*p.width);
+//   buildsH   = profilesH;
   
-  var selected;
+//   var selected;
   
-  p.beginDraw();
+//   p.beginDraw();
   
-  // Build Var
-  p.fill(255);
-  p.textAlign(LEFT);
-  p.textSize(12);
-  p.text("Pre-Engineered \nProduction Units:", buildsX, buildsY - MARGIN);
-  var spread = 3.0;
+//   // Build Var
+//   p.fill(255);
+//   p.textAlign(LEFT);
+//   p.textSize(12);
+//   p.text("Pre-Engineered \nProduction Units:", buildsX, buildsY - MARGIN);
+//   var spread = 3.0;
   
-  // Draw GMS Build Options
-  p.fill(255);
-  p.textAlign(LEFT);
-  p.text("GMS", buildsX, buildsY + 1.4*MARGIN);
-//      text("Build", MARGIN + buildsX, buildsY - 10);
-//      text("Repurpose", MARGIN + buildsX + 80, buildsY - 10);
-  for (var i=0; i<agileModel.GMS_BUILDS.length; i++) {
-    selected = false;
-    if (i == session.selectedBuild) selected = true;
-    agileModel.GMS_BUILDS[i].draw(p, buildsX, 2*MARGIN + buildsY + int(spread*buildsH*i), buildsW, buildsH, "GMS", selected);
-  }
-  // Draw R&D Build Options
-  p.fill(255);
-  p.textAlign(LEFT);
-  var vOffset = buildsY + spread*buildsH*(agileModel.GMS_BUILDS.length+1);
-  p.text("R&D", buildsX, vOffset + 1.4*MARGIN);
-  for (var i=0; i<agileModel.RND_BUILDS.length; i++) {
-    selected = false;
-    // if (...) selected = true;
-    agileModel.RND_BUILDS[i].draw(p, buildsX, 2*MARGIN + int(vOffset + spread*buildsH*i ), buildsW, buildsH, "R&D", selected);
-  }
+//   // Draw GMS Build Options
+//   p.fill(255);
+//   p.textAlign(LEFT);
+//   p.text("GMS", buildsX, buildsY + 1.4*MARGIN);
+// //      text("Build", MARGIN + buildsX, buildsY - 10);
+// //      text("Repurpose", MARGIN + buildsX + 80, buildsY - 10);
+//   for (var i=0; i<agileModel.GMS_BUILDS.length; i++) {
+//     selected = false;
+//     if (i == session.selectedBuild) selected = true;
+//     agileModel.GMS_BUILDS[i].draw(p, buildsX, 2*MARGIN + buildsY + int(spread*buildsH*i), buildsW, buildsH, "GMS", selected);
+//   }
+//   // Draw R&D Build Options
+//   p.fill(255);
+//   p.textAlign(LEFT);
+//   var vOffset = buildsY + spread*buildsH*(agileModel.GMS_BUILDS.length+1);
+//   p.text("R&D", buildsX, vOffset + 1.4*MARGIN);
+//   for (var i=0; i<agileModel.RND_BUILDS.length; i++) {
+//     selected = false;
+//     // if (...) selected = true;
+//     agileModel.RND_BUILDS[i].draw(p, buildsX, 2*MARGIN + int(vOffset + spread*buildsH*i ), buildsW, buildsH, "R&D", selected);
+//   }
   
-  // Draw Personnel Legend
-  var vOff = -50;
-  p.fill(255);
-  p.textAlign(LEFT);
-//      text("Personnel:", titlesY, MARGIN);
-  for (var i=0; i<NUM_LABOR; i++) {
-    if (i==0) {
-      p.fill("#CC0000");
-    } else if (i==1) {
-      p.fill("#00CC00");
-    } else if (i==2) {
-      p.fill("#0000CC");
-    } else if (i==3) {
-      p.fill("#CCCC00");
-    } else if (i==4) {
-      p.fill("#CC00CC");
-    } else {
-      p.fill("#00CCCC");
-    }
+//   // Draw Personnel Legend
+//   var vOff = -50;
+//   p.fill(255);
+//   p.textAlign(LEFT);
+// //      text("Personnel:", titlesY, MARGIN);
+//   for (var i=0; i<NUM_LABOR; i++) {
+//     if (i==0) {
+//       p.fill("#CC0000");
+//     } else if (i==1) {
+//       p.fill("#00CC00");
+//     } else if (i==2) {
+//       p.fill("#0000CC");
+//     } else if (i==3) {
+//       p.fill("#CCCC00");
+//     } else if (i==4) {
+//       p.fill("#CC00CC");
+//     } else {
+//       p.fill("#00CCCC");
+//     }
     
-    var xOff = 0;
-    if (i > 2) {
-      xOff = 100;
-    }
+//     var xOff = 0;
+//     if (i > 2) {
+//       xOff = 100;
+//     }
     
-    p.ellipse(buildsX + xOff, 15*(i%3) - 4 + buildsY, 3, 10);
-    p.fill(255);
-    p.text(agileModel.LABOR_TYPES.getString(i,0), buildsX + 10 + xOff, 15*(i%3) + buildsY);
-  }
+//     p.ellipse(buildsX + xOff, 15*(i%3) - 4 + buildsY, 3, 10);
+//     p.fill(255);
+//     p.text(agileModel.LABOR_TYPES.getString(i,0), buildsX + 10 + xOff, 15*(i%3) + buildsY);
+//   }
   
-  p.endDraw();
-}
+//   p.endDraw();
+// }

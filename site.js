@@ -43,7 +43,7 @@ function Site(name, capEx, capGn, limitRnD) {
     
     // Draw Site Selection
     if (selected) {
-        fill(HIGHLIGHT, 40);
+        fill(HIGHLIGHT_ALPHA);
         noStroke(); 
         rect(x - 10,  y - 20, w + RnD_W + 2*RnD_gap + 10,  highlightH, 5);
         noStroke();
@@ -158,7 +158,7 @@ function Site(name, capEx, capGn, limitRnD) {
           rect(BLD_X + BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, 5);
           
           // Draw colored rectangle
-          fill(agileModel.profileColor[this.siteBuild[i].PROFILE_INDEX], 180);
+          fill(agileModel.profileColor[this.siteBuild[i].PROFILE_INDEX]);
           rect(BLD_X + BLD_W*(i%3), BLD_Y + offset, capWidth, BLD_H - 2, 5);
           
         } 

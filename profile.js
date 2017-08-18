@@ -198,7 +198,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Profile Selection
     if (selected) {
-      fill(HIGHLIGHT, 50);
+      fill(HIGHLIGHT_ALPHA);
       noStroke(); 
       rect(x - 15, y - h - 7, w + 30, h+20, 5);
       //rect(0.25*MARGIN + profilesX, y - h - 7, profilesW + MARGIN*1.75, h+20, 2);
@@ -207,7 +207,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Molecule Icon
     if (!detail) {
-      fill(agileModel.profileColor[THE_INDEX]);
+      fill(agileModel.profileColor[this.ABSOLUTE_INDEX]);
       if (selected) {
         stroke(textColor);
         strokeWeight(1);
@@ -226,14 +226,14 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Time Bar
     if (!detail) {
-      fill("#CCCCCC"); // TODO: 80
+      fill(204,204,204, 80);
       var begin = max(0, timeLead);
       var end = max(0, timeEnd);
 
       if (!gameMode) {
         rect(x + scalerW * begin, y - h, scalerW * (min(end, this.demandProfile.getColumnCount()) - begin), h);
       } else {
-        fill("#CCCCCC"); // TODO: 80
+        fill(204,204,204,80);
         rect(x + scalerW * begin, y - h, scalerW * (min(min(end, this.demandProfile.getColumnCount()), session.current.TURN) - begin), h);
       }
     }
@@ -262,11 +262,11 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       // If game is on, only shows actual demand bars for finished turns
       if (!gameMode || session.current.TURN + 1 > i) {
         var alpha;
-        fill(agileModel.profileColor[THE_INDEX], 150);
+        fill(agileModel.profileColor[this.ABSOLUTE_INDEX]);
         
         // Draws 1-yr future demand lighter
         if (session.current.TURN == i) {
-          fill(agileModel.profileColor[THE_INDEX], 50);
+          fill(agileModel.profileColor[this.ABSOLUTE_INDEX], 50);
         }
         rect(x + scalerW * i + 1, y - barA, scalerW - 1, barA);
       }

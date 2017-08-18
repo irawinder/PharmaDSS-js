@@ -32,10 +32,10 @@ function MFG_System() {
     var hue;
     for (var i=0; i<this.profileColor.length; i++) {
       hue = i * 200.0 / this.profileColor.length;
-      this.profileColor[i] = (hue, 255, 255, 180);
+      this.profileColor[i] = color(hue, 255, 255, 200);
       if(i > 2){
         hue = i * 255.0 / this.profileColor.length;
-        this.profileColor[i] = (hue, 255, 255, 180);
+        this.profileColor[i] = color(hue, 255, 255, 200);
       }
     }
     colorMode(RGB);
