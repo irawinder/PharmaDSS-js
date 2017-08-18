@@ -281,7 +281,7 @@ function Button(x, y, w, h, label){
   pressed = 120; // darkest
   
   isPressed = false;
-  isVoid = false;
+  this.isVoid = false;
   
   this.x = x;
   this.y = y;
@@ -291,11 +291,11 @@ function Button(x, y, w, h, label){
   
   //Button Objects are draw to a PGraphics object rather than directly to canvas
   this.draw = function(p){
-    if (!isVoid) {
+    if (!this.isVoid) {
       p.noStroke();
       if( this.over() ) {  // Darkens button if hovering mouse over it
         p.fill(100, hover);
-      } else if (isPressed){
+      } else if (p.isPressed){
         p.fill(100, pressed);
       } else {
         p.fill(100, active);
@@ -352,6 +352,7 @@ function Menu(w, h, x, y, vOffset, names, align){
     if (this.names[i] == "void" || this.names[i] == "VOID" ) {
       this.buttons[i].isVoid = true;
     }
+
   }
   
   // Draws the Menu to its own PGraphics canvas
