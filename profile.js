@@ -402,7 +402,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
         textAlign(LEFT);
         text(int(cap/100)/10.0 + agileModel.WEIGHT_UNITS, X + 5, Y-5);
         textAlign(CENTER);
-        text((agileModel.YEAR_0 + session.current.TURN), X , y + MARGIN);
+        text((YEAR_0 + session.current.TURN), X , y + MARGIN);
       }
     }
 
