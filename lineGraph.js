@@ -123,7 +123,7 @@ function LineGraph(_Values, _x, _y, _w, _h) {
     //text(100, minx - 20, miny - h + 23);
     text(0, this.minx - 10, this.miny);
     var x = this.minx - textSizeValue*2;
-    var y = this.miny - h/2;
+    var y = this.miny - this.h/2;
     push();
     translate(x,y);
     rotate(-HALF_PI);
