@@ -186,9 +186,9 @@ function loadMenu(canvasWidth, canvasHeight) {
   // Initializes Menu Items (canvas width, canvas height, button width[pix], button height[pix], 
   // number of buttons to offset downward, String[] names of buttons)
   if (showMainMenu) {
-    hideText = "hide";
+    hideText = hide;
   } else {
-    hideText = "show";
+    hideText = show;
   }
 
   hideMenu = new Menu(canvasWidth, canvasHeight, max(int(width*.13), 160), 25, 0, hideText, align);

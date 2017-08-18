@@ -178,6 +178,7 @@ function keyPressed() {
 function toggleMainMenu() {
   showMainMenu = toggle(showMainMenu);
   if (showMainMenu) {
+    print(hideMenu);
     hideMenu.buttons[0].label = hide[0];
   } else {
     hideMenu.buttons[0].label = show[0];
