@@ -281,7 +281,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
         if (i==0 || (i+1)%5 == 0) {
           line(x + scalerW * i + 0.5*scalerW, y, x + scalerW * i + 0.5*scalerW, y+3);
           noStroke();
-          text((agileModel.YEAR_0+i), x + scalerW * (i+.5) + 1, y + 15);
+          text((YEAR_0+i), x + scalerW * (i+.5) + 1, y + 15);
         } else {
           line(x + scalerW * i + 0.5*scalerW, y, x + scalerW * i + 0.5*scalerW, y+2);
         }
