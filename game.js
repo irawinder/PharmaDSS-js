@@ -7,13 +7,14 @@ function regenerateGame() {
   if (gameMode) {
     interrupt = true;
     gameMode = false;
+    print("Game on");
   }
   
   // Initiate MFG_System and Objects
   agileModel = new MFG_System();
   //Initiate Game
   loadRules(agileModel, gmsRulesFile, gmsCapacityFile, gmsLabourFile, rndPPFile, rndRulesFile, supplyRulesFile, profileDataFile);
-  
+
   session = new Game();
   updateProfileCapacities();
   
@@ -109,7 +110,7 @@ Game.prototype.resetSites = function() {
 Game.prototype.populateProfiles = function() {
   // When not in game mode, all profiles are viewed in their entirety (i.e. Omnipotent mode..)
   for (var i=0; i<agileModel.PROFILES.length; i++) {
-    if ((timeLead == this.current.TURN) || (this.current.TURN == 0 && timeLead < 0) ) {
+    if ((agileModel.PROFILES[i].timeLead == this.current.TURN) || (this.current.TURN == 0 && agileModel.PROFILES[i].timeLead < 0) ) {
       agileModel.PROFILES[i].globalProductionLimit = 0;
       agileModel.PROFILES[i].initCapacityProfile();
       agileModel.activeProfiles.push(agileModel.PROFILES[i]);

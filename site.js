@@ -132,7 +132,7 @@ function Site(name, capEx, capGn, limitRnD) {
       } else if (gameMode) {
         if (session.current.TURN > 0 && this.siteBuild[i].built) {
           // Calculate percent of build module being utilized to meet demand
-          var demand = agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].demandProfile.getString(2, session.current.TURN-1);
+          var demand = int(agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].demandProfile.getString(2, session.current.TURN-1));
           var cap = agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].globalProductionLimit;
           var meetPercent;
           if (cap == 0) {

@@ -7,7 +7,7 @@ function drawScreen() {
   profilesY = int(0.21*height);
   profilesW = int(0.23*width);
   profilesH = int(0.02*height);
-  
+
   //Sites
   sitesX    = int(profilesX + profilesW + 100);
   sitesY    = int(0.21*height);
@@ -161,7 +161,7 @@ function drawProfiles(list) {
   for (var i=1; i<=list.length; i++) {
     selected = false;
     axis = false;
-    if (!gameMode || list[i-1].timeLead <= session.current.TURN ) {
+    if (!gameMode || (list[i-1].timeLead <= session.current.TURN) ) {
       if (i == numProf) axis = true;
       if (i == session.selectedProfile+1) selected = true;
          if(!gameMode){

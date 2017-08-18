@@ -42,6 +42,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   this.productionCost = productionCost;
   this.demandProfile = demandProfile;
   this.ABSOLUTE_INDEX = INDEX;
+  this.timeLead = timeLead;
   launched = false;
 
   this.calc = function() {
@@ -90,12 +91,12 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   // Based on Profile, compute the date that forecast is first know based on N years advance notice (i.e. 5yr) MFG_System.LEAD_TIME
   //For graph class
   this.lead = function() {
-    timeLead = 0;
+    this.timeLead = 0;
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
       var value = this.demandProfile.getString(1, i);
       if (value > 0) {
         timeLaunch = i;
-        timeLead = i - LEAD_TIME;
+        this.timeLead = i - LEAD_TIME;
         break;
       }
     }
@@ -120,7 +121,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
         viable = true;
       }
     }
-    if (!viable) timeEnd = timeLead;
+    if (!viable) timeEnd = this.timeLead;
   }
 
   this.initCapacityProfile = function() {
@@ -227,7 +228,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     // Time Bar
     if (!detail) {
       fill(204,204,204, 80);
-      var begin = max(0, timeLead);
+      var begin = max(0, this.timeLead);
       var end = max(0, timeEnd);
 
       if (!gameMode) {
@@ -263,7 +264,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       if (!gameMode || session.current.TURN + 1 > i) {
         var alpha;
         fill(agileModel.profileColor[this.ABSOLUTE_INDEX]);
-        
+
         // Draws 1-yr future demand lighter
         if (session.current.TURN == i) {
           fill(agileModel.profileColor[this.ABSOLUTE_INDEX], 50);
@@ -341,12 +342,12 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     var markW = 1;
     
     // Lead Date
-    if (timeLead >=0) {
+    if (this.timeLead >=0) {
       fill(P3);
-      rect(x + scalerW * timeLead - markW, y - markerH*h, markW, markerH*h);
+      rect(x + scalerW * this.timeLead - markW, y - markerH*h, markW, markerH*h);
       if (detail) {
         textAlign(CENTER);
-        text("Ph.III", x + scalerW * timeLead - markW, y-markerH*h-5);
+        text("Ph.III", x + scalerW * this.timeLead - markW, y-markerH*h-5);
       }
     }
 
@@ -393,7 +394,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       if (detail) {
         rect(X, y, 4, - max(0.25*h, barA) );
       } else {
-        if (session.current.TURN != timeLead) rect(X, Y + h/2, 3, h/2 ); //this is the game moving rectangle
+        if (session.current.TURN != this.timeLead) rect(X, Y + h/2, 3, h/2 ); //this is the game moving rectangle
       }
       if (detail) {
         fill(NOW, 100);
