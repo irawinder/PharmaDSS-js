@@ -44,6 +44,7 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
 
   this.draw = function(p, x, y, w, h, type, selected) {
     // Draw Build Characteristics
+    print("draw");
     var scaler = 3;
     p.noStroke();    
     p.fill(abs(255 - 75));

@@ -111,7 +111,7 @@ function drawScreen() {
   outputGraph = new LineGraph(outputs, lineX, lineY, lineW, lineH);
   
   // Draw Build Legend
-  // drawBuilds();  // TODO: THE SITES
+  drawBuilds();  // TODO: THE SITES
   
   //Draw Selected Profile in Large Format
   try {
