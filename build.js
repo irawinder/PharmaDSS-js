@@ -9,7 +9,6 @@ var demolish = false;
 // flag determining if build's capital cost has already been scored
 var capEx_Logged = false;
 var editing = false;
-var labor = new Array();
 
 function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, labor, editing) {
   this.name = name;
@@ -18,7 +17,7 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
   this.buildTime = buildTime;
   this.repurpCost = repurpCost;
   this.repurpTime = repurpTime;
-  this.labor = labor;
+  this.labor = new Array();
   this.editing = editing;
   this.repurpose = false;
 
@@ -44,7 +43,6 @@ function Build(name, capacity, buildCost, buildTime, repurpCost, repurpTime, lab
 
   this.draw = function(p, x, y, w, h, type, selected) {
     // Draw Build Characteristics
-    print("draw");
     var scaler = 3;
     p.noStroke();    
     p.fill(abs(255 - 75));
