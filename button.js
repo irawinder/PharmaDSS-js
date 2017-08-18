@@ -18,7 +18,8 @@
     "VOID",  // 15
     "Show Score Radar (z)",  // 16
     "Invert Colors (i)", // 17
-    "Project Table (`)", // 18
+    "VOID",
+    // "Project Table (`)", // 18
   ];
 
 // These Strings are for the hideMenu, formatted as arrays for Menu Class Constructor
@@ -296,7 +297,7 @@ function Button(x, y, w, h, label){
       p.noStroke();
       if( this.over() ) {  // Darkens button if hovering mouse over it
         p.fill(100, hover);
-      } else if (p.isPressed){
+      } else if (this.isPressed){
         p.fill(100, pressed);
       } else {
         p.fill(100, active);

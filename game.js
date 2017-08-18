@@ -26,8 +26,8 @@ function regenerateGame() {
   agileModel.maxCapacity();
   
   // Generate New Basins for Sites
-  // mfg.resetCellTypes(); // TODO
-  // generateBasins();
+  mfg.resetCellTypes();
+  generateBasins();
   
   //resets Scores
   flatOutputs();

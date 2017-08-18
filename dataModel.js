@@ -31,7 +31,7 @@ var NUM_PROFILES = 10;
 var NUM_INTERVALS = 20;
 
 function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply, profile) {
-  model.WEIGHT_UNITS = gms_rules.getString(0, 3);
+  model.WEIGHT_UNITS = gms_rules.getString(0, 1).substring(0, 1);
   model.TIME_UNITS = gms_rules.getString(2, 1);
   model.COST_UNITS = (gms_rules.getString(7, 1)).substring(0, 1);
 
@@ -61,20 +61,20 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     if(valid) {
       model.GMS_BUILDS.push(new Build());
       model.GMS_BUILDS[index].name         = "Build #" + (i + 1);
-      model.GMS_BUILDS[index].capacity     = gms_rules.getString(0, 3 + i);
+      model.GMS_BUILDS[index].capacity     = int(gms_rules.getString(0, 3 + i));
       model.GMS_BUILDS[index].buildCost    = buildCost(model.GMS_BUILDS.capacity);
       model.GMS_BUILDS[index].buildTime    = buildTime(model.GMS_BUILDS.capacity);
-      model.GMS_BUILDS[index].repurpCost   = 1000000 * gms_rules.getString(3, 3 + i);
-      model.GMS_BUILDS[index].repurpTime   = gms_rules.getString(4, 3 + i);
+      model.GMS_BUILDS[index].repurpCost   = 1000000 * int(gms_rules.getString(3, 3 + i));
+      model.GMS_BUILDS[index].repurpTime   = int(gms_rules.getString(4, 3 + i));
 
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
         var num = gms_rules.getString(5 + 3*j, 3 + i);
         for (var k=0; k<num; k++) {
-          model.GMS_BUILDS[index].labor = (new Person(
+          model.GMS_BUILDS[index].labor.push(new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            gms_rules.getString(6 + 3*j, 3 + i), // #Shifts
-            model.LABOR_TYPES.getString(j, 1) // Cost/Shift
+            int(gms_rules.getString(6 + 3*j, 3 + i)), // #Shifts
+            int(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
           ));
         }
       }
@@ -103,18 +103,18 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     if(valid) {
       model.RND_BUILDS.push(new Build());
       model.RND_BUILDS[index].name          = "Build #" + (i+1);
-      model.RND_BUILDS[index].capacity      = rnd_pp.getString(RND_ROW, RND_COL + i);
-      model.RND_BUILDS[index].repurpCost    = 1000000 * rnd_pp.getString(RND_ROW + 2, RND_COL + i);
-      model.RND_BUILDS[index].repurpTime    = rnd_pp.getString(RND_ROW + 1, RND_COL + i);
+      model.RND_BUILDS[index].capacity      = int(rnd_pp.getString(RND_ROW, RND_COL + i));
+      model.RND_BUILDS[index].repurpCost    = 1000000 * int(rnd_pp.getString(RND_ROW + 2, RND_COL + i));
+      model.RND_BUILDS[index].repurpTime    = int(rnd_pp.getString(RND_ROW + 1, RND_COL + i));
       
       // Read MFG_System: rnd_pp Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
         var num = rnd_pp.getString(RND_ROW + 3 + 3*j, RND_COL + i);
         for (var k=0; k<num; k++) {
-          model.RND_BUILDS[index].labor = (new Person(
+          model.RND_BUILDS[index].labor.push(new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i), // #Shifts
-            model.LABOR_TYPES.getString(j, 1) // Cost/Shift
+            int(rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i)), // #Shifts
+            int(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
           ));
         }
       }
@@ -130,9 +130,9 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     for (var i=0; i<NUM_XLS_SITES; i++) {
       model.SITES.push(new Site(
         "" + capacity.getString(i, 1),
-        capacity.getString(i, 2),
-        capacity.getString(i + 2, 2),
-        rnd_rules.getString(1 + i, 1)
+        int(capacity.getString(i, 2)),
+        int(capacity.getString(i + 2, 2)),
+        int(rnd_rules.getString(1 + i, 1))
       ));
     }
   } else {
