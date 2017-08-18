@@ -24,6 +24,7 @@ function MFG_System() {
   this.SITES = new Array();
   this.GMS_BUILDS = new Array();
   this.RND_BUILDS = new Array();
+  this.maxCap = 0;
 
   this.generateColors = function() {
     colorMode(HSB);
