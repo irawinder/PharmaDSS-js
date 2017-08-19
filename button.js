@@ -1,12 +1,12 @@
   var align = "LEFT";
   var buttonNames = [
-    "Load Random Data (SH+R)",  // 0
-    "Load XLS Data (SH+X)",  // 1
+    "Load Random Data (q)",  // 0
+    "Load XLS Data (x)",  // 1
     "Play Game (g)",  // 2
     "VOID",  // 3
     "Toggle Profile (p)",    // 4
     "Toggle Site (s)",  // 5
-    "Toggle Existing Build (SH+S)", //6
+    "Toggle Existing Build (u)", //6
     "Toggle New Build (b)",  // 7
     "VOID",  // 8
     "Deploy Selection (d)",  // 9
@@ -100,59 +100,61 @@ function mouseClicked() {
     toggleProjection();
   }
   
-  // checkSelections();
+  checkSelections();
   
   loop();
 }
 
 function keyPressed() {
   switch(key) {
-    case 'h': // "Hide Main Menu (h)"
+    case 'H': // "Hide Main Menu (h)"
       toggleMainMenu();
       break;
-    case 'i': // "Invert Colors (i)"
+    case 'I': // "Invert Colors (i)"
       invertColors();
       break;
-    case 'R': // "Regenerate Random Game Data (SH+R)"
+    case 'Q': // "Regenerate Random Game Data (q)"
       loadOriginal = false;
       regenerateGame();
       break;
-    case 'X': // "Regenerate XLS Game Data (SH+X)"
+    case 'X': // "Regenerate XLS Game Data (x)"
       loadOriginal = true;
       regenerateGame();
       break;
-    case 'g': // "Play Game (g)"
+    case 'G': // "Play Game (g)"
       toggleGame();
       game_message = "";
       break;
-    case 'p': // "Toggle Profile (p)"
+    case 'P': // "Toggle Profile (p)"
       nextProfile();
       break;
-    case 's': // "Toggle Site (s)"
+    case 'S': // "Toggle Site (s)"
       nextSite();
       break;
-    case 'S': // "Toggle Existing Build (SH+S)",
+    case 'U': // "Toggle Existing Build (u)",
       nextSiteBuild();
       break;
-    case 'b': // "Toggle Build (b)"
+    case 'B': // "Toggle Build (b)"
       nextBuild();
       break;
-    case 'd': // "Deploy Selection (d)"
-      if (gameMode) deploySelection();
+    case 'D': // "Deploy Selection (d)"
+      if (gameMode){
+        deploySelection();
+      }
       game_message = "";
       break;
-    case 'r': // "Remove Selection (r)"
+    case 'R': // "Remove Selection (r)"
       if (gameMode) removeSelection();
        game_message = "";
       break;
-    case 'e': // "Repurpose Selection (e)"
+    case 'E': // "Repurpose Selection (e)"
       if (gameMode) repurposeSelection();
       break;
     case ' ': // "Next Turn (SPACE)"
       if (gameMode) endTurn();
       game_message = "";
       break;
-    case 'z': //  "Show Score Radar (z)"
+    case 'Z': //  "Show Score Radar (z)"
       displayRadar = toggle(displayRadar);
       break;
     case '`': //  "Enable Projection (`)"
@@ -160,11 +162,11 @@ function keyPressed() {
       break;
       
     // Debugging (no formal buttons)
-    case 'x':
+    case 'X':
       testPlace(tablePieceInput, 2, 8, 0);
       changeDetected = true;
       break;
-    case 'P':
+    case 'L':
       // Toggle InfoOverlay
       if (infoOverride) {
         infoOverride = false;
@@ -372,8 +374,8 @@ function checkSelections() {
   if (!gameMode) {
     numProfiles = agileModel.PROFILES.length;
       for(var i =0; i<numProfiles; i++){
-        if(mouseX <= agileModel.PROFILES[i].xClick + agileModel.PROFILES[i].wClick && mouseX >= agileModel.PROFILES[i].xClick 
-        && mouseY <= agileModel.PROFILES[i].yClick + agileModel.PROFILES[i].hClick && mouseY >= agileModel.PROFILES[i].yClick){
+        if((mouseX <= agileModel.PROFILES[i].xClick + agileModel.PROFILES[i].wClick) && (mouseX >= agileModel.PROFILES[i].xClick) 
+        && (mouseY <= agileModel.PROFILES[i].yClick + agileModel.PROFILES[i].hClick) && (mouseY >= agileModel.PROFILES[i].yClick)){
           session.setProfile(i);
         }
       }

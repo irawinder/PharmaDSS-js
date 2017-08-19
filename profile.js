@@ -186,10 +186,10 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   var iconX, iconY, iconW, iconH;
 
   this.draw = function(x, y, w, h, axis, selected, detail) {
-    xClick = x - 15;
-    yClick = y - h - 7;
-    wClick = w + 80;
-    hClick = h + 20;
+    this.xClick = x - 15;
+    this.yClick = y - h - 7;
+    this.wClick = w + 80;
+    this.hClick = h + 20;
     var unit = 5000;
     var scalerH, scalerW;
     var markerH = 1.00;
