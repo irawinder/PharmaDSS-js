@@ -125,7 +125,7 @@ Game.prototype.populateProfiles = function() {
         // Resets selection to 0 if current profile is being deleted
         if (this.selectedProfile == i) this.selectedProfile = 0;
         
-        agileModel.activeProfiles.remove(i);
+        agileModel.activeProfiles.splice(i, 1);
         
         // keeps current profile selected if one behind it is removed
         if (this.selectedProfile > i) this.selectedProfile--;
@@ -167,6 +167,8 @@ function Event(eventType, siteIndex, buildIndex, profileIndex) {
     // stage a build/deployment event based upon pre-engineered modules 
     this.siteBuildIndex = buildIndex;
     this.flagRepurpose();
+  } else if (this.eventType == "remove") {
+    this.flagRemove();
   }
 }
 
@@ -216,25 +218,29 @@ Event.prototype.initialize = function() {
 }
 
 Event.prototype.flagRemove = function() {
-  var current = agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex];
+  var current = agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex];
   if (current.editing) {
-    agileModel.SITES[this.siteIndex].siteBuild.remove(this.siteBuildIndex);
+    agileModel.SITES[this.siteIndex].siteBuild.splice(this.buildIndex, 1);
   } else {
-    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].demolish = true;
+    agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex].demolish = true;
   }
   
 }
 
 Event.prototype.flagRepurpose = function() {
-  if (agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built == false) {
-    game_message ="Can't repurpose while under construction";
-    print("Can't Repurpose while Under Construction");
-  } else {
-    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].repurpose = true;
-    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built = false;
-    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].age = 0;
-    agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].PROFILE_INDEX = this.profileIndex;
-    game_message = " ";
+  if (agileModel.SITES[this.siteIndex].siteBuild.length > 0) {
+    if (agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built == false) {
+      game_message ="Can't repurpose while under construction";
+      print("Can't Repurpose while Under Construction");
+    } else {
+      agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].repurpose = true;
+      agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].built = false;
+      agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].age = 0;
+      agileModel.SITES[this.siteIndex].siteBuild[this.siteBuildIndex].PROFILE_INDEX = this.profileIndex;
+      game_message = " ";
+  }} else {
+    game_message ="Nothing to repurpose";
+    print("Nothing to repurpose");
   }
 }
 

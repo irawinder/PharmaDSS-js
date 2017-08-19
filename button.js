@@ -138,9 +138,7 @@ function keyPressed() {
       nextBuild();
       break;
     case 'D': // "Deploy Selection (d)"
-      if (gameMode){
-        deploySelection();
-      }
+      if (gameMode) deploySelection();
       game_message = "";
       break;
     case 'R': // "Remove Selection (r)"
