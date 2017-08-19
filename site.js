@@ -14,7 +14,7 @@ function Site(name, capEx, capGn, limitRnD) {
     for(var i=this.siteBuild.length-1; i>=0; i--) {
       this.siteBuild[i].editing = false;
       if (this.siteBuild[i].demolish) {
-        this.siteBuild.remove(i);
+        this.siteBuild.splice(i, 1);
         if (session.selectedSiteBuild >= i && i != 0) session.selectedSiteBuild--; // moves index back to avoid crash
       } else {
         this.siteBuild[i].updateBuild();
@@ -121,7 +121,7 @@ function Site(name, capEx, capGn, limitRnD) {
       //property array for clicking
       var props = [BLD_X +  BLD_W*(i%3), BLD_Y + offset,  BLD_W, BLD_H - 2, i, agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].ABSOLUTE_INDEX];
       NCEClicks.push(props);
-      
+
       // Draw Site Builds on Sites
       if(!gameMode){
         // Draws Solid NCE colors before game starts
