@@ -218,13 +218,16 @@ Event.prototype.initialize = function() {
 }
 
 Event.prototype.flagRemove = function() {
-  var current = agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex];
-  if (current.editing) {
-    agileModel.SITES[this.siteIndex].siteBuild.splice(this.buildIndex, 1);
-  } else {
-    agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex].demolish = true;
+  if (agileModel.SITES[this.siteIndex].siteBuild.length > 0) {
+    var current = agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex];
+    if (current.editing) {
+      agileModel.SITES[this.siteIndex].siteBuild.splice(this.buildIndex, 1);
+    } else {
+      agileModel.SITES[this.siteIndex].siteBuild[this.buildIndex].demolish = true;
+  }} else {
+    game_message ="Nothing to remove";
+    print("Nothing to remove");
   }
-  
 }
 
 Event.prototype.flagRepurpose = function() {

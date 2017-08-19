@@ -209,5 +209,5 @@ function gameText() {
   textAlign(LEFT);
   fill(249, 60, 60);
   textSize(textSizeValue + 2);
-  text(game_message, 50, height-260, profilesX-MARGIN*1.5, height/8);
+  text(game_message, 50, height-200, profilesX-MARGIN*1.5, height/8);
 }
