@@ -39,8 +39,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   this.summary = summary;
   this.success = success;
   this.timeStart = timeStart;
-  this.productionCost = productionCost;
-  this.demandProfile = demandProfile;
+  this.productionCost = new Array();
+  this.demandProfile = new p5.Table();
   this.ABSOLUTE_INDEX = INDEX;
   this.timeLead = timeLead;
   launched = false;
@@ -95,7 +95,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
       var value = float(this.demandProfile.getString(1, i));
       if (value > 0) {
-        timeLaunch = i;
+        this.timeLaunch = i;
         this.timeLead = i - LEAD_TIME;
         break;
       }
@@ -105,7 +105,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   // Based on Profile, compute the date that NCE Profile "terminates" (i.e. is no longer viable)
   //for graph class
   this.end = function() {
-    timeEnd = Number.POSITIVE_INFINITY;
+    this.timeEnd = Number.POSITIVE_INFINITY;
     var viable = false;
     var current, previous;
     for (var i=1; i<this.demandProfile.getColumnCount(); i++) {
@@ -113,7 +113,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       previous = float(this.demandProfile.getString(2, i-1));
       // If actual demand reaches zero, profile is no longer viable
       if (current == 0 && previous > 0) {
-        timeEnd = i;
+        this.timeEnd = i;
         break;
       }
       // If actual demand is still above zero, keep viable
@@ -121,7 +121,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
         viable = true;
       }
     }
-    if (!viable) timeEnd = this.timeLead;
+    if (!viable) this.timeEnd = this.timeLead;
   }
 
   this.initCapacityProfile = function() {
@@ -229,7 +229,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     if (!detail) {
       fill(204,204,204, 80);
       var begin = max(0, this.timeLead);
-      var end = max(0, timeEnd);
+      var end = max(0, this.timeEnd);
 
       if (!gameMode) {
         rect(x + scalerW * begin, y - h, scalerW * (min(end, this.demandProfile.getColumnCount()) - begin), h);
@@ -245,6 +245,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       barA = scalerH * float(this.demandProfile.getString(2, i)); // Actual Demand
       cap = scalerH * float(capacityProfile.getString(1, i)); // Actual Global Production Capacity
       globalCap = scalerH * globalProductionLimit; // Actual Global Production Capacity
+      // print(cap, globalCap, float(capacityProfile.getString(1, i)), scalerH); //TODO
       if (i==0) {
         capLast = 0;
       } else {
@@ -309,7 +310,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Profile Name and Summary
     // Draw small year axis on last NCE only
-    if ( (gameMode && timeEnd <= session.current.TURN) || (!gameMode && timeEnd <= NUM_INTERVALS-1)) {
+    if ( (gameMode && this.timeEnd <= session.current.TURN) || (!gameMode && this.timeEnd <= NUM_INTERVALS-1)) {
       fill("#FF0000");
     } else {
       fill(textColor);
@@ -323,7 +324,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     } else {
       Y_SHIFT = 28;
     }
-    if (gameMode && timeEnd > session.current.TURN ) {
+    if (gameMode && this.timeEnd > session.current.TURN ) {
       text(this.name, x, y + 10 + Y_SHIFT);
     } else {
       text(this.name + ", " + this.summary, x, y + 10 + Y_SHIFT);
@@ -352,24 +353,24 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     }
 
     // Launch Date
-    if (timeLaunch >=0) {
+    if (this.timeLaunch >=0) {
       fill(Launch);
-      rect(x + scalerW * timeLaunch - markW, y - markerH*h, markW, markerH*h);
+      rect(x + scalerW * this.timeLaunch - markW, y - markerH*h, markW, markerH*h);
       if (detail) {
         textAlign(CENTER);
         fill(textColor);
-        text("Launch", x + scalerW * timeLaunch - markW, y-markerH*h-5);
+        text("Launch", x + scalerW * this.timeLaunch - markW, y-markerH*h-5);
       }
     }
 
     // End Date
-    if (!gameMode || session.current.TURN > timeEnd) {
-      if (timeEnd >=0) {
+    if (!gameMode || session.current.TURN > this.timeEnd) {
+      if (this.timeEnd >=0) {
         fill(END);
-        rect(x + scalerW * timeEnd - markW, y - markerH*h, markW, markerH*h);
+        rect(x + scalerW * this.timeEnd - markW, y - markerH*h, markW, markerH*h);
         if (detail) {
           textAlign(CENTER);
-          text("End", x + scalerW * timeEnd - markW, y-markerH*h-5);
+          text("End", x + scalerW * this.timeEnd - markW, y-markerH*h-5);
         }
       }
     }

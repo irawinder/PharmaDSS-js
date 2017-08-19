@@ -198,7 +198,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     
     // Read Profile: Site Costs
     for (var j=0; j<NUM_XLS_SITES; j++) {
-      model.PROFILES[i].productionCost = float(profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j));
+      model.PROFILES[i].productionCost.push(float(profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j)));
     }
     
     // Read Profile: Demand Profile
