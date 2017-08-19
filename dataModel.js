@@ -61,20 +61,20 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     if(valid) {
       model.GMS_BUILDS.push(new Build());
       model.GMS_BUILDS[index].name         = "Build #" + (i + 1);
-      model.GMS_BUILDS[index].capacity     = int(gms_rules.getString(0, 3 + i));
+      model.GMS_BUILDS[index].capacity     = float(gms_rules.getString(0, 3 + i));
       model.GMS_BUILDS[index].buildCost    = buildCost(model.GMS_BUILDS.capacity);
       model.GMS_BUILDS[index].buildTime    = buildTime(model.GMS_BUILDS.capacity);
-      model.GMS_BUILDS[index].repurpCost   = 1000000 * int(gms_rules.getString(3, 3 + i));
-      model.GMS_BUILDS[index].repurpTime   = int(gms_rules.getString(4, 3 + i));
+      model.GMS_BUILDS[index].repurpCost   = 1000000 * float(gms_rules.getString(3, 3 + i));
+      model.GMS_BUILDS[index].repurpTime   = float(gms_rules.getString(4, 3 + i));
 
       // Read MFG_System: GMS Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = gms_rules.getString(5 + 3*j, 3 + i);
+        var num = int(gms_rules.getString(5 + 3*j, 3 + i));
         for (var k=0; k<num; k++) {
           model.GMS_BUILDS[index].labor.push(new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            int(gms_rules.getString(6 + 3*j, 3 + i)), // #Shifts
-            int(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
+            float(gms_rules.getString(6 + 3*j, 3 + i)), // #Shifts
+            float(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
           ));
         }
       }
@@ -93,7 +93,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     // Checks to see if capacity value is desired according to "float[] capacityToUseGMS"
     valid = false;
     for (var j=0; j<capacityToUseRND.length; j++) {
-      if (rnd_pp.getString(RND_ROW, RND_COL + i) == capacityToUseRND[j]) {
+      if (float(rnd_pp.getString(RND_ROW, RND_COL + i)) == capacityToUseRND[j]) {
         valid = true;
         index++;
         break;
@@ -103,18 +103,18 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     if(valid) {
       model.RND_BUILDS.push(new Build());
       model.RND_BUILDS[index].name          = "Build #" + (i+1);
-      model.RND_BUILDS[index].capacity      = int(rnd_pp.getString(RND_ROW, RND_COL + i));
-      model.RND_BUILDS[index].repurpCost    = 1000000 * int(rnd_pp.getString(RND_ROW + 2, RND_COL + i));
-      model.RND_BUILDS[index].repurpTime    = int(rnd_pp.getString(RND_ROW + 1, RND_COL + i));
+      model.RND_BUILDS[index].capacity      = float(rnd_pp.getString(RND_ROW, RND_COL + i));
+      model.RND_BUILDS[index].repurpCost    = 1000000 * float(rnd_pp.getString(RND_ROW + 2, RND_COL + i));
+      model.RND_BUILDS[index].repurpTime    = float(rnd_pp.getString(RND_ROW + 1, RND_COL + i));
       
       // Read MFG_System: rnd_pp Build Labor
       for (var j=0; j<NUM_LABOR; j++) {
-        var num = rnd_pp.getString(RND_ROW + 3 + 3*j, RND_COL + i);
+        var num = int(rnd_pp.getString(RND_ROW + 3 + 3*j, RND_COL + i));
         for (var k=0; k<num; k++) {
           model.RND_BUILDS[index].labor.push(new Person(
             model.LABOR_TYPES.getString(j, 0), // Name
-            int(rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i)), // #Shifts
-            int(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
+            float(rnd_pp.getString(RND_ROW + 4 + 3*j, RND_COL + i)), // #Shifts
+            float(model.LABOR_TYPES.getString(j, 1)) // Cost/Shift
           ));
         }
       }
@@ -129,9 +129,9 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     NUM_SITES = 2;
     for (var i=0; i<NUM_XLS_SITES; i++) {
       model.SITES.push(new Site(
-        "" + capacity.getString(i, 1),
-        int(capacity.getString(i, 2)),
-        int(capacity.getString(i + 2, 2)),
+        "" + int(capacity.getString(i, 1)),
+        float(capacity.getString(i, 2)),
+        float(capacity.getString(i + 2, 2)),
         int(rnd_rules.getString(1 + i, 1))
       ));
     }
@@ -166,7 +166,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
 
 
   // Read MFG_System: MAX_SAFE_UTILIZATION
-  model.MAX_SAFE_UTILIZATION = supply.getString(SAFE_ROW, SAFE_COL)/100.0;
+  model.MAX_SAFE_UTILIZATION = float(supply.getString(SAFE_ROW, SAFE_COL))/100.0;
   
 
 
@@ -198,7 +198,7 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     
     // Read Profile: Site Costs
     for (var j=0; j<NUM_XLS_SITES; j++) {
-      model.PROFILES[i].productionCost = profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j);
+      model.PROFILES[i].productionCost = float(profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 7 + j));
     }
     
     // Read Profile: Demand Profile
@@ -209,10 +209,10 @@ function loadRules(model, gms_rules, capacity, labour, rnd_pp, rnd_rules, supply
     model.PROFILES[i].demandProfile.addRow(); // Event Description
     for (var j=0; j<NUM_INTERVALS; j++) {
       model.PROFILES[i].demandProfile.addColumn();
-      model.PROFILES[i].demandProfile.setString(0, j, profile.getString(PROFILE_ROW, PROFILE_COL + 10 + j) );
-      model.PROFILES[i].demandProfile.setString(1, j, profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES[i].demandProfile.setString(2, j, profile.getString(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j) );
-      model.PROFILES[i].demandProfile.setString(3, j, profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j) );
+      model.PROFILES[i].demandProfile.setString(0, j, float(profile.getString(PROFILE_ROW, PROFILE_COL + 10 + j)) );
+      model.PROFILES[i].demandProfile.setString(1, j, float(profile.getString(PROFILE_ROW + 2 + 4*profileList[i], PROFILE_COL + 10 + j)) );
+      model.PROFILES[i].demandProfile.setString(2, j, float(profile.getString(PROFILE_ROW + 3 + 4*profileList[i], PROFILE_COL + 10 + j)) );
+      model.PROFILES[i].demandProfile.setString(3, j, float(profile.getString(PROFILE_ROW + 4 + 4*profileList[i], PROFILE_COL + 10 + j)) );
     }
     
     model.PROFILES[i].ABSOLUTE_INDEX = i;

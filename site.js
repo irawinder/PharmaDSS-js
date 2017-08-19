@@ -132,8 +132,8 @@ function Site(name, capEx, capGn, limitRnD) {
       } else if (gameMode) {
         if (session.current.TURN > 0 && this.siteBuild[i].built) {
           // Calculate percent of build module being utilized to meet demand
-          var demand = int(agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].demandProfile.getString(2, session.current.TURN-1));
-          var cap = agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].globalProductionLimit;
+          var demand = float(agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].demandProfile.getString(2, session.current.TURN-1));
+          var cap = float(agileModel.PROFILES[this.siteBuild[i].PROFILE_INDEX].globalProductionLimit);
           var meetPercent;
           if (cap == 0) {
             meetPercent = 0.0;
@@ -182,7 +182,7 @@ function Site(name, capEx, capGn, limitRnD) {
       fill(textColor);
       textAlign(CENTER, CENTER);
       //text(agileModel.PROFILES[siteBuild[i].PROFILE_INDEX].name + " - " + siteBuild[i].capacity + "t", x + BLD_W/2  + BLD_W*(i%2) + 10, BLD_Y + offset + textSize/2);
-      text(this.siteBuild[i].PROFILE_INDEX+1, x + BLD_W/2  + BLD_W*(i%3) + 10, BLD_Y + offset + textSize/2);
+      text(this.siteBuild[i].PROFILE_INDEX+1, x + BLD_W/2  + BLD_W*(i%3) + 10, BLD_Y + offset + textSizeValue/2);
       
       if (i%3 == 2) {
         offset += BLD_H;

@@ -60,8 +60,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   this.setPeak = function(newPeak) {
     var scaler = newPeak/demandPeak_F;
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
-      this.demandProfile.setString(1, i, this.demandProfile.getString(1, i) * scaler); // Forecast
-      this.demandProfile.setString(2, i, this.demandProfile.getString(2, i) * scaler); // Actual
+      this.demandProfile.setString(1, i, float(this.demandProfile.getString(1, i)) * scaler); // Forecast
+      this.demandProfile.setString(2, i, float(this.demandProfile.getString(2, i)) * scaler); // Actual
     }
   }
 
@@ -71,9 +71,9 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     demandPeak_A = 0;
     var value_F, value_A, time;
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
-      time = this.demandProfile.getString(0, i);
-      value_F = this.demandProfile.getString(1, i); // Forecast
-      value_A = this.demandProfile.getString(2, i); // Actual
+      time = float(this.demandProfile.getString(0, i));
+      value_F = float(this.demandProfile.getString(1, i)); // Forecast
+      value_A = float(this.demandProfile.getString(2, i)); // Actual
       if (demandPeak_F < value_F ) {
         demandPeak_F = value_F;
         peakTime_F = time;
@@ -93,7 +93,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
   this.lead = function() {
     this.timeLead = 0;
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
-      var value = this.demandProfile.getString(1, i);
+      var value = float(this.demandProfile.getString(1, i));
       if (value > 0) {
         timeLaunch = i;
         this.timeLead = i - LEAD_TIME;
@@ -109,8 +109,8 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     var viable = false;
     var current, previous;
     for (var i=1; i<this.demandProfile.getColumnCount(); i++) {
-      current = this.demandProfile.getString(2, i);
-      previous = this.demandProfile.getString(2, i-1);
+      current = float(this.demandProfile.getString(2, i));
+      previous = float(this.demandProfile.getString(2, i-1));
       // If actual demand reaches zero, profile is no longer viable
       if (current == 0 && previous > 0) {
         timeEnd = i;
@@ -130,7 +130,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     capacityProfile.addRow(); //Capacity (Actual)
     for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
       capacityProfile.addColumn();
-      capacityProfile.setString(0, i, this.demandProfile.getString(0, i)); //Time
+      capacityProfile.setString(0, i, float(this.demandProfile.getString(0, i))); //Time
       capacityProfile.setString(1, i, 0.0); // Capacity
     }
   }
@@ -171,7 +171,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
           if (current.PROFILE_INDEX == THE_INDEX) {
             var yearsToOperate = int(current.buildTime - current.age);
             if (yearsToOperate + session.current.TURN < NUM_INTERVALS) { // Checks to make sure relevant
-              var newCapacity = capacityProfile.getString(1, session.current.TURN-1 + yearsToOperate);
+              var newCapacity = float(capacityProfile.getString(1, session.current.TURN-1 + yearsToOperate));
               // Sets Remaining Capacity to Future Turn's Status Quo:
               for (var k=session.current.TURN-1+yearsToOperate; k<NUM_INTERVALS; k++) {
                 capacityProfile.setString(1, k, newCapacity + 1000*current.capacity);
@@ -239,16 +239,16 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       }
     }
 
-    for (var i=0; i<this.demandProfile.getColumnCount (); i++) {
+    for (var i=0; i<this.demandProfile.getColumnCount(); i++) {
       var barF, barA, cap, capLast, globalCap;
-      barF = scalerH * this.demandProfile.getString(1, i); // Forecast Demand
-      barA = scalerH * this.demandProfile.getString(2, i); // Actual Demand
-      cap = scalerH * capacityProfile.getString(1, i); // Actual Global Production Capacity
+      barF = scalerH * float(this.demandProfile.getString(1, i)); // Forecast Demand
+      barA = scalerH * float(this.demandProfile.getString(2, i)); // Actual Demand
+      cap = scalerH * float(capacityProfile.getString(1, i)); // Actual Global Production Capacity
       globalCap = scalerH * globalProductionLimit; // Actual Global Production Capacity
       if (i==0) {
         capLast = 0;
       } else {
-        capLast = scalerH * capacityProfile.getString(1, i-1);
+        capLast = scalerH * float(capacityProfile.getString(1, i-1));
       }
       noStroke();
 
@@ -294,7 +294,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
         if (i < session.current.TURN) {
           stroke(CAPACITY_COLOR);
         } else {
-          stroke(CAPACITY_COLOR, 200);
+          stroke(CAPACITY_COLOR_ALPHA);
           //          cap = globalCap;
           //          capLast = globalCap;
         }
@@ -331,11 +331,11 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
 
     // Draw Demand Peak Value
     fill(textColor);
-    ellipse(x + scalerW * (0.5+int(peakTime_F-1)), y - scalerH * this.demandProfile.getString(1, int(peakTime_F-1)), 3, 3);
+    ellipse(x + scalerW * (0.5+int(peakTime_F-1)), y - scalerH * float(this.demandProfile.getString(1, int(peakTime_F-1))), 3, 3);
     fill(textColor);
     textAlign(CENTER);
     textSize(textSizeValue);
-    text(int(demandPeak_F/100)/10.0 + agileModel.WEIGHT_UNITS, x + scalerW * (0.5+int(peakTime_F-1)) + 1, y - scalerH * this.demandProfile.getString(1, int(peakTime_F-1)) - 5);
+    text(int(demandPeak_F/100)/10.0 + agileModel.WEIGHT_UNITS, x + scalerW * (0.5+int(peakTime_F-1)) + 1, y - scalerH * float(this.demandProfile.getString(1, int(peakTime_F-1))) - 5);
 
     noStroke();
     
@@ -379,7 +379,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
       var barA = 0;
       var cap = 0;
       if (session.current.TURN > 0) {
-        cap = this.demandProfile.getString(2, session.current.TURN-1);
+        cap = float(this.demandProfile.getString(2, session.current.TURN-1));
         barA = scalerH * cap;
       }
       fill(abs(textColor - 50));

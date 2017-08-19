@@ -22,8 +22,6 @@ function LineGraph(_Values, _x, _y, _w, _h) {
     
     //Implement try catch in case of memory leak of array
     try {
-          print("LINE GRAPH");
-
       for(var i = 0; i<NUM_OUTPUTS; i++) {
         
         //draws legend

@@ -162,8 +162,8 @@ function calcDemandMeetAbility() {
   
   for (var i=0; i<agileModel.activeProfiles.length; i++) {
     
-    profileCapacity = agileModel.activeProfiles[i].globalProductionLimit;
-    profileActualDemand = agileModel.activeProfiles[i].demandProfile.getString(2, session.current.TURN-1);
+    profileCapacity = float(agileModel.activeProfiles[i].globalProductionLimit);
+    profileActualDemand = float(agileModel.activeProfiles[i].demandProfile.getString(2, session.current.TURN-1));
     
     if (profileActualDemand > 0) {
       scoreCount++;
@@ -234,7 +234,7 @@ function calcSecurity() {
       totalCapacity += siteCapacity[s];
     }
     
-    var demand = agileModel.activeProfiles[i].demandProfile.getString(2, min(session.current.TURN, NUM_INTERVALS-1) );
+    var demand = float(agileModel.activeProfiles[i].demandProfile.getString(2, min(session.current.TURN, NUM_INTERVALS-1) ));
     demand /= 1000.0; // units of kiloTons
     
     // Calaculates normalized balance and supply scores and adds them to total
