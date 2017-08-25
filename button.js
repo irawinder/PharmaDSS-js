@@ -179,7 +179,6 @@ function keyPressed() {
 function toggleMainMenu() {
   showMainMenu = toggle(showMainMenu);
   if (showMainMenu) {
-    print(hideMenu);
     hideMenu.buttons[0].label = hide[0];
   } else {
     hideMenu.buttons[0].label = show[0];
@@ -282,7 +281,7 @@ function Button(x, y, w, h, label){
   hover = 120;
   pressed = 120; // darkest
   
-  isPressed = false;
+  this.isPressed = false;
   this.isVoid = false;
   
   this.x = x;
@@ -290,7 +289,7 @@ function Button(x, y, w, h, label){
   this.w = w;
   this.h = h;
   this.label = label;
-  
+
   //Button Objects are draw to a PGraphics object rather than directly to canvas
   this.draw = function(p){
     if (!this.isVoid) {
@@ -302,10 +301,13 @@ function Button(x, y, w, h, label){
       } else {
         p.fill(100, active);
       }
-      p.rect(this.x, this.y, this.w, this.h, 5);
+      p.ellipse(this.x, this.y, 5, 5);
+      p.rectMode(CENTER);
+      p.rect(this.x + this.w/2, this.y - 2 -this.h/2, this.w, this.h, 5);
       p.fill(255);
-      p.textAlign(CENTER);
-      p.text(this.label, x + (w/2), y + 0.6*h); 
+      p.textAlign(CENTER, CENTER);
+      p.textSize(8);
+      p.text(this.label, this.x + this.w/2, this.y - 2 -this.h/2); 
     }
   } 
   
@@ -333,7 +335,7 @@ function Menu(w, h, x, y, vOffset, names, align){
   var marginH = BUTTON_OFFSET_H;
   var marginW = BUTTON_OFFSET_W;
   
-  canvas = createGraphics(w, h);
+  canvas = createGraphics(this.w, this.h);
   // #Buttons defined by Name String Array Length
   this.buttons = new Array(this.names.length);
 
@@ -345,6 +347,7 @@ function Menu(w, h, x, y, vOffset, names, align){
     } else if ( this.align == "left" || this.align == "LEFT" ) { 
       // Left Align
       this.buttons[i] = new Button(marginW, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
+
     } else if ( this.align == "center" || this.align == "CENTER" ) { 
       // Center Align
       this.buttons[i] = new Button( (this.w-this.x)/2, marginH + this.vOffset*(this.y+5) + i*(this.y+5), this.x, this.y, this.names[i]);
@@ -361,7 +364,7 @@ function Menu(w, h, x, y, vOffset, names, align){
   this.draw = function() {
     canvas.clear();
     for (var i=0; i<this.buttons.length; i++) {
-      this.buttons[i].draw(canvas);
+      // this.buttons[i].draw(canvas); // TODO: REPLACES BY drawMenuButtons()
     }  
     image(canvas, 0, 0);
   }

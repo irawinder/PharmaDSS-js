@@ -112,7 +112,7 @@ function setup() {
 
 
   phasing = loadImage("data/phasing.png");
-  sitePNG = loadImage("data/site.png");
+  sitePNG = loadImage("data/site_COL.png");
   sitePNG_BW = loadImage("data/site_BW.png");
   nce = loadImage("data/coumpound2.png");
   nceMini = loadImage("data/compound.png");
@@ -177,6 +177,8 @@ function draw() {
 
   gameText();
   
+  drawMenuButtons();
+
   noLoop();
 }
 
@@ -195,7 +197,7 @@ function loadMenu(canvasWidth, canvasHeight) {
     hideText = show;
   }
 
-  hideMenu = new Menu(canvasWidth, canvasHeight, max(int(width*.13), 160), 25, 0, hideText, align);
+  hideMenu = new Menu(canvasWidth, canvasHeight, max(int(width*0.13), 160), 25, 0, hideText, align);
   mainMenu = new Menu(canvasWidth, canvasHeight, max(int(width*0.13), 160), 25, 2, buttonNames, align);
 
   // Hides "End Turn" and "next Profile" button unless game is active
@@ -211,3 +213,50 @@ function gameText() {
   textSize(textSizeValue + 2);
   text(game_message, 50, height-200, profilesX-MARGIN*1.5, height/8);
 }
+
+
+
+
+function drawMenuButtons() {
+
+  for( var i=0; i < hideMenu.buttons.length; i++ ){
+    noStroke();
+    if( hideMenu.buttons[i].over() ) {  // Darkens button if hovering mouse over it
+      fill(100, 180);
+    } else if (hideMenu.buttons[i].isPressed){
+      fill(100, 120);
+    } else {
+      fill(100, 120);
+    }
+    rectMode(CORNER);
+    rect(hideMenu.buttons[i].x, hideMenu.buttons[i].y, hideMenu.buttons[i].w, hideMenu.buttons[i].h, 5);
+    fill(255);
+    textAlign(CENTER);
+    textSize(12);
+    print(hideMenu.buttons[i].label);
+    text(hideMenu.buttons[i].label, hideMenu.buttons[i].x + hideMenu.buttons[i].w/2, hideMenu.buttons[i].y + hideMenu.buttons[i].h/2); 
+  }
+
+  for( var i=0; i < mainMenu.buttons.length; i++ ){
+    if( !mainMenu.buttons[i].isVoid ) {
+      noStroke();
+      if( mainMenu.buttons[i].over() ) {  // Darkens button if hovering mouse over it
+        fill(100, 180);
+      } else if ( mainMenu.buttons[i].isPressed){
+        fill(100, 120);
+      } else {
+        fill(100, 120);
+      }
+      rectMode(CORNER);
+      rect(mainMenu.buttons[i].x, mainMenu.buttons[i].y, mainMenu.buttons[i].w, mainMenu.buttons[i].h, 5);
+      fill(255);
+      textAlign(CENTER);
+      textSize(12);
+      text(mainMenu.buttons[i].label, mainMenu.buttons[i].x + mainMenu.buttons[i].w/2, mainMenu.buttons[i].y + mainMenu.buttons[i].h/2); 
+    }
+  }
+}
+
+
+
+

@@ -18,7 +18,6 @@ var timeEnd;
 var capacityProfile;
 
 //Parameters for click interface
-var xClick, yClick, wClick, hClick;
 var dragClickX, dragClickY, dragClickW, dragClickH;  
 var over, locked;
 
@@ -185,6 +184,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     
   var iconX, iconY, iconW, iconH;
 
+
   this.draw = function(x, y, w, h, axis, selected, detail) {
     this.xClick = x - 15;
     this.yClick = y - h - 7;
@@ -201,7 +201,7 @@ function Profile(name, summary, success, timeStart, recoveries, productionCost, 
     if (selected) {
       fill(HIGHLIGHT_ALPHA);
       noStroke(); 
-      rect(x - 15, y - h - 7, w + 30, h+20, 5);
+      rect(x - 15, y - h - 7, w + 30, h + 20, 5);
       //rect(0.25*MARGIN + profilesX, y - h - 7, profilesW + MARGIN*1.75, h+20, 2);
       noStroke();
     }
