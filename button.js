@@ -303,7 +303,7 @@ function Button(x, y, w, h, label){
       }
       p.ellipse(this.x, this.y, 5, 5);
       p.rectMode(CENTER);
-      p.rect(this.x + this.w/2, this.y - 2 -this.h/2, this.w, this.h, 5);
+      p.rect(this.x, this.y, this.w, this.h, 5);
       p.fill(255);
       p.textAlign(CENTER, CENTER);
       p.textSize(8);
